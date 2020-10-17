@@ -1,0 +1,5 @@
+#import <Foundation/Foundation.h>
+@interface PodsDummy_Pods_BottleBuddySwiftUI_BottleBuddySwiftUIUITests : NSObject
+@end
+@implementation PodsDummy_Pods_BottleBuddySwiftUI_BottleBuddySwiftUIUITests
+@end

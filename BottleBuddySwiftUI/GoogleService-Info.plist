@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>523075296112-s6h9qkeopqlqnptjbu4s3cb5jn37sv95.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.523075296112-s6h9qkeopqlqnptjbu4s3cb5jn37sv95</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBQlVRirkYswV3ob3iZMj1MpEPagNtAw8I</string>
+	<key>GCM_SENDER_ID</key>
+	<string>523075296112</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>FlanneryThompson.BottleBuddySwiftUI</string>
+	<key>PROJECT_ID</key>
+	<string>bottlebuddyswiftui</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bottlebuddyswiftui.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:523075296112:ios:536f710d95db48b526cdb5</string>
+	<key>DATABASE_URL</key>
+	<string>https://bottlebuddyswiftui.firebaseio.com</string>
+</dict>
+</plist>

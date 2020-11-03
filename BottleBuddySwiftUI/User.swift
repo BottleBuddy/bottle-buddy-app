@@ -19,6 +19,12 @@ class User: ObservableObject{
     let height: Int = 0
     let weight: Int = 0
     
+    init(email: String, firstName: String, lastName: String) {
+        self.email = email
+        self.firstName = firstName
+        self.lastName = lastName
+    }
+    
     //firebase authentication state
 //    enum FBAuthState{
 //        case undefined, signedOut, signedIn
@@ -30,6 +36,7 @@ class User: ObservableObject{
 //        self.isUserAuthenticated = .signedOut
 //        self.isUserAuthenticated = .signedIn
 //    }
+    
 }
 
 struct User_Previews: PreviewProvider {

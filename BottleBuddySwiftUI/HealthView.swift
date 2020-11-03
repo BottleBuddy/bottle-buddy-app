@@ -16,10 +16,8 @@ struct HealthView: View {
     @State private var newPeople : [User] = [User]()
     
     
-     
     init(){
          healthStore = HealthStore()
-        
     }
     
     private func updateUIFromStatistics( statisticsCollection: HKStatisticsCollection){
@@ -41,22 +39,19 @@ struct HealthView: View {
         
         NavigationView{
            
-
-        
-    
-        List(steps, id: \.id) { step in
-            VStack(alignment: .leading){
-                Text("\(step.count)")
-                if #available(iOS 14.0, *) {
-                    Text(step.date, style: .date)
-                        .opacity(0.5)
-                } else {
-                    // Fallback on earlier versions
+            List(steps, id: \.id) { step in
+                VStack(alignment: .leading){
                     Text("\(step.count)")
+                    if #available(iOS 14.0, *) {
+                        Text(step.date, style: .date)
+                            .opacity(0.5)
+                    } else {
+                        // Fallback on earlier versions
+                        Text("\(step.count)")
 
+                    }
                 }
             }
-        }
         .navigationBarTitle("Steps")
         }
         

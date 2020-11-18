@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-class User: ObservableObject{
-    var id: Int = 0
+class User: Codable, Identifiable, ObservableObject{
+    var id: String = ""
     var firstName: String = ""
     var lastName: String = ""
     var email: String = ""
@@ -19,8 +19,8 @@ class User: ObservableObject{
     let height: Int = 0
     let weight: Int = 0
     
-    init(email: String, firstName: String, lastName: String) {
-        self.email = email
+    init(id: String, firstName: String, lastName: String) {
+        self.id = id
         self.firstName = firstName
         self.lastName = lastName
     }

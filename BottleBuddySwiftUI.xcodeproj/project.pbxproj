@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A55664B2565A23F00683DE7 /* UserDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A55664A2565A23F00683DE7 /* UserDataView.swift */; };
 		3B61EAB9E802619BE36CF686 /* Pods_BottleBuddySwiftUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF1CD522E16F2F022D06793 /* Pods_BottleBuddySwiftUITests.framework */; };
 		4C11B14C253B781600FEF692 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11B14B253B781600FEF692 /* HomePageView.swift */; };
 		4C11B156253B783F00FEF692 /* HealthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11B155253B783F00FEF692 /* HealthStore.swift */; };
@@ -50,6 +51,7 @@
 /* Begin PBXFileReference section */
 		056402634D81CEF20D90AC10 /* Pods-BottleBuddySwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BottleBuddySwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-BottleBuddySwiftUI/Pods-BottleBuddySwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
 		0D6C354BF14EECAA4EB10ACF /* Pods-BottleBuddySwiftUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BottleBuddySwiftUITests.release.xcconfig"; path = "Target Support Files/Pods-BottleBuddySwiftUITests/Pods-BottleBuddySwiftUITests.release.xcconfig"; sourceTree = "<group>"; };
+		1A55664A2565A23F00683DE7 /* UserDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataView.swift; sourceTree = "<group>"; };
 		38B124BAE224898E70C437FF /* Pods-BottleBuddySwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BottleBuddySwiftUI.release.xcconfig"; path = "Target Support Files/Pods-BottleBuddySwiftUI/Pods-BottleBuddySwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		4C11B14B253B781600FEF692 /* HomePageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
 		4C11B155253B783F00FEF692 /* HealthStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStore.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 		4CAC8AC925329BE4004A27F8 /* BottleBuddySwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				1A55664A2565A23F00683DE7 /* UserDataView.swift */,
 				4C11B177253B7CF800FEF692 /* BottleBuddySwiftUI.entitlements */,
 				4CAC8ACA25329BE4004A27F8 /* AppDelegate.swift */,
 				4CAC8ACC25329BE4004A27F8 /* SceneDelegate.swift */,
@@ -456,6 +459,7 @@
 				4CAC8ACB25329BE4004A27F8 /* AppDelegate.swift in Sources */,
 				4CAC8ACD25329BE4004A27F8 /* SceneDelegate.swift in Sources */,
 				4C11B15B253B784600FEF692 /* HealthView.swift in Sources */,
+				1A55664B2565A23F00683DE7 /* UserDataView.swift in Sources */,
 				4CAC8ACF25329BE4004A27F8 /* ContentView.swift in Sources */,
 				4C11B156253B783F00FEF692 /* HealthStore.swift in Sources */,
 				4C11B165253B78CF00FEF692 /* SettingsView.swift in Sources */,
@@ -633,6 +637,7 @@
 				DEVELOPMENT_TEAM = 43798T93T8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BottleBuddySwiftUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -656,6 +661,7 @@
 				DEVELOPMENT_TEAM = 43798T93T8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BottleBuddySwiftUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

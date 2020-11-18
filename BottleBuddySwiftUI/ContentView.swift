@@ -353,7 +353,7 @@ struct SignUp : View {
                     if err != nil{
                         self.error = err!.localizedDescription
                         self.alert.toggle()
-                        _ = User(email: self.email, firstName: self.firstName, lastName: self.lastName) //creating a new user instance when someone registers
+                        _ = User(id: self.id, firstName: self.firstName, lastName: self.lastName) //creating a new user instance when someone registers
                         return
                     }
                     

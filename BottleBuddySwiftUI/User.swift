@@ -9,18 +9,21 @@ import Foundation
 import SwiftUI
 
 class User: Codable, Identifiable, ObservableObject{
-    var id: String = ""
+    var uid: String = ""
     var firstName: String = ""
     var lastName: String = ""
-    var email: String = ""
     let age: Int = 0
     let birthdate: Date = Date()
     let sex: Int = 0
     let height: Int = 0
     let weight: Int = 0
     
-    init(id: String, firstName: String, lastName: String) {
-        self.id = id
+    init(uid: String) {
+        self.uid = uid
+    }
+    
+    init(uid: String, firstName: String, lastName: String) {
+        self.uid = uid
         self.firstName = firstName
         self.lastName = lastName
     }

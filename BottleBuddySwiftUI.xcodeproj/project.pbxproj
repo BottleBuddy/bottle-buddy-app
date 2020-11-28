@@ -637,7 +637,7 @@
 				DEVELOPMENT_TEAM = 43798T93T8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BottleBuddySwiftUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -661,7 +661,7 @@
 				DEVELOPMENT_TEAM = 43798T93T8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BottleBuddySwiftUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

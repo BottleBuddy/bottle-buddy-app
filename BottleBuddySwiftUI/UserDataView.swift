@@ -11,14 +11,19 @@ import Combine
 import SwiftUI
 
 struct UserDataView: View {
-    @ObservedObject var fetcher = HomeModel()
+    @ObservedObject var fetcher = UserDataFetcher()
     
     var body: some View {
         VStack {
-            List(fetcher.usersArray) { user in
+            List(fetcher.users) { user in
                 VStack (alignment: .leading) {
                     Text(user.firstName)
                     Text(user.lastName)
+                    Text(user.age)
+                    Text(user.gender)
+                    Text(user.height)
+                    Text(user.weight)
+                    Text("")
                         .font(.system(size: 11))
                         .foregroundColor(Color.gray)
                 }
@@ -27,72 +32,58 @@ struct UserDataView: View {
     }
 }
 
-public class HomeModel: ObservableObject {
+public class UserDataFetcher: ObservableObject {
+
+    @Published var users = [UserStruct]()
     
-    @Published var usersArray = [User]()
-    
-    func getItems() {
-        
-        //access webpoint
-        let serviceURL = "http://3.135.94.168/index2.php"
-        
-        //Download json data
-        let url = URL(string: serviceURL)
-        
-        //url is not nil
-        if let url = url {
-            //Create url session
-            let session = URLSession(configuration: .default)
-            
-            let task = session.dataTask(with: url, completionHandler:
-            { (data, response, error) in
-                if error == nil {
-                    self.usersArray = self.parseJson(data!)
-                } else {
-                    print("URL Session Error")
-                }
-            })
-            
-            //start task
-            task.resume()
-        }
-        
-        //Notify view controller and pass the data
+    init(){
+        print("loading url")
+        load()
+        print("loading url complete")
     }
-
     
-    func parseJson(_ data:Data) -> [User]{
-
-        var usersArray = [User]()
-
-        //parse data into AccountHolderModel struct
-
-        do {
-            let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as! [Any]
-
-            //Iterate through jsonArray and create AccountHolder struct instances
-            //TODO: Change struct to class
-
-            for jsonResult in jsonArray {
-
-                //Cast json result as dictionary
-                let jsonDict = jsonResult as! [String:String]
-
-                let user = User(
-                    id: jsonDict["user_id"]!,
-                    firstName: jsonDict["firstname"]!,
-                    lastName: jsonDict["lastname"]!)
-
-                usersArray.append(user)
+    func load() {
+        let url = URL(string: "http://3.135.94.168/index2.php")!
+        
+        print("url: ", url)
+    
+        URLSession.shared.dataTask(with: url) {(data,response,error) in
+            do {
+                if let d = data {
+                    let decodedLists = try JSONDecoder().decode([UserStruct].self, from: d)
+                    print("decoded lists: ", decodedLists)
+                    DispatchQueue.main.async {
+                        self.users = decodedLists
+                    }
+                }else {
+                    print("No Data")
+                }
+            } catch {
+                print (error)
             }
             
-            return usersArray
-
-        } catch {
-            print("There was an error")
-        }
-        
-        return usersArray
-
+        }.resume()
+         
     }
+}
+
+struct UserStruct: Codable, Identifiable {
+    
+    public var id: String
+    public var firstName: String
+    public var lastName: String
+    public var age: String
+    public var gender: String
+    public var height: String
+    public var weight: String
+    
+    enum CodingKeys: String, CodingKey {
+           case id = "user_id"
+           case firstName = "first_name"
+           case lastName = "last_name"
+           case age = "age"
+           case gender = "gender"
+           case height = "height"
+           case weight = "weight"
+        }
 }

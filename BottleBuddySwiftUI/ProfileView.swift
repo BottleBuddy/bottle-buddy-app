@@ -29,20 +29,6 @@ struct ProfileView: View {
     @State var sex = 3
     @State var weight = ""
     
-    
-    
-    
-    private func updatePersonSex( personSex: Int)->Int{
-        //        persons.removeAll()
-        //        persons.append(Person(firstName: "John", lastName: "Doe", age: 21, birthdate: Date(), sex: personSex))
-        
-        //          let newPerson = User(firstName: "John", lastName: "Doe", age: 21, birthdate: Date(), sex: personSex, height: 1, weight: 1)
-        //
-        //        newPeople.append(newPerson)
-        return -1
-    }
-    
-    
     var body: some View {
         NavigationView{
             VStack{
@@ -84,19 +70,21 @@ struct ProfileView: View {
                     .alert(isPresented:$submit){
                         Alert(title: Text("Profile Saved"))
                     }
+                    
+                    Button(action: {
+                        try! Auth.auth().signOut()
+                        UserDefaults.standard.set(false, forKey: "status")
+                        NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
+                    }) {
+                        Text("Log out")
+                            .foregroundColor(.white)
+                            .padding(.vertical)
+                            .frame(width: UIScreen.main.bounds.width - 50)
+                    }
+                    .background(Color(UIColor(named: "BB_DarkBlue")!))
+                    .cornerRadius(10)
                 }
-                Button(action: {
-                    try! Auth.auth().signOut()
-                    UserDefaults.standard.set(false, forKey: "status")
-                    NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
-                }) {
-                    Text("Log out")
-                        .foregroundColor(.white)
-                        .padding(.vertical)
-                        .frame(width: UIScreen.main.bounds.width - 50)
-                }
-                .background(Color(UIColor(named: "BB_DarkBlue")!))
-                .cornerRadius(10)
+                
             }
         }
         .onAppear{

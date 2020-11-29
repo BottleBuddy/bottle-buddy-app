@@ -12,24 +12,31 @@ import SwiftUI
 
 struct UserDataView: View {
     @ObservedObject var fetcher = UserDataFetcher()
+    let bbdarkblue = UIColor(named: "BB_DarkBlue")
+    let bblightblue = UIColor(named: "BB_LightBlue")
+    
     
     var body: some View {
-        VStack {
-            List(fetcher.users) { user in
-                VStack (alignment: .leading) {
-                    Text(user.firstName)
-                    Text(user.lastName)
-                    Text(user.age)
-                    Text(user.gender)
-                    Text(user.height)
-                    Text(user.weight)
-                    Text("")
-                        .font(.system(size: 11))
-                        .foregroundColor(Color.gray)
-                }
+            
+        List(fetcher.users) { user in
+            VStack (alignment: .leading) {
+                Text("First Name: " + user.firstName)
+                Text("Last Name: " + user.lastName)
+                Text("Age:" + user.age)
+                Text("Gender: " + user.gender)
+                Text("Height: " + user.height)
+                Text("Weight: " + user.weight)
+                Text("")
+                    .font(.system(size: 15))
+                    
             }
+            .background(Color(bblightblue!).ignoresSafeArea())
         }
+        .background(Color(bblightblue!).ignoresSafeArea())
+               
     }
+    
+    
 }
 
 public class UserDataFetcher: ObservableObject {

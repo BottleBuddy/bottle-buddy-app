@@ -26,7 +26,7 @@ struct HomePage: View {
                 
                 HStack{
                     
-                    Text("Hello Flan")
+                    Text("Hello Jo!")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -46,7 +46,7 @@ struct HomePage: View {
                 
                 VStack(alignment: .leading, spacing: 25) {
                     
-                    Text("Daily Workout in Hrs")
+                    Text("Daily Water Consumption")
                         .font(.system(size: 22))
                         .fontWeight(.bold)
                         .foregroundColor(.white)

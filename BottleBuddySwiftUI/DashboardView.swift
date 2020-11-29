@@ -57,7 +57,7 @@ struct Dashboard : View {
             UserDataView()
                 .tabItem{
                     VStack{
-                    Image(systemName:"heart" )
+                    Image(systemName:"star" )
                     Text("UserInfo")
                     }
             }.tag(5)

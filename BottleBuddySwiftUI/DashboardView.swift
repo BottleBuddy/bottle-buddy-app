@@ -53,7 +53,16 @@ struct Dashboard : View {
                     Text("Health")
                     }
             }.tag(4)
-        }
+            
+            UserDataView()
+                .tabItem{
+                    VStack{
+                    Image(systemName:"heart" )
+                    Text("UserInfo")
+                    }
+            }.tag(5)
+         }
     }
 }
+
 

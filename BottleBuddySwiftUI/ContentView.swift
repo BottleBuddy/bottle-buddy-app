@@ -224,6 +224,7 @@ struct SignUp : View {
     @Binding var show : Bool
     @State var alert = false
     @State var error = ""
+    @State var id = ""
     
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
     let bblightblue = UIColor(named: "BB_LightBlue")
@@ -353,7 +354,10 @@ struct SignUp : View {
                     if err != nil{
                         self.error = err!.localizedDescription
                         self.alert.toggle()
-                        _ = User(email: self.email, firstName: self.firstName, lastName: self.lastName) //creating a new user instance when someone registers
+                        
+                        //TODO: May need to add a guard bc of the force unwrap of the uid
+                        let userID = Auth.auth().currentUser!.uid
+                        _ = User(uid: userID) //creating a new user instance when someone registers
                         return
                     }
                     

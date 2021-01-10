@@ -25,7 +25,7 @@ struct HomePage: View {
             VStack{
                 
                 HStack{
-                    
+                    //TODO: update with dynamic user's name
                     Text("Hello Jo!")
                         .font(.title)
                         .fontWeight(.bold)
@@ -158,12 +158,24 @@ struct HomePage: View {
                         .shadow(color: Color.white.opacity(0.2), radius: 10, x: 0, y: 0)
                     }
                 }
+                Button(action: {
+                    
+                    //TODO: initiate cleaning protocol on button click
+                }){
+                    Text("Start Cleaning")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                }
+                .background(Color(UIColor(named: "BB_DarkBlue")!))
+                .cornerRadius(10)
                 .padding()
+                
+                
+                
             }
         }
         .background(Color(bblightblue!).ignoresSafeArea())
-        // status bar color is not changing
-        // its still in beta...
     }
     
     // calculating Type...
@@ -171,12 +183,9 @@ struct HomePage: View {
     func getType(val: String)->String{
         
         switch val {
-        case "Water": return "L"
-        case "Sleep": return "Hrs"
-        case "Running": return "Km"
-        case "Cycling": return "Km"
-        case "Steps": return "stp"
-        default: return "Kcal"
+        case "Water Intake Today": return "L"
+        case "Days Until Cleaning": return "Days"
+        default: return "X"
         }
     }
     
@@ -240,7 +249,7 @@ struct Daily : Identifiable {
     var day : String
     var workout_In_Min : CGFloat
 }
-
+//TODO: update with water data from past 7 days
 var workout_Data = [
 
     Daily(id: 0, day: "Day 1", workout_In_Min: 480),
@@ -252,7 +261,6 @@ var workout_Data = [
     Daily(id: 6, day: "Day 7", workout_In_Min: 950)
 ]
 
-// stats Data...
 
 struct Stats : Identifiable {
     
@@ -263,19 +271,12 @@ struct Stats : Identifiable {
     var color : Color
 }
 
+//TODO: make currentData variable w data from database
 var stats_Data = [
-
-    Stats(id: 0, title: "Running", currentData: 6.8, goal: 15, color: Color(.yellow)),
     
-    Stats(id: 1, title: "Water", currentData: 3.5, goal: 5, color: Color(.yellow)),
+    Stats(id: 1, title: "Water Intake Today", currentData: 3.5, goal: 5, color: Color(.yellow)),
     
-    Stats(id: 2, title: "Energy Burn", currentData: 585, goal: 1000, color: Color(.yellow)),
-    
-    Stats(id: 3, title: "Sleep", currentData: 6.2, goal: 10, color: Color(.yellow)),
-    
-    Stats(id: 4, title: "Cycling", currentData: 12.5, goal: 25, color: Color(.yellow)),
-    
-    Stats(id: 5, title: "Steps", currentData: 16889, goal: 20000, color: Color(.yellow)),
+    Stats(id: 3, title: "Days Until Cleaning", currentData: 6.2, goal: 10, color: Color(.yellow))
 ]
 
 struct HomePage_Previews: PreviewProvider {

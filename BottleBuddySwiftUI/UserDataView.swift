@@ -10,6 +10,8 @@ import Foundation
 import Combine
 import SwiftUI
 
+
+//TODO: move most of this data to the home page and the profile page
 struct UserDataView: View {
     @ObservedObject var fetcher = UserDataFetcher()
     let bbdarkblue = UIColor(named: "BB_DarkBlue")

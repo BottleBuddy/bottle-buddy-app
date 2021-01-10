@@ -39,20 +39,14 @@ struct Dashboard : View {
                       }
             }.tag(2)
             
-            SettingsView()
-                .tabItem{
-                    VStack{
-                    Image(systemName:"gear" )
-                    Text("Settings")
-                    }
-            }.tag(3)
+        
             HealthView()
                 .tabItem{
                     VStack{
                     Image(systemName:"heart" )
                     Text("Health")
                     }
-            }.tag(4)
+            }.tag(3)
             
             UserDataView()
                 .tabItem{
@@ -60,7 +54,7 @@ struct Dashboard : View {
                     Image(systemName:"star" )
                     Text("UserInfo")
                     }
-            }.tag(5)
+            }.tag(4)
          }
     }
 }

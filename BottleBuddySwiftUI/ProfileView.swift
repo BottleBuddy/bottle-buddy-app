@@ -12,7 +12,7 @@ import Firebase
 
 struct ProfileView: View {
     
-    
+    let bblightblue = UIColor(named: "BB_LightBlue")
     private var healthStore:  HealthStore?
     @State private var newPeople : [User] = [User]()
     
@@ -28,49 +28,67 @@ struct ProfileView: View {
     @State var age = ""
     @State var sex = 3
     @State var weight = ""
+    @State var recieve = false
+    @State var notifNumber = 1
     
     var body: some View {
-        NavigationView{
+        
             VStack{
-                Form{
-                    Section(header: Text("About You")){
-                        TextField("First Name" , text: $firstName)
-                        TextField("Last Name" , text: $lastName)
-                        TextField("Age", text: $age)
-                            .keyboardType(.numberPad)
-                        TextField("Weight", text: $weight)
-                            .keyboardType(.numberPad)
-                        Picker(selection: $sex, label: Text("Sex")){
-                            Text("Male").tag(1)
-                            Text("Female").tag(2)
-                            Text("Other").tag(3)
-                            
+            
+                VStack{
+                    Form{
+                        Section(header: Text("About You")){
+                            TextField("First Name" , text: $firstName)
+                            TextField("Last Name" , text: $lastName)
+                            TextField("Age", text: $age)
+                                .keyboardType(.numberPad)
+                            TextField("Weight", text: $weight)
+                                .keyboardType(.numberPad)
+                            Picker(selection: $sex, label: Text("Sex")){
+                                Text("Male").tag(1)
+                                Text("Female").tag(2)
+                                Text("Other").tag(3)
+                                
+                            }
+                            TextField("Your email" , text: $email)
                         }
-                        TextField("Your email" , text: $email)
-                    }
-                    
-                    Section(header: Text("About Your Bottle")){
-                        Picker(selection: $bottleType, label: Text("Water Bottle Brand")){
-                            Text("Yeti").tag(1)
-                            Text("HydroFlask").tag(2)
-                            Text("ThermoFlask").tag(3)
-                            Text("None").tag(4)
+                        Section(header: Text("About Your Bottle")){
+                            Picker(selection: $bottleType, label: Text("Water Bottle Brand")){
+                                Text("Yeti").tag(1)
+                                Text("HydroFlask").tag(2)
+                                Text("ThermoFlask").tag(3)
+                                Text("None").tag(4)
+                            }
+                            Picker(selection: $bottleSize, label: Text("Water Bottle Size")){
+                                Text("16oz").tag(1)
+                                Text("18oz").tag(2)
+                                Text("26oz").tag(3)
+                                Text("36oz").tag(4)
+                            }
                         }
-                        Picker(selection: $bottleSize, label: Text("Water Bottle Size")){
-                            Text("16oz").tag(1)
-                            Text("18oz").tag(2)
-                            Text("26oz").tag(3)
-                            Text("36oz").tag(4)
+                        Button(action: {self.submit.toggle()}){
+                            //TODO: submit data to database
+                            Text("Submit")
+                        }
+                        .alert(isPresented:$submit){
+                            Alert(title: Text("Profile Saved"))
+                        }
+                        
+                    }
+                }
+                
+                HStack{
+                    Form{
+                        Toggle(isOn: $recieve){
+                            Text("Recieve Notifications")
+                        }
+                        Stepper(value: $notifNumber , in: 1...20){
+                            Text("\(notifNumber) Notification\(notifNumber > 1 ? "s " : " " )per week")
                         }
                     }
-                    
-                    Button(action: {self.submit.toggle()}){
-                        Text("Submit")
-                    }
-                    .alert(isPresented:$submit){
-                        Alert(title: Text("Profile Saved"))
-                    }
-                    
+                }
+                
+                HStack{
                     Button(action: {
                         try! Auth.auth().signOut()
                         UserDefaults.standard.set(false, forKey: "status")
@@ -85,26 +103,28 @@ struct ProfileView: View {
                     .cornerRadius(10)
                 }
                 
-            }
+            
+            
         }
-        .onAppear{
-            if let healthStore = healthStore{
-                healthStore.requestAuthorization { success in
-                    if(success){
-                        print(success)
-                        //                           sex = updatePersonSex(personSex: healthStore.getSex())
+        .background(Color(bblightblue!).ignoresSafeArea())
+                .onAppear{
+                    if let healthStore = healthStore{
+                        healthStore.requestAuthorization { success in
+                            if(success){
+                                print(success)
+                            }
+                        }
                     }
                 }
-            }
-        }
         
         .navigationBarTitle("Profile")
     }
     
-}
-
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
+    
+    
+    struct ProfileView_Previews: PreviewProvider {
+        static var previews: some View {
+            ProfileView()
+        }
     }
 }

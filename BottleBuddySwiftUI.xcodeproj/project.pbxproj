@@ -13,7 +13,6 @@
 		4C11B156253B783F00FEF692 /* HealthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11B155253B783F00FEF692 /* HealthStore.swift */; };
 		4C11B15B253B784600FEF692 /* HealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11B15A253B784600FEF692 /* HealthView.swift */; };
 		4C11B160253B78C100FEF692 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11B15F253B78C000FEF692 /* ProfileView.swift */; };
-		4C11B165253B78CF00FEF692 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11B164253B78CF00FEF692 /* SettingsView.swift */; };
 		4C11B16A253B78D500FEF692 /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11B169253B78D500FEF692 /* Step.swift */; };
 		4C11B179253B7CF800FEF692 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C11B178253B7CF800FEF692 /* HealthKit.framework */; };
 		4CAC8ACB25329BE4004A27F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAC8ACA25329BE4004A27F8 /* AppDelegate.swift */; };
@@ -57,7 +56,6 @@
 		4C11B155253B783F00FEF692 /* HealthStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStore.swift; sourceTree = "<group>"; };
 		4C11B15A253B784600FEF692 /* HealthView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthView.swift; sourceTree = "<group>"; };
 		4C11B15F253B78C000FEF692 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		4C11B164253B78CF00FEF692 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		4C11B169253B78D500FEF692 /* Step.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
 		4C11B177253B7CF800FEF692 /* BottleBuddySwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BottleBuddySwiftUI.entitlements; sourceTree = "<group>"; };
 		4C11B178253B7CF800FEF692 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -148,7 +146,6 @@
 				4CFE21CB253B5E5600666A61 /* DashboardView.swift */,
 				4C11B14B253B781600FEF692 /* HomePageView.swift */,
 				4C11B155253B783F00FEF692 /* HealthStore.swift */,
-				4C11B164253B78CF00FEF692 /* SettingsView.swift */,
 				4C11B15A253B784600FEF692 /* HealthView.swift */,
 				4C11B15F253B78C000FEF692 /* ProfileView.swift */,
 				4C11B169253B78D500FEF692 /* Step.swift */,
@@ -462,7 +459,6 @@
 				1A55664B2565A23F00683DE7 /* UserDataView.swift in Sources */,
 				4CAC8ACF25329BE4004A27F8 /* ContentView.swift in Sources */,
 				4C11B156253B783F00FEF692 /* HealthStore.swift in Sources */,
-				4C11B165253B78CF00FEF692 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

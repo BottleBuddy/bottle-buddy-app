@@ -9,6 +9,7 @@ import SwiftUI
 import Firebase
 
 struct ContentView: View {
+    let bbdarkblue = UIColor(named: "BB_DarkBlue")
     var body: some View {
         LoginSignin()
     }
@@ -43,10 +44,6 @@ struct LoginSignin : View {
                 }
                 else{
                     ZStack{
-                        NavigationLink(destination: SignUp(show: self.$show), isActive: self.$show) {
-                            Text("")
-                        }
-                        .hidden()
                         Login(show: self.$show)
                     }
                 }
@@ -81,92 +78,90 @@ struct Login : View {
     
     var body: some View{
         
-        ZStack{
-            ZStack(alignment: .topTrailing) {
-                GeometryReader{_ in
-                    VStack(alignment: .center){
-                        Image("logo")
-                            .padding(.horizontal)
-                        
-                        Text("Log in to your account")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(self.color)
-                            .padding(.top, 35)
-                        
-                        TextField("Email", text: self.$email)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 4).stroke(self.email != "" ? Color("Color") : self.color,lineWidth: 2))
-                            .padding(.top, 25)
-                        
-                        HStack(spacing: 15){
-                            
-                            VStack{
-                                if self.visible{
-                                    TextField("Password", text: self.$pass)
-                                        .autocapitalization(.none)
-                                }
-                                else{
-                                    SecureField("Password", text: self.$pass)
-                                        .autocapitalization(.none)
-                                }
-                            }
-                            Button(action: {
-                                self.visible.toggle()
-                            }) {
-                                Image(systemName: self.visible ? "eye.slash.fill" : "eye.fill")
-                                    .foregroundColor(self.color)
-                            }
+        ZStack(alignment: .top){
+            VStack(alignment: .center){
+                Image("logo")
+                    .padding(.horizontal)
+                
+                Text("Log in to your account")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(self.color)
+                    .padding(.top, 35)
+                
+                TextField("Email", text: self.$email)
+                    .autocapitalization(.none)
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.email != "" ? Color("Color") : self.color,lineWidth: 2))
+                    .padding(.top, 25)
+                
+                HStack(spacing: 15){
+                    
+                    VStack{
+                        if self.visible{
+                            TextField("Password", text: self.$pass)
+                                .autocapitalization(.none)
                         }
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 4).stroke(self.pass != "" ? Color("Color") : self.color,lineWidth: 2))
-                        .padding(.top, 25)
-                        
-                        HStack{
-                            Spacer()
-                            Button(action: {
-                                self.reset()
-                                
-                            }) {
-                                Text("Forgot password?")
-                                    .fontWeight(.bold)
-                                    .foregroundColor(Color("Color"))
-                            }
+                        else{
+                            SecureField("Password", text: self.$pass)
+                                .autocapitalization(.none)
                         }
-                        .padding(.top, 20)
-                        Button(action: {
-                            self.verify()
-                        }) {
-                            Text("Log in")
-                                .foregroundColor(.white)
-                                .padding(.vertical)
-                                .frame(width: UIScreen.main.bounds.width - 50)
-                        }
-                        .background(Color(bbdarkblue!))
-                        .cornerRadius(10)
-                        .padding(.top, 25)
-                        
                     }
-                    .padding(.horizontal, 25)
+                    Button(action: {
+                        self.visible.toggle()
+                    }) {
+                        Image(systemName: self.visible ? "eye.slash.fill" : "eye.fill")
+                            .foregroundColor(self.color)
+                    }
+                }
+                .padding()
+                .background(RoundedRectangle(cornerRadius: 4).stroke(self.pass != "" ? Color("Color") : self.color,lineWidth: 2))
+                .padding(.top, 25)
+                
+                HStack{
+                    Spacer()
+                    Button(action: {
+                        self.reset()
+                        
+                    }) {
+                        Text("Forgot password?")
+                            .fontWeight(.bold)
+                            .foregroundColor(Color("Color"))
+                    }
+                }
+                .padding(.top, 20)
+                Button(action: {
+                    self.verify()
+                }) {
+                    Text("Log in")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                }
+                .background(Color(bbdarkblue!))
+                .cornerRadius(10)
+                .padding(.top, 25)
+                
+                NavigationLink(destination: RegisterView()){
+                    Text("Register")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                        .cornerRadius(10)
                 }
                 
-                Button(action: {
-                    self.show.toggle()
-                }) {
-                    
-                    Text("Register")
-                        .fontWeight(.bold)
-                        .foregroundColor(Color(.black))
-                        .padding()
-                }
             }
+            .padding(.horizontal, 25)
+            .background(Color(bblightblue!).ignoresSafeArea())
+            .frame(maxHeight: .infinity)
             
             if self.alert{
                 ErrorView(alert: self.$alert, error: self.$error)
             }
         }
         .background(Color(bblightblue!).ignoresSafeArea())
+        .frame(maxHeight: .infinity)
     }
     
     func verify(){
@@ -205,175 +200,7 @@ struct Login : View {
         }
         else{
             
-            self.error = "Email Id is empty"
-            self.alert.toggle()
-        }
-    }
-}
-
-struct SignUp : View {
-    
-    @State var color = Color.black.opacity(0.7)
-    @State var email = ""
-    @State var firstName = ""
-    @State var lastName = ""
-    @State var pass = ""
-    @State var repass = ""
-    @State var visible = false
-    @State var revisible = false
-    @Binding var show : Bool
-    @State var alert = false
-    @State var error = ""
-    @State var id = ""
-    
-    let bbdarkblue = UIColor(named: "BB_DarkBlue")
-    let bblightblue = UIColor(named: "BB_LightBlue")
-    let bbyellow = UIColor(named: "BB_Yellow")
-    
-    
-    var body: some View{
-        
-        ZStack{
-            ZStack(alignment: .top) {
-                GeometryReader{_ in
-                    VStack{
-                        Button(action: {self.show.toggle()}) {
-                            Image(systemName: "chevron.left")
-                                .font(.title)
-                                .foregroundColor(Color(.black))
-                        }
-                        Image("logo")
-                        Text("Register to join BottleBuddy")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
-                            .padding(.top, 5)
-                        
-                        TextField("Email", text: self.$email)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 4).stroke(self.email != "" ? Color("Color") : self.color,lineWidth: 2))
-                            .padding(.top, 5)
-                        
-                        TextField("First Name", text: self.$firstName)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 4).stroke(self.firstName != "" ? Color("Color") : self.color,lineWidth: 2))
-                            .padding(.top, 5)
-                        
-                        TextField("Last Name", text: self.$lastName)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 4).stroke(self.lastName != "" ? Color("Color") : self.color,lineWidth: 2))
-                            .padding(.top, 5)
-                        
-                        HStack(spacing: 15){
-                            
-                            VStack{
-                                if self.visible{
-                                    TextField("Password", text: self.$pass)
-                                        .autocapitalization(.none)
-                                }
-                                else{
-                                    
-                                    SecureField("Password", text: self.$pass)
-                                        .autocapitalization(.none)
-                                }
-                            }
-                            
-                            Button(action: {
-                                self.visible.toggle()
-                            }) {
-                                Image(systemName: self.visible ? "eye.slash.fill" : "eye.fill")
-                                    .foregroundColor(self.color)
-                            }
-                            
-                        }
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 4).stroke(self.pass != "" ? Color("Color") : self.color,lineWidth: 2))
-                        .padding(.top, 5)
-                        
-                        HStack(spacing: 15){
-                            
-                            VStack{
-                                
-                                if self.revisible{
-                                    TextField("Re-enter", text: self.$repass)
-                                        .autocapitalization(.none)
-                                }
-                                else{
-                                    SecureField("Re-enter", text: self.$repass)
-                                        .autocapitalization(.none)
-                                }
-                            }
-                            
-                            Button(action: {
-                                self.revisible.toggle()
-                            }) {
-                                
-                                Image(systemName: self.revisible ? "eye.slash.fill" : "eye.fill")
-                                    .foregroundColor(self.color)
-                            }
-                            
-                        }
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 4).stroke(self.repass != "" ? Color("Color") : self.color,lineWidth: 2))
-                        .padding(.top, 5)
-                        
-                        Button(action: {
-                            
-                            self.register()
-                        }) {
-                            
-                            Text("Register")
-                                .foregroundColor(.white)
-                                .padding(.vertical)
-                                .frame(width: UIScreen.main.bounds.width - 50)
-                        }
-                        .background(Color(.black))
-                        .cornerRadius(10)
-                        .padding(.top, 5)
-                    }
-                    .padding(.horizontal, 25.0)
-                }
-                
-            }
-            .background(Color(bblightblue!).ignoresSafeArea())
-            
-            if self.alert{
-                ErrorView(alert: self.$alert, error: self.$error)
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-    }
-    
-    func register(){
-        if self.email != ""{
-            if self.pass == self.repass{
-                Auth.auth().createUser(withEmail: self.email, password: self.pass) { (res, err) in
-                    if err != nil{
-                        self.error = err!.localizedDescription
-                        self.alert.toggle()
-                        
-                        //TODO: May need to add a guard bc of the force unwrap of the uid
-                        let userID = Auth.auth().currentUser!.uid
-                        _ = User(uid: userID) //creating a new user instance when someone registers
-                        return
-                    }
-                    
-                    print("success")
-                    
-                    UserDefaults.standard.set(true, forKey: "status")
-                    NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
-                }
-            }
-            else{
-                self.error = "Password mismatch"
-                self.alert.toggle()
-            }
-        }
-        else{
-            self.error = "Please fill all the contents properly"
+            self.error = "Email ID is empty"
             self.alert.toggle()
         }
     }

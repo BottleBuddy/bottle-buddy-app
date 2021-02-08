@@ -12,7 +12,8 @@ import Foundation
 
 struct BluetoothConnectView: View {
     var body: some View {
-        let first = Buddy(bottleID: "yeti", connected: false)
+        //hardcoded test buddies for now
+        let first = Buddy(bottleID: "yeti", connected: true)
         let second = Buddy(bottleID: "hydroflask", connected: false)
         let third = Buddy(bottleID: "other", connected: false)
         let buddys = [first, second, third]
@@ -25,37 +26,53 @@ struct BluetoothConnectView: View {
 
 struct Buddy: Identifiable {
     var id = UUID()
-    var bottleID: String
-    var connected: Bool = false;
-    
-//    mutating func connect(){
-//        self.connected = true;
-//    }
+    var bottleID: String = ""
+    var connected: Bool = false
     
 }
 
 struct BuddyRow: View {
-    
     var buddy: Buddy
+    
     var body: some View {
         List{
             HStack{
                 Text(buddy.bottleID)
                 Spacer()
                 Button(action: {connect()}) {
-                    Text("CONNECT")
+                    if !buddy.connected{    //if buddy is NOT connected
+                        Text("CONNECT")
+                    }
+                    else {
+                        Text("DISCONNECT")
+                    }
                 }
             }
             .buttonStyle(BorderlessButtonStyle())
         }
         
     }
+    
+    func connect(){
+        if !buddy.connected {
+            bluetoothInit()
+        }
+        else {
+            bluetoothClose()
+        }
+    }
 }
 
-//temporary connect method to make it compile
-func connect(){
-    
+func bluetoothInit(){
+    let bluetooth = Bluetooth()
+    bluetooth.initializeStream()
 }
+
+func bluetoothClose(){
+    let bluetooth = Bluetooth()
+    bluetooth.closeStream()
+}
+
 
 
 struct BluetoothConnectView_Previews: PreviewProvider {

@@ -10,14 +10,14 @@ import Foundation
  *  Description: Creates a new service with specified characteristic(s)
  *  Usage: Make this structure whenever you want to make a new service
  */
-struct NewService{
-    var serviceUUID: CBUUID!
-    var characteristicUUID: CBUUID!
-    init(testService: String, testCharacteristic: String){
-        self.serviceUUID = CBUUID(string: testService)
-        self.characteristicUUID = CBUUID(string: testCharacteristic)
-    }
-}
+//struct NewService{
+//    var serviceUUID: CBUUID!
+//    var characteristicUUID: CBUUID!
+//    init(testService: String, testCharacteristic: String){
+//        self.serviceUUID = CBUUID(string: testService)
+//        self.characteristicUUID = CBUUID(string: testCharacteristic)
+//    }
+//}
 
 class ViewController: UIViewController {
     var peripheralManager: CBPeripheralManager!

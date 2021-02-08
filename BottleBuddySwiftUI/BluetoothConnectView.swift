@@ -11,7 +11,10 @@ import os
 import Foundation
 
 struct BluetoothConnectView: View {
+    
     var body: some View {
+        let bluetooth : Bluetooth
+        bluetooth = Bluetooth.init()
         //hardcoded test buddies for now
         let first = Buddy(bottleID: "yeti", connected: true)
         let second = Buddy(bottleID: "hydroflask", connected: false)
@@ -20,6 +23,9 @@ struct BluetoothConnectView: View {
         
         return List(buddys) { buddy in
             BuddyRow(buddy: buddy)
+            Button(action: {bluetooth.scanForDevices()}) {
+                Text("Search For Devices")
+            }
         }
     }
 }
@@ -33,7 +39,6 @@ struct Buddy: Identifiable {
 
 struct BuddyRow: View {
     var buddy: Buddy
-    
     var body: some View {
         List{
             HStack{
@@ -55,7 +60,7 @@ struct BuddyRow: View {
     
     func connect(){
         if !buddy.connected {
-            bluetoothInit()
+            bluetoothInit()     //need to update .connected status
         }
         else {
             bluetoothClose()

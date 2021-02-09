@@ -11,24 +11,38 @@ import os
 import Foundation
 
 struct BluetoothConnectView: View {
+    let bblightblue = UIColor(named: "BB_LightBlue")
     
-    var body: some View {
-        let bluetooth : Bluetooth
-        bluetooth = Bluetooth.init()
-        //hardcoded test buddies for now
-        let first = Buddy(bottleID: "yeti", connected: true)
-        let second = Buddy(bottleID: "hydroflask", connected: false)
-        let third = Buddy(bottleID: "other", connected: false)
-        let buddys = [first, second, third]
+    var bluetooth = Bluetooth.init()
+    
+    //hardcoded test buddies for now
+    let buddys = [
+        Buddy(bottleID: "yeti", connected: true),
+        Buddy(bottleID: "hydroflask", connected: false),
+        Buddy(bottleID: "other", connected: false)
+    ]
+    
+    var body: some View{
         
-        return List(buddys) { buddy in
-            BuddyRow(buddy: buddy)
+        VStack{
             Button(action: {bluetooth.scanForDevices()}) {
                 Text("Search For Devices")
+                    .foregroundColor(.white)
+                    .padding(.vertical)
+                    .frame(width: UIScreen.main.bounds.width - 50)
+                    .background(Color(UIColor(named: "BB_DarkBlue")!))
+                    .cornerRadius(10)
+            }
+            .padding()
+            
+            List(buddys) { buddy in
+                BuddyRow(buddy: buddy)
             }
         }
+        .background(Color(bblightblue!).ignoresSafeArea())
     }
 }
+
 
 struct Buddy: Identifiable {
     var id = UUID()

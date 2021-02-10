@@ -23,33 +23,41 @@ struct BluetoothConnectView: View {
     ]
     
     var body: some View{
-        
-        VStack{
-            Button(action: {bluetooth.scanForDevices()}) {
-                Text("Search For Devices")
+        ScrollView(){
+            VStack{
+                Text("Bluetooth")
+                    .font(.title)
+                    .fontWeight(.bold)
                     .foregroundColor(.white)
-                    .padding(.vertical)
-                    .frame(width: UIScreen.main.bounds.width - 50)
-                    .background(Color(UIColor(named: "BB_DarkBlue")!))
-                    .cornerRadius(10)
+                
+                Button(action: {bluetooth.scanForDevices()}) {
+                    Text("Search For Devices")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                        .cornerRadius(10)
+                }
+                .padding()
+                
+                Button(action: {bluetooth.connectDevice()}) {
+                    Text("Connect")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                        .cornerRadius(10)
+                }
+                
             }
-            .padding()
-            
-            
-            Spacer()
-            Button(action: {bluetooth.connectDevice()}) {
-                Text("Connect")
-            }
-            
-//            List(buddys) { buddy in
-//                BuddyRow(buddy: buddy)
-//            }
+            .background(Color(bblightblue!).ignoresSafeArea())
+            .frame(maxWidth: .infinity)
+            .onAppear{bluetooth.initializeStream()}
         }
         .background(Color(bblightblue!).ignoresSafeArea())
-        .onAppear{bluetooth.initializeStream()}
+        .frame(maxWidth: .infinity)
     }
 }
-
 
 struct Buddy: Identifiable {
     var id = UUID()
@@ -57,47 +65,6 @@ struct Buddy: Identifiable {
     var connected: Bool = false
     
 }
-
-//struct BuddyRow: View {
-//    var buddy: Buddy
-//    var body: some View {
-//        List{
-//            HStack{
-//                Text(buddy.bottleID)
-//                Spacer()
-//                Button(action: {bluetooth.connectDevice()}) {
-//                    if !buddy.connected{    //if buddy is NOT connected
-//                        Text("CONNECT")
-//                    }
-//                    else {
-//                        Text("DISCONNECT")
-//                    }
-//                }
-//            }
-//            .buttonStyle(BorderlessButtonStyle())
-//        }
-//
-//    }
-//
-////    func connect(){
-////        if !buddy.connected {
-////            bluetoothInit()     //need to update .connected status
-////        }
-////        else {
-////            bluetoothClose()
-////        }
-////    }
-//
-//}
-
-
-
-func bluetoothClose(){
-    let bluetooth = Bluetooth()
-    bluetooth.closeStream()
-}
-
-
 
 struct BluetoothConnectView_Previews: PreviewProvider {
     static var previews: some View {

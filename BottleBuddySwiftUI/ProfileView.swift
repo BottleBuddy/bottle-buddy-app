@@ -23,6 +23,10 @@ struct ProfileView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(){
+                Text("Profile")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
                 
                 NavigationLink(destination: BluetoothConnectView()){
                     Text("Bluetooth")

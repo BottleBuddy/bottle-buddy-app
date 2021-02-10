@@ -10,14 +10,14 @@ import SwiftUI
 import HealthKit
 
 struct HealthView: View {
-     
+    
     private var healthStore:  HealthStore?
     @State private var steps: [Step] = [Step]()
     @State private var newPeople : [User] = [User]()
     
     
     init(){
-         healthStore = HealthStore()
+        healthStore = HealthStore()
     }
     
     private func updateUIFromStatistics( statisticsCollection: HKStatisticsCollection){
@@ -34,11 +34,11 @@ struct HealthView: View {
         }
     }
     
-  
+    
     var body: some View {
         
         NavigationView{
-           
+            
             List(steps, id: \.id) { step in
                 VStack(alignment: .leading){
                     Text("\(step.count)")
@@ -48,41 +48,41 @@ struct HealthView: View {
                     } else {
                         // Fallback on earlier versions
                         Text("\(step.count)")
-
+                        
                     }
                 }
             }
-        .navigationBarTitle("Steps")
+            .navigationBarTitle("Steps")
         }
         
-            .onAppear{
-                if let healthStore = healthStore{
-                    healthStore.requestAuthorization { success in
-                        if(success){
-                            print(success)
-                            
-                            healthStore.calculateSteps{statisticsCollection in
-                                if let statisticsCollection = statisticsCollection{
-                                    print(statisticsCollection)
-                                    updateUIFromStatistics(statisticsCollection: statisticsCollection)
-                                }
+        .onAppear{
+            if let healthStore = healthStore{
+                healthStore.requestAuthorization { success in
+                    if(success){
+                        print(success)
+                        
+                        healthStore.calculateSteps{statisticsCollection in
+                            if let statisticsCollection = statisticsCollection{
+                                print(statisticsCollection)
+                                updateUIFromStatistics(statisticsCollection: statisticsCollection)
                             }
-                            
                         }
+                        
                     }
                 }
             }
         }
     }
+}
 
-        
+
 
 struct HealthView_Previews: PreviewProvider {
     static var previews: some View {
         HealthView()
     }
 }
-    
+
 
 
 

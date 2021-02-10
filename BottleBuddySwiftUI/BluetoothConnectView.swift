@@ -15,13 +15,6 @@ struct BluetoothConnectView: View {
     
     var bluetooth = Bluetooth.init()
     
-    //hardcoded test buddies for now
-    let buddys = [
-        Buddy(bottleID: "yeti", connected: true),
-        Buddy(bottleID: "hydroflask", connected: false),
-        Buddy(bottleID: "other", connected: false)
-    ]
-    
     var body: some View{
         ScrollView(){
             VStack{
@@ -62,8 +55,7 @@ struct BluetoothConnectView: View {
 struct Buddy: Identifiable {
     var id = UUID()
     var bottleID: String = ""
-    var connected: Bool = false
-    
+    var connected: Bool = false    
 }
 
 struct BluetoothConnectView_Previews: PreviewProvider {

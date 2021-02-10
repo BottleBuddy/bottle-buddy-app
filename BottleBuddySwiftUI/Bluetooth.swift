@@ -11,21 +11,7 @@ import CoreBluetooth
 import os
 
 
-/*
- THINGS THAT NEED HOMES
- 
- let peripheralManager = CBPeripheralManager(
- delegate: self,
- queue: nil,
- options: [CBPeripheralManagerOptionShowPowerAlertKey: true])
- )
- */
-
-
-/*  NewService
- *  Description: Creates a new service with specified characteristic(s)
- *  Usage: Make this structure whenever you want to make a new service
- */
+// Make this structure whenever you want to make a new service
 struct NewService{
     var serviceUUID: CBUUID!
     var characteristicUUID: CBUUID!
@@ -64,7 +50,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
     
     override init(){
-        sendingEOM = false
+        sendingEOM = false      //this is j to make things compile,, may need to change later
     }
     
     func initializeStream(){
@@ -80,7 +66,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     }
     
     func closeStream(){
-        centralManager.stopScan()   //stops looking for devices (the bottle cap)
+        centralManager.stopScan()   //stops looking for devices
         dataRecieved.removeAll(keepingCapacity: false)  //clearing BLE queue
         peripheralManager.stopAdvertising()     //this advertises to the bottle cap,,, may not need (ask josh and zane what they decide)
     }
@@ -104,8 +90,6 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             withServices: nil,
             options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
         )
-        //var isPrint :Bool
-        //isPrint = centralManager.isScanning
         if centralManager.isScanning {
             os_log("is scanning")
         }
@@ -123,7 +107,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         // Change the minimum RSSI value depending on your app’s use case.
         guard RSSI.intValue >= -50
         else {
-//            os_log("Discovered perhiperal not in expected range, at %d", RSSI.intValue)
+            //            os_log("Discovered perhiperal not in expected range, at %d", RSSI.intValue)
             return
         }
         
@@ -158,10 +142,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             return
         case .resetting:
             os_log("CBManager is resetting")
-            // In a real app, you'd deal with all the states accordingly
             return
         case .unauthorized:
-            // In a real app, you'd deal with all the states accordingly
             if #available(iOS 13.0, *) {
                 switch central.authorization {
                 case .denied:
@@ -177,11 +159,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             return
         case .unknown:
             os_log("CBManager state is unknown")
-            // In a real app, you'd deal with all the states accordingly
             return
         case .unsupported:
             os_log("Bluetooth is not supported on this device")
-            // In a real app, you'd deal with all the states accordingly
             return
         @unknown default:
             os_log("A previously unknown central manager state occurred")
@@ -196,7 +176,6 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
          *  Description: Standard sendData() function from Apple's Example code. Personally, I did not change anything in this function because I was just testing.
          *  Usage: Call this function to actually send the data (as a peripheral) to another device. However, the way it is sent is up to you.
          */
-        
         
         //sending from phone to cap
         func sendData() {
@@ -252,10 +231,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
                 // Was it the last one?
                 if sendDataIndex >= dataToSend.count {
                     // It was - send an EOM
-                    
                     // Set this so if the send fails, we'll send it next time
                     ViewController.sendingEOM = true
-                    
                     //Send it
                     let eomSent = peripheralManager.updateValue("EOM".data(using: .utf8)!,
                                                                 for: transferCharacteristic, onSubscribedCentrals: nil)
@@ -337,9 +314,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             //cleanup()
             return
         }
-        
         // Discover the characteristic we want...
-        
         // Loop through the newly filled peripheral.services array, just in case there's more than one.
         guard let peripheralServices = peripheral.services else { return }
         /*for service in peripheralServices {
@@ -375,7 +350,6 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             centralTransferCharacteristic = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
         }
-        
         // Once this is complete, we just need to wait for the data to come in.
     }
     
@@ -434,8 +408,5 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             os_log("Notification stopped on %@. Disconnecting", characteristic)
             //cleanup()
         }
-        
     }
-    
-    
 }

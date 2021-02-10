@@ -39,22 +39,13 @@ struct Dashboard : View {
                       }
             }.tag(2)
             
-        
-            HealthView()
-                .tabItem{
-                    VStack{
-                    Image(systemName:"heart" )
-                    Text("Health")
-                    }
-            }.tag(3)
-            
-            UserDataView()
+            UserDataView()  //remove once user info can be displayed on dashboard
                 .tabItem{
                     VStack{
                     Image(systemName:"star" )
                     Text("UserInfo")
                     }
-            }.tag(4)
+            }.tag(3)
          }
     }
 }

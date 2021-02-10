@@ -35,11 +35,18 @@ struct BluetoothConnectView: View {
             }
             .padding()
             
-            List(buddys) { buddy in
-                BuddyRow(buddy: buddy)
+            
+            Spacer()
+            Button(action: {bluetooth.connectDevice()}) {
+                Text("Connect")
             }
+            
+//            List(buddys) { buddy in
+//                BuddyRow(buddy: buddy)
+//            }
         }
         .background(Color(bblightblue!).ignoresSafeArea())
+        .onAppear{bluetooth.initializeStream()}
     }
 }
 
@@ -51,41 +58,39 @@ struct Buddy: Identifiable {
     
 }
 
-struct BuddyRow: View {
-    var buddy: Buddy
-    var body: some View {
-        List{
-            HStack{
-                Text(buddy.bottleID)
-                Spacer()
-                Button(action: {connect()}) {
-                    if !buddy.connected{    //if buddy is NOT connected
-                        Text("CONNECT")
-                    }
-                    else {
-                        Text("DISCONNECT")
-                    }
-                }
-            }
-            .buttonStyle(BorderlessButtonStyle())
-        }
-        
-    }
-    
-    func connect(){
-        if !buddy.connected {
-            bluetoothInit()     //need to update .connected status
-        }
-        else {
-            bluetoothClose()
-        }
-    }
-}
+//struct BuddyRow: View {
+//    var buddy: Buddy
+//    var body: some View {
+//        List{
+//            HStack{
+//                Text(buddy.bottleID)
+//                Spacer()
+//                Button(action: {bluetooth.connectDevice()}) {
+//                    if !buddy.connected{    //if buddy is NOT connected
+//                        Text("CONNECT")
+//                    }
+//                    else {
+//                        Text("DISCONNECT")
+//                    }
+//                }
+//            }
+//            .buttonStyle(BorderlessButtonStyle())
+//        }
+//
+//    }
+//
+////    func connect(){
+////        if !buddy.connected {
+////            bluetoothInit()     //need to update .connected status
+////        }
+////        else {
+////            bluetoothClose()
+////        }
+////    }
+//
+//}
 
-func bluetoothInit(){
-    let bluetooth = Bluetooth()
-    bluetooth.initializeStream()
-}
+
 
 func bluetoothClose(){
     let bluetooth = Bluetooth()

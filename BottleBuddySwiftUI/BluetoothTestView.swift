@@ -486,7 +486,9 @@ extension ViewController: CBCentralManagerDelegate {
     /*
      *  If the connection fails for whatever reason, we need to deal with it.
      */
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+    func centralManager(_ central: CBCentralManager,
+                        didFailToConnect peripheral: CBPeripheral,
+                        error: Error?) {
         os_log("Failed to connect to %@. %s", peripheral, String(describing: error))
         cleanup()
     }
@@ -494,7 +496,8 @@ extension ViewController: CBCentralManagerDelegate {
     /*
      *  We've connected to the peripheral, now we need to discover the services and characteristics to find the 'transfer' characteristic.
      */
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+    func centralManager(_ central: CBCentralManager,
+                        didConnect peripheral: CBPeripheral) {
         os_log("Peripheral Connected")
         // Stop scanning
         centralManager.stopScan()
@@ -515,7 +518,8 @@ extension ViewController: CBCentralManagerDelegate {
     /*
      *  Once the disconnection happens, we need to clean up our local copy of the peripheral
      */
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral,
+                        error: Error?) {
         os_log("Perhiperal Disconnected")
         connectedPeripheral = nil
         //deviceTableView.reloadData()

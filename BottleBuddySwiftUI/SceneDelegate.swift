@@ -11,7 +11,7 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    var user = User(uid: "", firstName: "", lastName: "")   //creating instance of user
+    @ObservedObject var user = User(uid: "sanika", firstName: "", lastName: "")   //creating instance of user
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {

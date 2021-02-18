@@ -7,6 +7,11 @@
 
 import SwiftUI
 import Firebase
+import Combine
+
+//final class userObject: Object, ObjectKeyIdentifiable {
+//
+//}
 
 struct EditProfileView: View {
     

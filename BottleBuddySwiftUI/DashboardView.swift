@@ -8,9 +8,11 @@
 import SwiftUI
 import Firebase
 
-struct DashboardView: View {        //why do i need this struct and Dashboard struct?
+struct DashboardView: View {//why do i need this struct and Dashboard struct?
+    @EnvironmentObject var user: User
+    
     var body: some View {
-        Dashboard()
+        Dashboard().environmentObject(user)
     }
 }
 
@@ -21,6 +23,9 @@ struct DashboardView_Previews: PreviewProvider {
 }
 
 struct Dashboard : View {
+    @EnvironmentObject var user: User
+    @ObservedObject var state = AppState()
+    
     var body: some View {
         TabView{
             HomePage()
@@ -38,15 +43,22 @@ struct Dashboard : View {
                       Text("Profile")
                       }
             }.tag(2)
+            .environmentObject(user)
+            .environmentObject(state)
             
-            UserDataView()  //remove once user info can be displayed on dashboard
+            UserDataView()
                 .tabItem{
                     VStack{
                     Image(systemName:"star" )
                     Text("UserInfo")
                     }
-            }.tag(3)
-         }
+                }.tag(3)
+                .environmentObject(user)
+                .environmentObject(state)
+        }.onAppear {
+            uid = user.uid
+            state.partitionValue = user.uid
+        }
     }
 }
 

@@ -14,7 +14,9 @@ struct ProfileView: View {
     
     let bblightblue = UIColor(named: "BB_LightBlue")
     private var healthStore:  HealthStore?
-    @State private var newPeople : [User] = [User]()
+   // @State private var newPeople : [User] = [User]()
+    @EnvironmentObject var state: AppState
+    @EnvironmentObject var user: User
     
     init(){
         healthStore = HealthStore()

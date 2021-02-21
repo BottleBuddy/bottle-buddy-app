@@ -1,6 +1,0 @@
-framework module Pods_BottleBuddySwiftUI_BottleBuddySwiftUIUITests {
-  umbrella header "Pods-BottleBuddySwiftUI-BottleBuddySwiftUIUITests-umbrella.h"
-
-  export *
-  module * { export * }
-}

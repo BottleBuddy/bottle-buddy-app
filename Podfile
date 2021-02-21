@@ -6,6 +6,7 @@ target 'BottleBuddySwiftUI' do
   use_frameworks!
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
+  pod 'RealmSwift'
 
   # Pods for BottleBuddySwiftUI
 

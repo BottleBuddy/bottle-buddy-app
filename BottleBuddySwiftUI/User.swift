@@ -6,9 +6,10 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
-class User: Codable, Identifiable, ObservableObject{
-    var uid: String = ""
+class User: ObservableObject{
+    @Published var uid: String = ""
     var firstName: String = ""
     var lastName: String = ""
     let age: Int = 0

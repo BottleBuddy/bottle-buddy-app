@@ -42,6 +42,18 @@ struct BluetoothConnectView: View {
                         .cornerRadius(10)
                 }
                 
+                //TextField(<#LocalizedStringKey#>, text: <#Binding<String>#>)
+                
+                Button(action:{bluetooth.writeData()}){
+                    Text("Write Data")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                        .cornerRadius(10)
+                }
+                
+                
             }
             .background(Color(bblightblue!).ignoresSafeArea())
             .frame(maxWidth: .infinity)
@@ -52,11 +64,11 @@ struct BluetoothConnectView: View {
     }
 }
 
-struct Buddy: Identifiable {
-    var id = UUID()
-    var bottleID: String = ""
-    var connected: Bool = false    
-}
+//struct Buddy: Identifiable {
+//    var id = UUID()
+//    var bottleID: String = ""
+//    var connected: Bool = false
+//}
 
 struct BluetoothConnectView_Previews: PreviewProvider {
     static var previews: some View {

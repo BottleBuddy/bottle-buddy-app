@@ -161,9 +161,9 @@
 				4C11B14B253B781600FEF692 /* HomePageView.swift */,
 				4C11B155253B783F00FEF692 /* HealthStore.swift */,
 				4C11B15A253B784600FEF692 /* HealthView.swift */,
-				4C11B15F253B78C000FEF692 /* ProfileView.swift */,
-				4C84DD7725D07EB800DD0376 /* EditProfileView.swift */,
 				4C11B169253B78D500FEF692 /* Step.swift */,
+				4C11B15F253B78C000FEF692 /* ProfileView.swift */,
+				4C84DD7725D07EB800DD0376 /* EditProfileView.swift */
 				4CAC8AFD25329C02004A27F8 /* User.swift */,
 				4C5CAA9925D0CE6A005F9AB8 /* Bluetooth.swift */,
 				4C49359A25C5FA1000FD44B1 /* BluetoothTestView.swift */,

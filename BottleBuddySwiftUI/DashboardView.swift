@@ -15,7 +15,6 @@ var uid: String = ""
 
 struct DashboardView: View {//why do i need this struct and Dashboard struct?
     @EnvironmentObject var user: User
-    
     var body: some View {
         Dashboard().environmentObject(user)
     }

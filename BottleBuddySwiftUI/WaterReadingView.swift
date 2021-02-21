@@ -9,9 +9,9 @@ import RealmSwift
 import Combine
 import SwiftUI
 
-let USE_REALM_SYNC = true
-let app = USE_REALM_SYNC ? App(id: "bottlebuddyrealm-ucenr") : nil
-var uid: String = ""
+//let USE_REALM_SYNC = true
+//let app = USE_REALM_SYNC ? App(id: "bottlebuddyrealm-ucenr") : nil
+//var uid: String = ""
 
 struct WaterReadingView : View {
     @EnvironmentObject var state: AppState
@@ -19,17 +19,9 @@ struct WaterReadingView : View {
     
     var body: some View {
         ZStack {
-            // If a realm is open for a logged in user, show the waterReadingsView
-            // else show the LoginView
             if let waterReadings = state.waterReadings {
-                // If using Realm Sync and authentication, provide a logout button
-                // in the top left of the waterReadingsView.
-                let leadingBarButton = app != nil ? AnyView(LogoutButton().environmentObject(state)) : nil
-                waterReadingsView(waterReadings: waterReadings,
-                          leadingBarButton: leadingBarButton)
+                waterReadingsView(waterReadings: waterReadings)
                     .disabled(state.shouldIndicateActivity)
-            } else {
-                LoginView().environmentObject(state)
             }
             // If the app is doing work in the background,
             // overlay an ActivityIndicator
@@ -170,59 +162,6 @@ class AppState: ObservableObject {
     }
 }
 
-// MARK: Authentication Views
-/// Represents the login screen. We will just have a button to log in anonymously.
-struct LoginView: View {
-    @EnvironmentObject var state: AppState
-    // Display an error if it occurs
-    @State var error: Error?
-
-    var body: some View {
-        VStack {
-            if let error = error {
-                Text("Error: \(error.localizedDescription)")
-            }
-            Button("View Water Readings") {
-                guard let app = app else {
-                    print("Not using Realm Sync - not logging in")
-                    return
-                }
-                state.shouldIndicateActivity = true
-                app.login(credentials: .anonymous).receive(on: DispatchQueue.main).sink(receiveCompletion: {
-                    state.shouldIndicateActivity = false
-                    switch ($0) {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        self.error = error
-                    }
-                }, receiveValue: {
-                    self.error = nil
-                    state.loginPublisher.send($0)
-                }).store(in: &state.cancellables)
-            }.disabled(state.shouldIndicateActivity)
-        }
-    }
-}
-
-/// A button that handles logout requests.
-struct LogoutButton: View {
-    @EnvironmentObject var state: AppState
-    var body: some View {
-        Button("Exit") {
-            guard let app = app else {
-                print("Not using Realm Sync - not logging out")
-                return
-            }
-            state.shouldIndicateActivity = true
-            app.currentUser?.logOut().receive(on: DispatchQueue.main).sink(receiveCompletion: { _ in }, receiveValue: {
-                state.shouldIndicateActivity = false
-                state.logoutPublisher.send($0)
-            }).store(in: &state.cancellables)
-        }.disabled(state.shouldIndicateActivity)
-    }
-}
-
 // MARK: waterReading Views
 /// The screen containing a list of waterReadings in a group. Implements functionality for adding, rearranging,
 /// and deleting waterReadings in the group.
@@ -326,7 +265,6 @@ struct waterReadingRow: View {
     }
 }
 
-/// Represents a screen where you can edit the waterReading's name.
 struct waterReadingDetailsView: View {
     var waterReading: waterReading
 

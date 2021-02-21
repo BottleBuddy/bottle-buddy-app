@@ -53,6 +53,7 @@ struct BluetoothConnectView: View {
                         .cornerRadius(10)
                 }
                 
+                
             }
             .background(Color(bblightblue!).ignoresSafeArea())
             .frame(maxWidth: .infinity)

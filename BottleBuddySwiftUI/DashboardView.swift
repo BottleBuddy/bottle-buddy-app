@@ -8,7 +8,7 @@
 import SwiftUI
 import Firebase
 
-struct DashboardView: View {        //why do i need this struct and Dashboard struct?
+struct DashboardView: View {       
     var body: some View {
         Dashboard()
     }

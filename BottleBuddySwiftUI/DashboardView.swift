@@ -12,23 +12,18 @@ import RealmSwift
 let USE_REALM_SYNC = true
 let app = USE_REALM_SYNC ? App(id: "bottlebuddyrealm-ucenr") : nil
 var uid: String = ""
-
-struct DashboardView: View {//why do i need this struct and Dashboard struct?
-    @EnvironmentObject var user: User
-    
-    var body: some View {
-        Dashboard().environmentObject(user)
-    }
-}
+var user: userObject = userObject(uid: Auth.auth().currentUser!.uid,email: Auth.auth().currentUser!.email!)
 
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
-        DashboardView()
+        Dashboard()
     }
 }
 
 struct Dashboard : View {
-    @EnvironmentObject var user: User
+    //creating global instance of user
+//    @ObservedObject var user = userObject(uid: Auth.auth().currentUser!.uid,email: Auth.auth().currentUser!.email!)
+    
     @ObservedObject var state = AppState()
     
     @State var error: Error?
@@ -42,6 +37,7 @@ struct Dashboard : View {
                         Text("Home")
                     }
                 }.tag(1)
+                
             
             ProfileView()
                 .tabItem{
@@ -50,7 +46,7 @@ struct Dashboard : View {
                         Text("Profile")
                     }
                 }.tag(2)
-                .environmentObject(user)
+                
                 .environmentObject(state)
             
             UserDataView()
@@ -60,11 +56,11 @@ struct Dashboard : View {
                         Text("UserInfo")
                     }
                 }.tag(3)
-                .environmentObject(user)
+                
                 .environmentObject(state)
         }.onAppear {
-            uid = user.uid
-            state.partitionValue = user.uid
+            uid = user.user_id
+            state.partitionValue = user.user_id
             
             guard let app = app else {
                 print("Not using Realm Sync - not logging in")
@@ -83,17 +79,8 @@ struct Dashboard : View {
                 self.error = nil
                 state.loginPublisher.send($0)
             }).store(in: &state.cancellables)
-        }.disabled(state.shouldIndicateActivity)
-        .onDisappear{
-            guard let app = app else {
-                print("Not using Realm Sync - not logging out")
-                return
-            }
-            state.shouldIndicateActivity = true
-            app.currentUser?.logOut().receive(on: DispatchQueue.main).sink(receiveCompletion: { _ in }, receiveValue: {
-                state.shouldIndicateActivity = false
-                state.logoutPublisher.send($0)
-            }).store(in: &state.cancellables)
+        
+   //         user.syncUserObject()
         }.disabled(state.shouldIndicateActivity)
     }
 }

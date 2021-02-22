@@ -10,6 +10,7 @@ import SwiftUI
 
 struct HomePage: View {
     
+ //   @EnvironmentObject var user: userObject
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     @State var selected = 0
     var colors = [Color(.white)]
@@ -26,7 +27,7 @@ struct HomePage: View {
                 
                 HStack{
                     //TODO: update with dynamic user's name
-                    Text("Hello Jo!")
+                    Text("Hi Jo")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)

@@ -14,9 +14,8 @@ struct ProfileView: View {
     
     let bblightblue = UIColor(named: "BB_LightBlue")
     private var healthStore:  HealthStore?
-   // @State private var newPeople : [User] = [User]()
     @EnvironmentObject var state: AppState
-    @EnvironmentObject var user: User
+  //  @EnvironmentObject var user: userObject
     
     init(){
         healthStore = HealthStore()
@@ -54,6 +53,17 @@ struct ProfileView: View {
                     try! Auth.auth().signOut()
                     UserDefaults.standard.set(false, forKey: "status")
                     NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
+                    
+                    guard let app = app else {
+                        print("Not using Realm Sync - not logging out")
+                        return
+                    }
+                    state.shouldIndicateActivity = true
+                    app.currentUser?.logOut().receive(on: DispatchQueue.main).sink(receiveCompletion: { _ in }, receiveValue: {
+                        state.shouldIndicateActivity = false
+                        state.logoutPublisher.send($0)
+                    }).store(in: &state.cancellables)
+                    
                 }) {
                     Text("Log out")
                         .foregroundColor(.white)

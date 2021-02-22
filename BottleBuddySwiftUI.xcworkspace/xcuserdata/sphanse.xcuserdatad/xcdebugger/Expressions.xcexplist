@@ -3,6 +3,43 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "_swift_runtime_on_report:(null)">
+         <PersistentStrings>
+            <PersistentString
+               value = "currentUser">
+            </PersistentString>
+            <PersistentString
+               value = "app?.currentUser">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in userObject.syncUserObject():EditProfileView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in AppState.init():WaterReadingView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "realm.objects(userObject.self).count">
+            </PersistentString>
+            <PersistentString
+               value = "userData">
+            </PersistentString>
+            <PersistentString
+               value = "WaterReadingsGroup.self">
+            </PersistentString>
+            <PersistentString
+               value = "userObject.self">
+            </PersistentString>
+            <PersistentString
+               value = "realm.objects(WaterReadingsGroup.self)">
+            </PersistentString>
+            <PersistentString
+               value = "user">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "EditProfileView.addUserObject():EditProfileView.swift">
          <PersistentStrings>
             <PersistentString
@@ -13,6 +50,28 @@
             </PersistentString>
             <PersistentString
                value = "app?.currentUser">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "SceneDelegate.init():SceneDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Auth.auth().currentUser">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Dashboard.init():DashboardView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "user">
+            </PersistentString>
+            <PersistentString
+               value = "Auth.auth().currentUser!.email">
+            </PersistentString>
+            <PersistentString
+               value = "Auth.auth().currentUser">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

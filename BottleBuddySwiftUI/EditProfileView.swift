@@ -12,56 +12,85 @@ import RealmSwift
 
 final class userObject: Object, ObjectKeyIdentifiable {
     @objc dynamic var _id: ObjectId = ObjectId.generate()
-    @objc dynamic var user_id: String = uid
+    @objc dynamic var user_id: String = ""
     @objc dynamic var bottleType = 4
     @objc dynamic var bottleSize = 1
     @objc dynamic var email = ""
     @objc dynamic var submit = false
-    @objc dynamic var firstName = ""
-    @objc dynamic var lastName = ""
+    @objc dynamic var name = ""
     @objc dynamic var age = ""
     @objc dynamic var sex = 3
     @objc dynamic var weight = ""
     @objc dynamic var recieve = false
     @objc dynamic var notifNumber = 1
     
+    convenience init(uid: String, email: String){
+        self.init()
+        self.user_id = uid
+        self.email = email
+    }
+    
     
     override static func primaryKey() -> String? {
         return "_id"
     }
+    
+//    func syncUserObject(){
+//        let currentUser = app?.currentUser
+//        let config = currentUser!.configuration(partitionValue: uid)
+//        Realm.asyncOpen(configuration: config) { result in
+//            switch result {
+//            case .failure(let error):
+//                print("Failed to open realm: \(error.localizedDescription)")
+//                // handle error
+//            case .success(let realm):
+//                print("Successfully opened realm: \(realm)")
+//
+//                let realmObject = realm.objects(userObject.self)
+//
+//                let pups = realmObject.filter("user_id == " + self.user_id)
+//                
+//                print("realmObject: ")
+//                print(pups)
+//
+////                if realmObject[0].user_id == user.user_id {
+////                    user.age = realmObject[0].age
+////                } else {
+////                    try! realm.write{
+////                        realm.add(user)
+////                    }
+////                }
+//
+//            }
+//        }
+//
+//    }
 
 }
 
 struct EditProfileView: View {
     
     @EnvironmentObject var state: AppState
-    @EnvironmentObject var user: User
-    var userObj: userObject
+    @EnvironmentObject var user: userObject
     
     let bblightblue = UIColor(named: "BB_LightBlue")
     @State var bottleType = 4
     @State var bottleSize = 1
     @State var email = ""
     @State var submit = false
-    @State var firstName = ""
-    @State var lastName = ""
+    @State var name = ""
     @State var age = ""
     @State var sex = 3
     @State var weight = ""
     @State var recieve = false
     @State var notifNumber = 1
     
-    init() {
-        self.userObj = userObject()
-    }
-    
     var body: some View {
         VStack{
             VStack{
                 Form{
                     Section(header: Text("About You")){
-                        TextField("First Name" , text: $firstName)
-                        TextField("Last Name" , text: $lastName)
+                        TextField("Name" , text: $name)
                         TextField("Age", text: $age)
                             .keyboardType(.numberPad)
                         TextField("Weight", text: $weight)
@@ -110,6 +139,8 @@ struct EditProfileView: View {
         }
     }
     
+    
+    
     func addUserObject() {
         let newUserObject = userObject()
         
@@ -117,9 +148,9 @@ struct EditProfileView: View {
         newUserObject.bottleSize = bottleSize
         newUserObject.bottleType = bottleType
         newUserObject.email = email
-        newUserObject.firstName = firstName
-        newUserObject.lastName = lastName
+        newUserObject.name = name
         newUserObject.notifNumber = notifNumber
+        newUserObject.user_id = user.user_id
         
         let currentUser = app?.currentUser
         

@@ -9,13 +9,9 @@ import RealmSwift
 import Combine
 import SwiftUI
 
-//let USE_REALM_SYNC = true
-//let app = USE_REALM_SYNC ? App(id: "bottlebuddyrealm-ucenr") : nil
-//var uid: String = ""
-
 struct WaterReadingView : View {
     @EnvironmentObject var state: AppState
-    @EnvironmentObject var user: User
+   // @EnvironmentObject var user: userObject
     
     var body: some View {
         ZStack {
@@ -84,7 +80,7 @@ class AppState: ObservableObject {
     /// The list of waterReadings in the first group in the realm that will be displayed to the user.
     @Published var waterReadings: RealmSwift.List<waterReading>?
     
-    //@Published var userData: User
+    @Published var userData: userObject?
     
     var partitionValue: String = ""
 
@@ -111,6 +107,14 @@ class AppState: ObservableObject {
                 }
                 assert(realm.objects(WaterReadingsGroup.self).count > 0)
                 self.waterReadings = realm.objects(WaterReadingsGroup.self).first!.waterReadings
+                
+                if realm.objects(userObject.self).count == 0 {
+                    try! realm.write {
+                        realm.add(user)
+                    }
+                }
+                assert(realm.objects(userObject.self).count > 0)
+                self.userData = realm.objects(userObject.self).first!
             })
             .store(in: &cancellables)
 

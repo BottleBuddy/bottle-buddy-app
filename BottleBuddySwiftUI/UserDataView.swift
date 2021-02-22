@@ -14,9 +14,11 @@ import SwiftUI
 //TODO: move most of this data to the home page and the profile page
 struct UserDataView: View {
     @EnvironmentObject var state: AppState
-    @EnvironmentObject var user: User
+  //  @EnvironmentObject var user: userObject
     var body: some View {
-        WaterReadingView().environmentObject(user).environmentObject(state)
+        WaterReadingView()
+           // .environmentObject(user)
+            .environmentObject(state)
     }
 }
 

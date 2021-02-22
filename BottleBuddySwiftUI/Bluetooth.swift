@@ -70,6 +70,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         dataRecieved.removeAll(keepingCapacity: false)  //clearing BLE queue
         peripheralManager.stopAdvertising()     //this advertises to the bottle cap,,, may not need (ask josh and zane what they decide)
     }
+    
+    
     func connectDevice(){
         if let connectedPeripheral = connectedPeripheral{
             os_log("Connecting to peripheral %@", connectedPeripheral)
@@ -168,133 +170,137 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             // In a real app, you'd deal with yet unknown cases that might occur in the future
             return
         }
+    }
+    
+    
+    
+    
+    /*  sendData
+     *  Description: Standard sendData() function from Apple's Example code. Personally, I did not change anything in this function because I was just testing.
+     *  Usage: Call this function to actually send the data (as a peripheral) to another device. However, the way it is sent is up to you.
+     */
+    
+    //sending from phone to cap
+    func sendData() {
+        var sendDataIndex = 0
+        //Below defines the transferCharacteristic for this transfer and immediately returns if it is null/nil
+        guard let transferCharacteristic = peripheralTransferCharacteristic else {return}
+        //Below checks to see if we are suppose to be sending the end of message
+        if sendingEOM {
+            // send it
+            let didSend = peripheralManager.updateValue("EOM".data(using: .utf8)!, for: transferCharacteristic, onSubscribedCentrals: nil)
+            // Did it send?
+            if didSend {
+                // It did, so mark it as sent
+                sendingEOM = false
+                os_log("Sent: EOM")
+            }
+            // It didn't send, so we'll exit and wait for peripheralManagerIsReadyToUpdateSubscribers to call sendData again
+            return
+        }
+        // We're not sending an EOM, so we're sending data
+        // Is there any left to send?
+        if sendDataIndex >= dataToSend.count {
+            // No data left.  Do nothing
+            return
+        }
         
-        
-        
-        
-        /*  sendData
-         *  Description: Standard sendData() function from Apple's Example code. Personally, I did not change anything in this function because I was just testing.
-         *  Usage: Call this function to actually send the data (as a peripheral) to another device. However, the way it is sent is up to you.
-         */
-        
-        //sending from phone to cap
-        func sendData() {
-            var sendDataIndex = 0
-            //Below defines the transferCharacteristic for this transfer and immediately returns if it is null/nil
-            guard let transferCharacteristic = peripheralTransferCharacteristic else {return}
-            //Below checks to see if we are suppose to be sending the end of message
-            if sendingEOM {
-                // send it
-                let didSend = peripheralManager.updateValue("EOM".data(using: .utf8)!, for: transferCharacteristic, onSubscribedCentrals: nil)
-                // Did it send?
-                if didSend {
-                    // It did, so mark it as sent
+        // There's data left, so send until the callback fails, or we're done.
+        var didSend = true
+        while didSend {
+            
+            // Work out how big it should be
+            var amountToSend = dataToSend.count - sendDataIndex
+            if let mtu = connectedCentral?.maximumUpdateValueLength {
+                amountToSend = min(amountToSend, mtu)
+            }
+            
+            // Copy out the data we want
+            let chunk = dataToSend.subdata(in: sendDataIndex..<(sendDataIndex + amountToSend))
+            
+            // Send it
+            didSend = peripheralManager.updateValue(chunk, for: transferCharacteristic, onSubscribedCentrals: nil)
+            
+            // If it didn't work, drop out and wait for the callback
+            if !didSend {
+                return
+            }
+            
+            let stringFromData = String(data: chunk, encoding: .utf8)
+            os_log("Sent %d bytes: %s", chunk.count, String(describing: stringFromData))
+            
+            // It did send, so update our index
+            sendDataIndex += amountToSend
+            // Was it the last one?
+            if sendDataIndex >= dataToSend.count {
+                // It was - send an EOM
+                // Set this so if the send fails, we'll send it next time
+                sendingEOM = true
+                //Send it
+                let eomSent = peripheralManager.updateValue("EOM".data(using: .utf8)!,
+                                                            for: transferCharacteristic, onSubscribedCentrals: nil)
+                
+                if eomSent {
+                    // It sent; we're all done
                     sendingEOM = false
                     os_log("Sent: EOM")
                 }
-                // It didn't send, so we'll exit and wait for peripheralManagerIsReadyToUpdateSubscribers to call sendData again
                 return
             }
-            // We're not sending an EOM, so we're sending data
-            // Is there any left to send?
-            if sendDataIndex >= dataToSend.count {
-                // No data left.  Do nothing
-                return
-            }
-            
-            // There's data left, so send until the callback fails, or we're done.
-            var didSend = true
-            while didSend {
-                
-                // Work out how big it should be
-                var amountToSend = dataToSend.count - sendDataIndex
-                if let mtu = connectedCentral?.maximumUpdateValueLength {
-                    amountToSend = min(amountToSend, mtu)
-                }
-                
-                // Copy out the data we want
-                let chunk = dataToSend.subdata(in: sendDataIndex..<(sendDataIndex + amountToSend))
-                
-                // Send it
-                didSend = peripheralManager.updateValue(chunk, for: transferCharacteristic, onSubscribedCentrals: nil)
-                
-                // If it didn't work, drop out and wait for the callback
-                if !didSend {
-                    return
-                }
-                
-                let stringFromData = String(data: chunk, encoding: .utf8)
-                os_log("Sent %d bytes: %s", chunk.count, String(describing: stringFromData))
-                
-                // It did send, so update our index
-                sendDataIndex += amountToSend
-                // Was it the last one?
-                if sendDataIndex >= dataToSend.count {
-                    // It was - send an EOM
-                    // Set this so if the send fails, we'll send it next time
-                    ViewController.sendingEOM = true
-                    //Send it
-                    let eomSent = peripheralManager.updateValue("EOM".data(using: .utf8)!,
-                                                                for: transferCharacteristic, onSubscribedCentrals: nil)
-                    
-                    if eomSent {
-                        // It sent; we're all done
-                        sendingEOM = false
-                        os_log("Sent: EOM")
-                    }
-                    return
-                }
-            }
-        }
-        
-        
-        /*  cleanUp()
-         *  Call this when things either go wrong, or you're done with the connection.
-         *  This cancels any subscriptions if there are any, or straight disconnects if not.
-         *  (didUpdateNotificationStateForCharacteristic will cancel the connection if a subscription is involved)
-         */
-        func cleanup() {
-            // Don't do anything if we're not connected
-            guard let connectedPeripheral = connectedPeripheral,
-                  case .connected = connectedPeripheral.state else { return }
-            
-            for service in (connectedPeripheral.services ?? [] as [CBService]) {
-                for characteristic in (service.characteristics ?? [] as [CBCharacteristic]) {
-                    if characteristic.uuid == mainService.characteristicUUID && characteristic.isNotifying {
-                        // It is notifying, so unsubscribe
-                        self.connectedPeripheral?.setNotifyValue(false, for: characteristic)
-                    }
-                }
-            }
-            // If we've gotten this far, we're connected, but we're not subscribed, so we just disconnect
-            //Possibly will need to add the code below back
-            //centralManager.cancelPeripheralConnection(connectedPeripheral)
-        }
-        
-        /*  writeData
-         *  Description: Write some test data to a peripheral
-         *  Usage: This differs from sendData() because this writes the data to a peripheral as a central device
-         */
-        //this will change a tad based on pipeline,, but v important
-        func writeData() {
-            
-            guard let connectedPeripheral = connectedPeripheral,
-                  let transferCharacteristic = centralTransferCharacteristic
-            else { return }
-            
-            let mtu = connectedPeripheral.maximumWriteValueLength (for: .withoutResponse)
-            var rawPacket = [UInt8]()
-            
-            let bytesToCopy: size_t = min(mtu, dataRecieved.count)
-            dataRecieved.copyBytes(to: &rawPacket, count: bytesToCopy)
-            let packetData = Data(bytes: &rawPacket, count: bytesToCopy)
-            
-            let stringFromData = String(data: packetData, encoding: .utf8)
-            os_log("Writing %d bytes: %s", bytesToCopy, String(describing: stringFromData))
-            
-            connectedPeripheral.writeValue(packetData, for: transferCharacteristic, type: .withoutResponse)
         }
     }
+    
+    
+    /*  cleanUp()
+     *  Call this when things either go wrong, or you're done with the connection.
+     *  This cancels any subscriptions if there are any, or straight disconnects if not.
+     *  (didUpdateNotificationStateForCharacteristic will cancel the connection if a subscription is involved)
+     */
+    func cleanup() {
+        // Don't do anything if we're not connected
+        guard let connectedPeripheral = connectedPeripheral,
+              case .connected = connectedPeripheral.state else { return }
+        
+        for service in (connectedPeripheral.services ?? [] as [CBService]) {
+            for characteristic in (service.characteristics ?? [] as [CBCharacteristic]) {
+                if characteristic.uuid == mainService.characteristicUUID && characteristic.isNotifying {
+                    // It is notifying, so unsubscribe
+                    self.connectedPeripheral?.setNotifyValue(false, for: characteristic)
+                }
+            }
+        }
+        // If we've gotten this far, we're connected, but we're not subscribed, so we just disconnect
+        //Possibly will need to add the code below back
+        //centralManager.cancelPeripheralConnection(connectedPeripheral)
+    }
+    
+    /*  writeData
+     *  Description: Write some test data to a peripheral
+     *  Usage: This differs from sendData() because this writes the data to a peripheral as a central device
+     */
+    //this will change a tad based on pipeline,, but v important
+    func writeData() {
+        os_log("entered write data function")
+        guard let connectedPeripheral = connectedPeripheral,
+              let transferCharacteristic = centralTransferCharacteristic
+        else {
+            os_log("returning if connected peripheral and transfer charac. did not work")
+            return
+        }
+        
+        let mtu = connectedPeripheral.maximumWriteValueLength (for: .withoutResponse)
+        var rawPacket = [UInt8]()
+        
+        let bytesToCopy: size_t = min(mtu, dataRecieved.count)
+        dataRecieved.copyBytes(to: &rawPacket, count: bytesToCopy)
+        let packetData = Data(bytes: &rawPacket, count: bytesToCopy)
+        let stringFromData = String(data: packetData, encoding: .utf8)
+        
+        os_log("Writing %d bytes: %s", bytesToCopy, String(describing: stringFromData))
+        
+        connectedPeripheral.writeValue(packetData, for: transferCharacteristic, type: .withoutResponse)
+    }
+    
     
     
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
@@ -379,7 +385,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             //            }
             
             // Write test data
-            //writeData()
+            writeData()
         } else {
             // Otherwise, just append the data to what we have previously received.
             dataRecieved.append(characteristicData)
@@ -409,4 +415,5 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             //cleanup()
         }
     }
+    
 }

@@ -14,9 +14,7 @@ struct ProfileView: View {
     
     let bblightblue = UIColor(named: "BB_LightBlue")
     private var healthStore:  HealthStore?
-   // @State private var newPeople : [User] = [User]()
     @EnvironmentObject var state: AppState
-    @EnvironmentObject var user: User
     
     init(){
         healthStore = HealthStore()
@@ -40,7 +38,7 @@ struct ProfileView: View {
                 }
                 .padding()
                 
-                NavigationLink(destination: EditProfileView()){
+                NavigationLink(destination: EditProfileView().environmentObject(state)){
                     Text("Edit Profile Information")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -54,6 +52,17 @@ struct ProfileView: View {
                     try! Auth.auth().signOut()
                     UserDefaults.standard.set(false, forKey: "status")
                     NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
+                    
+                    guard let app = app else {
+                        print("Not using Realm Sync - not logging out")
+                        return
+                    }
+                    state.shouldIndicateActivity = true
+                    app.currentUser?.logOut().receive(on: DispatchQueue.main).sink(receiveCompletion: { _ in }, receiveValue: {
+                        state.shouldIndicateActivity = false
+                        state.logoutPublisher.send($0)
+                    }).store(in: &state.cancellables)
+                    
                 }) {
                     Text("Log out")
                         .foregroundColor(.white)
@@ -73,8 +82,6 @@ struct ProfileView: View {
         .frame(maxWidth: .infinity)
   
     }
-    
-    
     
     struct ProfileView_Previews: PreviewProvider {
         static var previews: some View {

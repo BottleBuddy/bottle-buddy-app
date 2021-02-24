@@ -10,7 +10,7 @@ import SwiftUI
 import UserNotifications
 
 struct HomePage: View {
-    
+    @EnvironmentObject var state: AppState
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     @State var selected = 0
     var colors = [Color(.white)]
@@ -19,6 +19,7 @@ struct HomePage: View {
     let bbyellow = UIColor(named: "BB_Yellow")
     @State var alert = false
     let notifContent = UNMutableNotificationContent()
+    
      
     
     var body: some View {
@@ -29,7 +30,7 @@ struct HomePage: View {
                 
                 HStack{
                     //TODO: update with dynamic user's name
-                    Text("Hello Jo!")
+                    Text("Welcome " + state.email + "!")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)

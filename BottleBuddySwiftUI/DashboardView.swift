@@ -11,25 +11,15 @@ import RealmSwift
 
 let USE_REALM_SYNC = true
 let app = USE_REALM_SYNC ? App(id: "bottlebuddyrealm-ucenr") : nil
-var uid: String = ""
-
-struct DashboardView: View {//why do i need this struct and Dashboard struct?
-    @EnvironmentObject var user: User
-    var body: some View {
-        Dashboard().environmentObject(user)
-    }
-}
 
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
-        DashboardView()
+        Dashboard()
     }
 }
 
 struct Dashboard : View {
-    @EnvironmentObject var user: User
     @ObservedObject var state = AppState()
-    
     @State var error: Error?
     
     var body: some View {
@@ -37,34 +27,31 @@ struct Dashboard : View {
             HomePage()
                 .tabItem{
                     VStack{
-                        Image(systemName:"house" )
+                        Image(systemName:"house")
                         Text("Home")
                     }
                 }.tag(1)
+                .environmentObject(state)
+                
             
             ProfileView()
                 .tabItem{
                     VStack{
-                        Image(systemName:"person.circle" )
+                        Image(systemName:"person.circle")
                         Text("Profile")
                     }
                 }.tag(2)
-                .environmentObject(user)
                 .environmentObject(state)
             
             UserDataView()
                 .tabItem{
                     VStack{
-                        Image(systemName:"star" )
+                        Image(systemName:"star")
                         Text("UserInfo")
                     }
                 }.tag(3)
-                .environmentObject(user)
                 .environmentObject(state)
         }.onAppear {
-            uid = user.uid
-            state.partitionValue = user.uid
-            
             guard let app = app else {
                 print("Not using Realm Sync - not logging in")
                 return
@@ -81,17 +68,6 @@ struct Dashboard : View {
             }, receiveValue: {
                 self.error = nil
                 state.loginPublisher.send($0)
-            }).store(in: &state.cancellables)
-        }.disabled(state.shouldIndicateActivity)
-        .onDisappear{
-            guard let app = app else {
-                print("Not using Realm Sync - not logging out")
-                return
-            }
-            state.shouldIndicateActivity = true
-            app.currentUser?.logOut().receive(on: DispatchQueue.main).sink(receiveCompletion: { _ in }, receiveValue: {
-                state.shouldIndicateActivity = false
-                state.logoutPublisher.send($0)
             }).store(in: &state.cancellables)
         }.disabled(state.shouldIndicateActivity)
     }

@@ -10,10 +10,9 @@ import Firebase
 
 struct ContentView: View {
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
-    @EnvironmentObject var user: User
     
     var body: some View {
-        LoginSignin().environmentObject(user)
+        LoginSignin()
     }
 }
 
@@ -28,7 +27,6 @@ struct LoginSignin : View {
     
     @State var show = false
     @State var status = UserDefaults.standard.value(forKey: "status") as? Bool ?? false
-    @EnvironmentObject var user: User
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
     let bblightblue = UIColor(named: "BB_LightBlue")
     let bbyellow = UIColor(named: "BB_Yellow")
@@ -43,7 +41,7 @@ struct LoginSignin : View {
             
             VStack{
                 if self.status{
-                    Dashboard().environmentObject(user)
+                    Dashboard()
                 }
                 else{
                     ZStack{

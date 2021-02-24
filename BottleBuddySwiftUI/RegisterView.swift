@@ -146,7 +146,7 @@ struct RegisterView: View {
                         
                         //TODO: May need to add a guard bc of the force unwrap of the uid
                         let userID = Auth.auth().currentUser!.uid
-                        _ = User(uid: userID) //creating a new user instance when someone registers
+                    
                         return
                     }
                     

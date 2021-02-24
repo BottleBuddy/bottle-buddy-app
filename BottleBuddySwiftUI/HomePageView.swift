@@ -166,8 +166,8 @@ struct HomePage: View {
                     //TODO: initiate cleaning protocol on button click
                     UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge]) { (status, _) in
                         
-                        
-                        if status{
+                    }
+                        //if status{
                             
                             let content = UNMutableNotificationContent()
                             content.title = "Notification"
@@ -177,22 +177,23 @@ struct HomePage: View {
                             
                             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
                             
-                            let request = UNNotificationRequest(identifier: "noti", content: content, trigger: trigger)
-                            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+                            let request = UNNotificationRequest(
+                                identifier: UUID().uuidString,
+                                content: content,
+                                trigger: trigger
+                            )
+                            UNUserNotificationCenter.current().add(request)
                             
-                            return
-                        }
+                            //return
+                        //}
                         
-                        self.alert.toggle()
-                    }
+                        //self.alert.toggle()
+                    
                 }){
                     Text("Start Cleaning")
                         .foregroundColor(.white)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)
-                }.alert(isPresented: $alert) {
-                    
-                    return Alert(title: Text("Please Enable Notification Access In Settings Pannel !!!"))
                 }
                 .background(Color(UIColor(named: "BB_DarkBlue")!))
                 .cornerRadius(10)
@@ -202,34 +203,34 @@ struct HomePage: View {
         .background(Color(bblightblue!).ignoresSafeArea())
     }
     
-    //does this need to be called from somewhere or is it enough to set these attributes?
-    /*
-     https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
-     */
-    func notificationLogic(){
-        notifContent.title = "Notification"
-        notifContent.body = "Time to clean your BottleBuddy! Please empty any contents and ensure the lid is tightly secured"
-        var dateComponents = DateComponents()
-        dateComponents.calendar = Calendar.current
-
-        dateComponents.weekday = 7  // Friday
-        dateComponents.hour = 10    // 16:00 hours
-           
-        // Create the trigger as a repeating event.
-        let trigger = UNCalendarNotificationTrigger(
-                 dateMatching: dateComponents, repeats: true)
-        let uuidString = UUID().uuidString
-        let request = UNNotificationRequest(identifier: uuidString,
-                    content: notifContent, trigger: trigger)
-
-        // Schedule the request with the system.
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.add(request) { (error) in
-           if error != nil {
-              // Handle any errors.
-           }
-        }
-    }
+//    //does this need to be called from somewhere or is it enough to set these attributes?
+//    /*
+//     https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
+//     */
+//    func notificationLogic(){
+//        notifContent.title = "Notification"
+//        notifContent.body = "Time to clean your BottleBuddy! Please empty any contents and ensure the lid is tightly secured"
+//        var dateComponents = DateComponents()
+//        dateComponents.calendar = Calendar.current
+//
+//        dateComponents.weekday = 7  // Friday
+//        dateComponents.hour = 10    // 16:00 hours
+//
+//        // Create the trigger as a repeating event.
+//        let trigger = UNCalendarNotificationTrigger(
+//                 dateMatching: dateComponents, repeats: true)
+//        let uuidString = UUID().uuidString
+//        let request = UNNotificationRequest(identifier: uuidString,
+//                    content: notifContent, trigger: trigger)
+//
+//        // Schedule the request with the system.
+//        let notificationCenter = UNUserNotificationCenter.current()
+//        notificationCenter.add(request) { (error) in
+//           if error != nil {
+//              // Handle any errors.
+//           }
+//        }
+//    }
     
     // calculating Type...
     

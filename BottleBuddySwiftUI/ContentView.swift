@@ -27,7 +27,6 @@ struct LoginSignin : View {
     
     @State var show = false
     @State var status = UserDefaults.standard.value(forKey: "status") as? Bool ?? false
-    @EnvironmentObject var user: userObject
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
     let bblightblue = UIColor(named: "BB_LightBlue")
     let bbyellow = UIColor(named: "BB_Yellow")

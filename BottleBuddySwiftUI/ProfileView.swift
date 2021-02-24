@@ -15,7 +15,6 @@ struct ProfileView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
     private var healthStore:  HealthStore?
     @EnvironmentObject var state: AppState
-  //  @EnvironmentObject var user: userObject
     
     init(){
         healthStore = HealthStore()
@@ -39,7 +38,7 @@ struct ProfileView: View {
                 }
                 .padding()
                 
-                NavigationLink(destination: EditProfileView()){
+                NavigationLink(destination: EditProfileView().environmentObject(state)){
                     Text("Edit Profile Information")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -83,8 +82,6 @@ struct ProfileView: View {
         .frame(maxWidth: .infinity)
   
     }
-    
-    
     
     struct ProfileView_Previews: PreviewProvider {
         static var previews: some View {

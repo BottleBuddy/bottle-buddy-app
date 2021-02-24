@@ -14,10 +14,10 @@
             filePath = "BottleBuddySwiftUI/EditProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "EditProfileView"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -30,8 +30,8 @@
             filePath = "BottleBuddySwiftUI/DashboardView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "BottleBuddySwiftUI/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -94,8 +94,8 @@
             filePath = "BottleBuddySwiftUI/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -110,24 +110,8 @@
             filePath = "BottleBuddySwiftUI/DashboardView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "previews"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B6AB4D6A-8BAD-4C03-9225-F89CD7F37BD9"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BottleBuddySwiftUI/DashboardView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
             landmarkName = "DashboardView_Previews"
             landmarkType = "14">
          </BreakpointContent>
@@ -142,8 +126,8 @@
             filePath = "BottleBuddySwiftUI/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -190,8 +174,8 @@
             filePath = "BottleBuddySwiftUI/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "59"
-            endingLineNumber = "59"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -206,8 +190,8 @@
             filePath = "BottleBuddySwiftUI/DashboardView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -222,13 +206,13 @@
             filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
-            landmarkName = "waterReadingsView"
-            landmarkType = "14">
+            startingLineNumber = "237"
+            endingLineNumber = "237"
+            landmarkName = "addWaterReading()"
+            landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "43672CE2-1452-4000-A4C3-89BB65A94BC6 - e0e82d01e5a7d9d8"
+                  uuid = "43672CE2-1452-4000-A4C3-89BB65A94BC6 - e0e82d01e5a7dad0"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -238,12 +222,12 @@
                   urlString = "file:///Users/sphanse/Documents/Senior_Year/SeniorDesign/bottle-buddy-app/BottleBuddySwiftUI/WaterReadingView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "229"
-                  endingLineNumber = "229"
+                  startingLineNumber = "237"
+                  endingLineNumber = "237"
                   offsetFromSymbolStart = "1629">
                </Location>
                <Location
-                  uuid = "43672CE2-1452-4000-A4C3-89BB65A94BC6 - 61588b9f5382f0f5"
+                  uuid = "43672CE2-1452-4000-A4C3-89BB65A94BC6 - 61588b9f5382f3fd"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -253,43 +237,11 @@
                   urlString = "file:///Users/sphanse/Documents/Senior_Year/SeniorDesign/bottle-buddy-app/BottleBuddySwiftUI/WaterReadingView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "230"
-                  endingLineNumber = "230"
+                  startingLineNumber = "238"
+                  endingLineNumber = "238"
                   offsetFromSymbolStart = "53">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0C86D213-A792-4452-8DCA-2E465FF3A8C5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BottleBuddySwiftUI/EditProfileView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "EditProfileView"
-            landmarkType = "14">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C51C92EB-52D9-4A61-9CC8-6868FA202BD5"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BottleBuddySwiftUI/EditProfileView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "EditProfileView"
-            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -302,8 +254,8 @@
             filePath = "BottleBuddySwiftUI/DashboardView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -343,31 +295,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E046994D-23E4-4D22-AF96-95C962DD5567"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BottleBuddySwiftUI/EditProfileView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
-            landmarkName = "EditProfileView"
-            landmarkType = "14">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "CF1A2916-C7A3-4604-AAB9-04FC3221B4A2"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
             landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>
@@ -376,14 +312,46 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D555F2DE-6922-42C7-91F9-F99F5CC0D60A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "init()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C28BC533-0531-4A46-8279-5A949BD2CE10"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
+            landmarkName = "init()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "33EC7E9C-050A-46EF-A30B-8FA3CC41AD14"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
             landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>

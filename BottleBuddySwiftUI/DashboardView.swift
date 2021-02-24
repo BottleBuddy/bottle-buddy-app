@@ -11,8 +11,6 @@ import RealmSwift
 
 let USE_REALM_SYNC = true
 let app = USE_REALM_SYNC ? App(id: "bottlebuddyrealm-ucenr") : nil
-var uid: String = ""
-var user: userObject = userObject(uid: Auth.auth().currentUser!.uid,email: Auth.auth().currentUser!.email!)
 
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
@@ -21,11 +19,7 @@ struct DashboardView_Previews: PreviewProvider {
 }
 
 struct Dashboard : View {
-    //creating global instance of user
-//    @ObservedObject var user = userObject(uid: Auth.auth().currentUser!.uid,email: Auth.auth().currentUser!.email!)
-    
     @ObservedObject var state = AppState()
-    
     @State var error: Error?
     
     var body: some View {
@@ -33,35 +27,31 @@ struct Dashboard : View {
             HomePage()
                 .tabItem{
                     VStack{
-                        Image(systemName:"house" )
+                        Image(systemName:"house")
                         Text("Home")
                     }
                 }.tag(1)
+                .environmentObject(state)
                 
             
             ProfileView()
                 .tabItem{
                     VStack{
-                        Image(systemName:"person.circle" )
+                        Image(systemName:"person.circle")
                         Text("Profile")
                     }
                 }.tag(2)
-                
                 .environmentObject(state)
             
             UserDataView()
                 .tabItem{
                     VStack{
-                        Image(systemName:"star" )
+                        Image(systemName:"star")
                         Text("UserInfo")
                     }
                 }.tag(3)
-                
                 .environmentObject(state)
         }.onAppear {
-            uid = user.user_id
-            state.partitionValue = user.user_id
-            
             guard let app = app else {
                 print("Not using Realm Sync - not logging in")
                 return
@@ -79,8 +69,6 @@ struct Dashboard : View {
                 self.error = nil
                 state.loginPublisher.send($0)
             }).store(in: &state.cancellables)
-        
-   //         user.syncUserObject()
         }.disabled(state.shouldIndicateActivity)
     }
 }

@@ -8,10 +8,10 @@ import Foundation
 import RealmSwift
 import Combine
 import SwiftUI
+import Firebase
 
 struct WaterReadingView : View {
     @EnvironmentObject var state: AppState
-   // @EnvironmentObject var user: userObject
     
     var body: some View {
         ZStack {
@@ -37,7 +37,7 @@ struct WaterReadingView_Previews: PreviewProvider {
 /// An individual reading. Part of a `WaterReadingsGroup`.
 final class waterReading: Object, ObjectKeyIdentifiable {
     @objc dynamic var _id: ObjectId = ObjectId.generate()
-    @objc dynamic var user_id: String = uid
+    @objc dynamic var user_id: String = Auth.auth().currentUser!.uid
     @objc dynamic var time: String = "12:00"
     @objc dynamic var date: String = "01-01-2021"
     @objc dynamic var water_level: String = ""
@@ -82,8 +82,9 @@ class AppState: ObservableObject {
     
     @Published var userData: userObject?
     
-    var partitionValue: String = ""
-
+    var partitionValue: String = Auth.auth().currentUser!.uid
+    var email: String = Auth.auth().currentUser!.email!
+    
     init() {
         // Create a private subject for the opened realm, so that:
         // - if we are not using Realm Sync, we can open the realm immediately.
@@ -108,11 +109,18 @@ class AppState: ObservableObject {
                 assert(realm.objects(WaterReadingsGroup.self).count > 0)
                 self.waterReadings = realm.objects(WaterReadingsGroup.self).first!.waterReadings
                 
+                
                 if realm.objects(userObject.self).count == 0 {
                     try! realm.write {
-                        realm.add(user)
+                        realm.add(userObject(uid: self.partitionValue, email: self.email))
                     }
                 }
+                
+                if realm.objects(userObject.self)[0].user_id != self.partitionValue {
+                    realm.deleteAll()
+                    realm.add(userObject(uid:self.partitionValue, email:self.email))
+                }
+                
                 assert(realm.objects(userObject.self).count > 0)
                 self.userData = realm.objects(userObject.self).first!
             })
@@ -137,7 +145,7 @@ class AppState: ObservableObject {
                 // However, with anonymous authentication, that user.id changes upon logout and login,
                 // so we will not see the same data or be able to sync across devices.
                 
-                let configuration = realm_user.configuration(partitionValue: self.partitionValue)
+                let configuration = realm_user.configuration(partitionValue: Auth.auth().currentUser!.uid)
 
                 // Loading may take a moment, so indicate activity.
                 self.shouldIndicateActivity = true

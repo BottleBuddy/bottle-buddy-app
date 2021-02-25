@@ -45,9 +45,11 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var sendingEOM :Bool = false   //sending end of message
     
     
-    let mainService = NewService(
-        testService: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961",
-        testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
+    //let mainService = NewService(
+        //testService: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961",
+        //testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
+    
+    let mainService = NewService(testService: "29B10010-E8F2-537E-4F6C-D104768A1214", testCharacteristic: "29B10011-E8F2-537E-4F6C-D104768A1214")
     
     override init(){
         sendingEOM = false      //this is j to make things compile,, may need to change later
@@ -85,6 +87,19 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             
         }
     }
+    func disconnectDevice(){
+        if let connectedPeripheral = connectedPeripheral{
+            os_log("disconnecting from peripheral %@", connectedPeripheral)
+            centralManager.cancelPeripheralConnection(connectedPeripheral)
+            
+            //deviceTableView.reloadData()      //reloads the data after you connect so you can change the type of button from connect to disconnect
+            os_log("DISCONNECTED")
+        }
+        else {
+            os_log("STILL CONNECTED TO PERIPHERAL")
+            
+        }
+    }
     
     func scanForDevices(){
         os_log("Scanning for Devices...")
@@ -100,10 +115,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
     }
     
-    func centralManager(_ central: CBCentralManager,
-                        didDiscover peripheral: CBPeripheral,
-                        advertisementData: [String: Any],
-                        rssi RSSI: NSNumber) {
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber) {
         
         // Reject if the signal strength is too low to attempt data transfer.
         // Change the minimum RSSI value depending on your app’s use case.
@@ -113,10 +125,33 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             return
         }
         
+        //if (peripheral.services?.contains(<#T##element: CBService##CBService#>))
+
+            
+        
         os_log("Discovered %s at %d with identifier %s", String(describing: peripheral.name), RSSI.intValue, String(describing: peripheral.identifier))
+        
+        //FE6C41D8-5F21-7F2B-5DF1-67396CAC0569 Chris's Mac Book Air
         connectedPeripheral = peripheral
         connectedPeripheral.delegate = self
-        central.stopScan()
+        if (connectedPeripheral.identifier  ==  UUID(uuidString: "887D0D42-E8B3-7B69-FAB5-1CBC7F864C86")){
+            os_log("FOUND WHAT YOU'RE LOOKING FOR!!!!")
+            //centralManager.stopScan()
+        }
+        
+        /*let correct_air = NSString(string: "Christopher's MacBook Air" )
+        if(connectedPeripheral.name != nil){
+            if(connectedPeripheral.name isEqualToString:correct_air){
+                os_log("found")
+                central.stopScan()
+                
+            }
+        }*/
+        /*if(connectedPeripheral.name == "Christopher's MacBook Air"){
+            os_log("found")
+            central.stopScan()
+        }*/
+        //central.stopScan()
         
         // Device is in range - have we already seen it?
         //        if connectedPeripheral != peripheral {
@@ -281,6 +316,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     //this will change a tad based on pipeline,, but v important
     func writeData() {
         os_log("entered write data function")
+        
         guard let connectedPeripheral = connectedPeripheral,
               let transferCharacteristic = centralTransferCharacteristic
         else {
@@ -288,17 +324,23 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             return
         }
         
-        let mtu = connectedPeripheral.maximumWriteValueLength (for: .withoutResponse)
+        //Makes sure we don't transfer more than we can in any given cycle
+        /*let mtu = connectedPeripheral.maximumWriteValueLength (for: .withoutResponse)
+        //initializes the data
         var rawPacket = [UInt8]()
         
+        //further makes sure we don't tranfer more than we can
         let bytesToCopy: size_t = min(mtu, dataRecieved.count)
+        //
         dataRecieved.copyBytes(to: &rawPacket, count: bytesToCopy)
         let packetData = Data(bytes: &rawPacket, count: bytesToCopy)
-        let stringFromData = String(data: packetData, encoding: .utf8)
+        //let stringFromData = String(data: packetData, encoding: .utf8)
         
-        os_log("Writing %d bytes: %s", bytesToCopy, String(describing: stringFromData))
-        
-        connectedPeripheral.writeValue(packetData, for: transferCharacteristic, type: .withoutResponse)
+        //os_log("Writing %d bytes: %s", bytesToCopy, String(describing: stringFromData))
+        os_log("%s", String(describing: packetData))
+        connectedPeripheral.writeValue(packetData, for: transferCharacteristic, type: .withoutResponse)*/
+        connectedPeripheral.writeValue(dataRecieved, for: transferCharacteristic, type: .withoutResponse)
+        os_log("Successfully written data")
     }
     
     

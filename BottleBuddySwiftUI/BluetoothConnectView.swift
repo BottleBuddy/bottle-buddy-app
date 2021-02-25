@@ -41,6 +41,14 @@ struct BluetoothConnectView: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
+                Button(action: {bluetooth.disconnectDevice()}) {
+                    Text("Disconnect")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                        .cornerRadius(10)
+                }
                 
                 //TextField(<#LocalizedStringKey#>, text: <#Binding<String>#>)
                 

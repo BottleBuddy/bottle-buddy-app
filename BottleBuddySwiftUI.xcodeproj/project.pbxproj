@@ -627,15 +627,15 @@
 				CODE_SIGN_ENTITLEMENTS = BottleBuddySwiftUI/BottleBuddySwiftUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"BottleBuddySwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = 43798T93T8;
+				DEVELOPMENT_TEAM = 3UZS6AS8CD;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BottleBuddySwiftUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = FlanneryThompson.BottleBuddySwiftUI;
+				PRODUCT_BUNDLE_IDENTIFIER = Chris.BottleBuddySwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -651,15 +651,15 @@
 				CODE_SIGN_ENTITLEMENTS = BottleBuddySwiftUI/BottleBuddySwiftUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"BottleBuddySwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = 43798T93T8;
+				DEVELOPMENT_TEAM = 3UZS6AS8CD;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = BottleBuddySwiftUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = FlanneryThompson.BottleBuddySwiftUI;
+				PRODUCT_BUNDLE_IDENTIFIER = Chris.BottleBuddySwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

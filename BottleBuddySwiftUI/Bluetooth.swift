@@ -49,7 +49,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         //testService: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961",
         //testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
     
-    let mainService = NewService(testService: "29B10010-E8F2-537E-4F6C-D104768A1214", testCharacteristic: "29B10011-E8F2-537E-4F6C-D104768A1214")
+    let mainService = NewService(testService: "19B10010-E8F2-537E-4F6C-D104768A1214", testCharacteristic: "19B10011-E8F2-537E-4F6C-D104768A1214")
     
     override init(){
         sendingEOM = false      //this is j to make things compile,, may need to change later
@@ -125,46 +125,22 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             return
         }
         
-        //if (peripheral.services?.contains(<#T##element: CBService##CBService#>))
-
+        
+        if(String(describing: peripheral.identifier) == "F8DDCC5D-D2F0-FEC9-E400-575577FC5008"){
+            os_log("Discovered %s at %d with identifier %s", String(describing: peripheral.name), RSSI.intValue, String(describing: peripheral.identifier))
+            os_log("%d",advertisementData.count)
+            for advertisement in advertisementData{
+                os_log("%s", String(describing: advertisement))
+            }
+        if (String(describing: advertisementData["kCBAdvDataLocalName"]!) == "BBUDDY"){
+            connectedPeripheral = peripheral
+            connectedPeripheral.delegate = self
+            os_log("Successfully Discovered Bottle Buddy")
+            central.stopScan()
+        }
             
-        
-        os_log("Discovered %s at %d with identifier %s", String(describing: peripheral.name), RSSI.intValue, String(describing: peripheral.identifier))
-        
-        //FE6C41D8-5F21-7F2B-5DF1-67396CAC0569 Chris's Mac Book Air
-        connectedPeripheral = peripheral
-        connectedPeripheral.delegate = self
-        if (connectedPeripheral.identifier  ==  UUID(uuidString: "887D0D42-E8B3-7B69-FAB5-1CBC7F864C86")){
-            os_log("FOUND WHAT YOU'RE LOOKING FOR!!!!")
-            //centralManager.stopScan()
         }
         
-        /*let correct_air = NSString(string: "Christopher's MacBook Air" )
-        if(connectedPeripheral.name != nil){
-            if(connectedPeripheral.name isEqualToString:correct_air){
-                os_log("found")
-                central.stopScan()
-                
-            }
-        }*/
-        /*if(connectedPeripheral.name == "Christopher's MacBook Air"){
-            os_log("found")
-            central.stopScan()
-        }*/
-        //central.stopScan()
-        
-        // Device is in range - have we already seen it?
-        //        if connectedPeripheral != peripheral {
-        //
-        //            // Save a local copy of the peripheral, so CoreBluetooth doesn't get rid of it.
-        //            //connectedPeripheral = peripheral
-        //
-        //            central.stopScan()
-        //            //deviceTableView.reloadData()
-        //            // And finally, connect to the peripheral.
-        //            //os_log("Connecting to perhiperal %@", peripheral)
-        //            //centralManager.connect(peripheral, options: nil)
-        //        }
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {

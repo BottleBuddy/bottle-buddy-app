@@ -46,7 +46,7 @@ class ViewController: UIViewController {
     //Below makes a new service. This service was made for testing and there will be a lot more services later as the pipeline is developed
     //Services are sort of like objects and characteristics are like their attributes
     //this main service will eventually be the cap as a whole
-    let mainService = NewService(testService: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961", testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
+   // let mainService = NewService(testService: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961", testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
 
     
     /*  viewDidLoad
@@ -197,10 +197,10 @@ class ViewController: UIViewController {
     //NEED THE CENTRALMANAGER.SCANFORP,,, BUT NEED TO MOVE THIS FUNCTION CALL
     @IBAction func scanForDevices(_ sender: Any){
         os_log("Scanning for Devices...")
-        centralManager.scanForPeripherals(
-            withServices: [mainService.serviceUUID],
-            options: [CBCentralManagerScanOptionAllowDuplicatesKey: true]
-        )
+//        centralManager.scanForPeripherals(
+//            withServices: [mainService.serviceUUID],
+//            options: [CBCentralManagerScanOptionAllowDuplicatesKey: true]
+//        )
     }
     /*  connectToDevice
      *  Description: This establishes a connection to the specified device called "connectedPeripheral". Probably will need to change slightly if we want multiple device connections.
@@ -228,10 +228,10 @@ class ViewController: UIViewController {
         
         for service in (connectedPeripheral.services ?? [] as [CBService]) {
             for characteristic in (service.characteristics ?? [] as [CBCharacteristic]) {
-                if characteristic.uuid == mainService.characteristicUUID && characteristic.isNotifying {
-                    // It is notifying, so unsubscribe
-                    self.connectedPeripheral?.setNotifyValue(false, for: characteristic)
-                }
+//                if characteristic.uuid == mainService.characteristicUUID && characteristic.isNotifying {
+//                    // It is notifying, so unsubscribe
+//                    self.connectedPeripheral?.setNotifyValue(false, for: characteristic)
+//                }
             }
         }
         // If we've gotten this far, we're connected, but we're not subscribed, so we just disconnect
@@ -511,7 +511,7 @@ extension ViewController: CBCentralManagerDelegate {
         
         // Search only for services that match our UUID
         //peripheral.discoverServices([TransferService.serviceUUID])
-        peripheral.discoverServices([mainService.serviceUUID])
+//        peripheral.discoverServices([mainService.serviceUUID])
         //deviceTableView.reloadData()
     }
     
@@ -536,10 +536,10 @@ extension ViewController: CBPeripheralDelegate {
      */
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
 
-        for service in invalidatedServices where service.uuid == mainService.serviceUUID {
-            os_log("Transfer service is invalidated - rediscover services")
-            peripheral.discoverServices([mainService.serviceUUID])//REVIEW WHAT THIS DOES BECAUSE IT DOESNT MAKE SENSE
-        }
+//        for service in invalidatedServices where service.uuid == mainService.serviceUUID {
+//            os_log("Transfer service is invalidated - rediscover services")
+//            peripheral.discoverServices([mainService.serviceUUID])//REVIEW WHAT THIS DOES BECAUSE IT DOESNT MAKE SENSE
+//        }
     }
 
     /*
@@ -561,7 +561,7 @@ extension ViewController: CBPeripheralDelegate {
         }*/
 
         for service in peripheralServices {
-            peripheral.discoverCharacteristics([mainService.characteristicUUID], for: service)
+//            peripheral.discoverCharacteristics([mainService.characteristicUUID], for: service)
         }
     }
 
@@ -584,11 +584,11 @@ extension ViewController: CBPeripheralDelegate {
             centralTransferCharacteristic = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
         }*/
-        for characteristic in serviceCharacteristics where characteristic.uuid == mainService.characteristicUUID {
-            // If it is, subscribe to it
-            centralTransferCharacteristic = characteristic
-            peripheral.setNotifyValue(true, for: characteristic)
-        }
+//        for characteristic in serviceCharacteristics where characteristic.uuid == mainService.characteristicUUID {
+//            // If it is, subscribe to it
+//            centralTransferCharacteristic = characteristic
+//            peripheral.setNotifyValue(true, for: characteristic)
+//        }
 
         // Once this is complete, we just need to wait for the data to come in.
     }
@@ -639,7 +639,7 @@ extension ViewController: CBPeripheralDelegate {
 
         // Exit if it's not the transfer characteristic
         //guard characteristic.uuid == TransferService.characteristicUUID else { return }
-        guard characteristic.uuid == mainService.characteristicUUID else { return }
+//        guard characteristic.uuid == mainService.characteristicUUID else { return }
         if characteristic.isNotifying {
             // Notification has started
             os_log("Notification began on %@", characteristic)

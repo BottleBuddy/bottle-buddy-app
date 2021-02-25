@@ -35,6 +35,9 @@ struct Dashboard : View {
                     Text("Home")
                     }
             }.tag(1)
+            .environmentObject(user)
+            .environmentObject(state)
+
             
             ProfileView()
                   .tabItem{

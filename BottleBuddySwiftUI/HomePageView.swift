@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct HomePage: View {
     
@@ -16,17 +17,26 @@ struct HomePage: View {
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
     let bblightblue = UIColor(named: "BB_LightBlue")
     let bbyellow = UIColor(named: "BB_Yellow")
-
+    @EnvironmentObject var state: AppState
+    @EnvironmentObject var user: User
+    
+    
+    
     
     var body: some View {
-
+        //        let waterReadings = state.waterReadings?.freeze()
+        
+        //        for reading in waterReadings {
+        //            print(reading.water_level)
+        //        }
+        
         ScrollView(.vertical, showsIndicators: false) {
             
             VStack{
                 
                 HStack{
                     //TODO: update with dynamic user's name
-                    Text("Hello Jo!")
+                    Text("Hello \(state.partitionValue)!")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -45,15 +55,15 @@ struct HomePage: View {
                 // Bar Chart...
                 
                 VStack(alignment: .leading, spacing: 25) {
-                    
                     Text("Daily Water Consumption")
                         .font(.system(size: 22))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                     
                     HStack(spacing: 15){
+                        var waterLogData = getWaterLog()
                         
-                        ForEach(workout_Data){work in
+                        ForEach(waterLogData){waterLogEntry in
                             
                             // Bars...
                             
@@ -63,28 +73,28 @@ struct HomePage: View {
                                     
                                     Spacer(minLength: 0)
                                     
-                                    if selected == work.id{
+                                    if selected == waterLogEntry.id{
                                         
-                                        Text(getHrs(value: work.workout_In_Min))
+                                        Text(getDec(val: waterLogEntry.water_consumed))
                                             .foregroundColor(Color(bbyellow!))
                                             .padding(.bottom,5)
                                     }
                                     
                                     RoundedShape()
-                                        .fill(LinearGradient(gradient: .init(colors: selected == work.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
-                                    // max height = 200
-                                        .frame(height: getHeight(value: work.workout_In_Min))
+                                        .fill(LinearGradient(gradient: .init(colors: selected == waterLogEntry.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
+                                        // max height = 200
+                                        .frame(height: waterLogEntry.water_consumed)
                                 }
                                 .frame(height: 220)
                                 .onTapGesture {
                                     
                                     withAnimation(.easeOut){
                                         
-                                        selected = work.id
+                                        selected = waterLogEntry.id
                                     }
                                 }
                                 
-                                Text(work.day)
+                                Text(waterLogEntry.day)
                                     .font(.caption)
                                     .foregroundColor(.white)
                             }
@@ -210,14 +220,15 @@ struct HomePage: View {
     
     // calculating Hrs For Height...
     
-    func getHeight(value : CGFloat)->CGFloat{
+    func getHeight(value : String)->CGFloat{
         
         // the value in minutes....
         // 24 hrs in min = 1440
-        
-        let hrs = CGFloat(value / 1440) * 200
-        
-        return hrs
+        guard let n = NumberFormatter().number(from: value) else {return CGFloat(-1)}
+        return CGFloat(n)
+        //        let hrs = CGFloat(n / 1440) * 200
+        //
+        //        return hrs
     }
     
     // getting hrs...
@@ -228,13 +239,40 @@ struct HomePage: View {
         
         return String(format: "%.1f", hrs)
     }
+    
+    func getWaterLog()-> [WaterLogEntry] {
+        var arr =  [WaterLogEntry]()
+        
+//        var length = state.waterReadings?.freeze().count ?? 0
+//        if (length<7){
+//            length = 7
+//        }
+        
+        var day_count = 1
+        for i in Range(uncheckedBounds: (0,7)){
+            var waterLevel = "";
+            do{
+                waterLevel = state.waterReadings?.freeze()[i].water_level ?? "0";
+            }
+            catch{
+             waterLevel = "0";
+            }
+            arr.append(WaterLogEntry(id: day_count, day: "Day \(day_count)", water_consumed:getHeight(value: waterLevel)))
+            day_count+=1
+            
+        }
+        return arr
+        
+    }
 }
+
+
 
 struct RoundedShape : Shape {
     
     func path(in rect: CGRect) -> Path {
         
-
+        
         let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft,.topRight], cornerRadii: CGSize(width: 5, height: 5))
         
         return Path(path.cgPath)
@@ -243,23 +281,24 @@ struct RoundedShape : Shape {
 
 // sample Data...
 
-struct Daily : Identifiable {
+struct WaterLogEntry : Identifiable {
     
     var id : Int
     var day : String
-    var workout_In_Min : CGFloat
+    var water_consumed : CGFloat
 }
 //TODO: update with water data from past 7 days
-var workout_Data = [
 
-    Daily(id: 0, day: "Day 1", workout_In_Min: 480),
-    Daily(id: 1, day: "Day 2", workout_In_Min: 880),
-    Daily(id: 2, day: "Day 3", workout_In_Min: 250),
-    Daily(id: 3, day: "Day 4", workout_In_Min: 360),
-    Daily(id: 4, day: "Day 5", workout_In_Min: 1220),
-    Daily(id: 5, day: "Day 6", workout_In_Min: 750),
-    Daily(id: 6, day: "Day 7", workout_In_Min: 950)
-]
+//var workout_Data = [
+//    Daily(id: 0, day: "Day 1" , workout_In_Min:480),
+//    Daily(id: 1, day: "Day 2", workout_In_Min: 880),
+//    Daily(id: 2, day: "Day 3", workout_In_Min: 250),
+//    Daily(id: 3, day: "Day 4", workout_In_Min: 360),
+//    Daily(id: 4, day: "Day 5", workout_In_Min: 1220),
+//    Daily(id: 5, day: "Day 6", workout_In_Min: 750),
+//    Daily(id: 6, day: "Day 7", workout_In_Min: 950)
+//]
+
 
 
 struct Stats : Identifiable {
@@ -282,6 +321,7 @@ var stats_Data = [
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
         HomePage()
+        
     }
 }
 

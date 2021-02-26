@@ -126,22 +126,48 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
         
         
-        if(String(describing: peripheral.identifier) == "F8DDCC5D-D2F0-FEC9-E400-575577FC5008"){
+        //if(String(describing: peripheral.identifier) == "F8DDCC5D-D2F0-FEC9-E400-575577FC5008"){
             os_log("Discovered %s at %d with identifier %s", String(describing: peripheral.name), RSSI.intValue, String(describing: peripheral.identifier))
             os_log("%d",advertisementData.count)
             for advertisement in advertisementData{
                 os_log("%s", String(describing: advertisement))
             }
-        if (String(describing: advertisementData["kCBAdvDataLocalName"]!) == "BBUDDY"){
-            connectedPeripheral = peripheral
-            connectedPeripheral.delegate = self
-            os_log("Successfully Discovered Bottle Buddy")
-            central.stopScan()
+        if (advertisementData["kCBAdvDataLocalName"] != nil){
+            if (String(describing: advertisementData["kCBAdvDataLocalName"]!) == "BBUDDY"){
+                connectedPeripheral = peripheral
+                connectedPeripheral.delegate = self
+                os_log("Successfully Discovered Bottle Buddy")
+                central.stopScan()
+            }
         }
+
+        
+       
             
-        }
+       // }
         
     }
+    
+    
+    func centralManager(_ central: CBCentralManager,
+                        didConnect peripheral: CBPeripheral) {
+        os_log("Peripheral Connected")
+        // Stop scanning
+        centralManager.stopScan()
+        os_log("Scanning stopped")
+        
+        // Clear the data that we may already have
+        dataRecieved.removeAll(keepingCapacity: false)
+        
+        // Make sure we get the discovery callbacks
+        //peripheral.delegate = self
+        
+        // Search only for services that match our UUID
+        //peripheral.discoverServices([TransferService.serviceUUID])
+        peripheral.discoverServices([mainService.serviceUUID])
+        //deviceTableView.reloadData()
+    }
+    
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
@@ -301,21 +327,20 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
         
         //Makes sure we don't transfer more than we can in any given cycle
-        /*let mtu = connectedPeripheral.maximumWriteValueLength (for: .withoutResponse)
-        //initializes the data
-        var rawPacket = [UInt8]()
+        let mtu = connectedPeripheral.maximumWriteValueLength (for: .withoutResponse)
+       
+        var rawPacket = 1
         
-        //further makes sure we don't tranfer more than we can
-        let bytesToCopy: size_t = min(mtu, dataRecieved.count)
-        //
-        dataRecieved.copyBytes(to: &rawPacket, count: bytesToCopy)
-        let packetData = Data(bytes: &rawPacket, count: bytesToCopy)
-        //let stringFromData = String(data: packetData, encoding: .utf8)
         
-        //os_log("Writing %d bytes: %s", bytesToCopy, String(describing: stringFromData))
+//        let bytesToCopy: size_t = min(mtu, dataRecieved.count)
+        
+//        dataRecieved.copyBytes(to: &rawPacket, count: bytesToCopy)
+        let packetData = Data(bytes: &rawPacket, count: 1)
+//        let stringFromData = String(data: packetData, encoding: .utf8)
+        
+//        os_log("Writing %d bytes: %s", bytesToCopy, String(describing: stringFromData))
         os_log("%s", String(describing: packetData))
-        connectedPeripheral.writeValue(packetData, for: transferCharacteristic, type: .withoutResponse)*/
-        connectedPeripheral.writeValue(dataRecieved, for: transferCharacteristic, type: .withoutResponse)
+        connectedPeripheral.writeValue(packetData, for: transferCharacteristic, type: .withoutResponse)
         os_log("Successfully written data")
     }
     

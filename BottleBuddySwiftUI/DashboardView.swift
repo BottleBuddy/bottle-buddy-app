@@ -10,7 +10,7 @@ import Firebase
 import RealmSwift
 
 let USE_REALM_SYNC = true
-let app = USE_REALM_SYNC ? App(id: "bottlebuddyrealm-ucenr") : nil
+let app = USE_REALM_SYNC ? App(id: "bottlebuddyrealm2-ohcmu") : nil
 
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {

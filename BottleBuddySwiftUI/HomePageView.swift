@@ -22,13 +22,16 @@ struct HomePage: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
     let bbyellow = UIColor(named: "BB_Yellow")
 
+
     @State var alert = false
     let notifContent = UNMutableNotificationContent()
 
    
     @EnvironmentObject var user: User
     
-    
+
+    @ObservedObject var notifcation = NotificationManager()
+
     
 
     
@@ -79,9 +82,7 @@ struct HomePage: View {
                             // Bars...
                             
                             VStack{
-                                
                                 VStack{
-                                    
                                     Spacer(minLength: 0)
                                     
                                     if selected == waterLogEntry.id{
@@ -133,23 +134,18 @@ struct HomePage: View {
                 LazyVGrid(columns: columns,spacing: 30){
                     
                     ForEach(stats_Data){stat in
-                        
                         VStack(spacing: 32){
-                            
                             HStack{
-                                
                                 Text(stat.title)
                                     .font(.system(size: 22))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
-                                
                                 Spacer(minLength: 0)
                             }
                             
                             // Ring...
                             
                             ZStack{
-                                
                                 Circle()
                                     .trim(from: 0, to: 1)
                                     .stroke(stat.color.opacity(0.05), lineWidth: 10)
@@ -181,30 +177,7 @@ struct HomePage: View {
                 }
                 Button(action: {
                     //TODO: initiate cleaning protocol on button click
-                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge]) { (status, _) in
-                        
-                    }
-                        //if status{
-                            
-                            let content = UNMutableNotificationContent()
-                            content.title = "Notification"
-                            content.body = "Cleaning is starting, please ensure BottleBuddy cap is tightly secured."
-                            
-                            //timeInterval shows delay of notification delivery
-                            
-                            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                            
-                            let request = UNNotificationRequest(
-                                identifier: UUID().uuidString,
-                                content: content,
-                                trigger: trigger
-                            )
-                            UNUserNotificationCenter.current().add(request)
-                            
-                            //return
-                        //}
-                        
-                        //self.alert.toggle()
+                    self.notifcation.sendNotification(title: "Sent!!", subtitle: nil, body: "woot", launchIn: 1)
                     
                 }){
                     Text("Start Cleaning")
@@ -219,35 +192,6 @@ struct HomePage: View {
         }
         .background(Color(bblightblue!).ignoresSafeArea())
     }
-    
-//    //does this need to be called from somewhere or is it enough to set these attributes?
-//    /*
-//     https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
-//     */
-//    func notificationLogic(){
-//        notifContent.title = "Notification"
-//        notifContent.body = "Time to clean your BottleBuddy! Please empty any contents and ensure the lid is tightly secured"
-//        var dateComponents = DateComponents()
-//        dateComponents.calendar = Calendar.current
-//
-//        dateComponents.weekday = 7  // Friday
-//        dateComponents.hour = 10    // 16:00 hours
-//
-//        // Create the trigger as a repeating event.
-//        let trigger = UNCalendarNotificationTrigger(
-//                 dateMatching: dateComponents, repeats: true)
-//        let uuidString = UUID().uuidString
-//        let request = UNNotificationRequest(identifier: uuidString,
-//                    content: notifContent, trigger: trigger)
-//
-//        // Schedule the request with the system.
-//        let notificationCenter = UNUserNotificationCenter.current()
-//        notificationCenter.add(request) { (error) in
-//           if error != nil {
-//              // Handle any errors.
-//           }
-//        }
-//    }
     
     // calculating Type...
     

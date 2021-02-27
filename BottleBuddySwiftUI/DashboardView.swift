@@ -32,7 +32,7 @@ struct Dashboard : View {
                     }
                 }.tag(1)
                 .environmentObject(state)
-                
+
             
             ProfileView()
                 .tabItem{

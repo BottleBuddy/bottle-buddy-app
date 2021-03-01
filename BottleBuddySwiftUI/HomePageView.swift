@@ -77,40 +77,40 @@ struct HomePage: View {
                     HStack(spacing: 15){
                         var waterLogData = getWaterLog()
                         
-                        ForEach(waterLogData){waterLogEntry in
-                            
-                            // Bars...
-                            
-                            VStack{
-                                VStack{
-                                    Spacer(minLength: 0)
-                                    
-                                    if selected == waterLogEntry.id{
-                                        
-                                        Text(getDec(val: waterLogEntry.water_consumed))
-                                            .foregroundColor(Color(bbyellow!))
-                                            .padding(.bottom,5)
-                                    }
-                                    
-                                    RoundedShape()
-                                        .fill(LinearGradient(gradient: .init(colors: selected == waterLogEntry.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
-                                        // max height = 200
-                                        .frame(height: waterLogEntry.water_consumed)
-                                }
-                                .frame(height: 220)
-                                .onTapGesture {
-                                    
-                                    withAnimation(.easeOut){
-                                        
-                                        selected = waterLogEntry.id
-                                    }
-                                }
-                                
-                                Text(waterLogEntry.day)
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                            }
-                        }
+//                        ForEach(waterLogData){waterLogEntry in
+//
+//                            // Bars...
+//
+//                            VStack{
+//                                VStack{
+//                                    Spacer(minLength: 0)
+//
+//                                    if selected == waterLogEntry.id{
+//
+//                                        Text(getDec(val: waterLogEntry.water_consumed))
+//                                            .foregroundColor(Color(bbyellow!))
+//                                            .padding(.bottom,5)
+//                                    }
+//
+//                                    RoundedShape()
+//                                        .fill(LinearGradient(gradient: .init(colors: selected == waterLogEntry.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
+//                                        // max height = 200
+//                                        .frame(height: waterLogEntry.water_consumed)
+//                                }
+//                                .frame(height: 220)
+//                                .onTapGesture {
+//
+//                                    withAnimation(.easeOut){
+//
+//                                        selected = waterLogEntry.id
+//                                    }
+//                                }
+//
+//                                Text(waterLogEntry.day)
+//                                    .font(.caption)
+//                                    .foregroundColor(.white)
+//                            }
+ //                       }
                     }
                 }
                 .padding()
@@ -133,47 +133,47 @@ struct HomePage: View {
                 
                 LazyVGrid(columns: columns,spacing: 30){
                     
-                    ForEach(stats_Data){stat in
-                        VStack(spacing: 32){
-                            HStack{
-                                Text(stat.title)
-                                    .font(.system(size: 22))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                Spacer(minLength: 0)
-                            }
-                            
-                            // Ring...
-                            
-                            ZStack{
-                                Circle()
-                                    .trim(from: 0, to: 1)
-                                    .stroke(stat.color.opacity(0.05), lineWidth: 10)
-                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-                                
-                                Circle()
-                                    .trim(from: 0, to: (stat.currentData / stat.goal))
-                                    .stroke(stat.color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-                                
-                                Text(getPercent(current: stat.currentData, Goal: stat.goal) + " %")
-                                    .font(.system(size: 22))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(stat.color)
-                                    .rotationEffect(.init(degrees: 90))
-                            }
-                            .rotationEffect(.init(degrees: -90))
-                            
-                            Text(getDec(val: stat.currentData) + " " + getType(val: stat.title))
-                                .font(.system(size: 22))
-                                .foregroundColor(.white)
-                                .fontWeight(.bold)
-                        }
-                        .padding()
-                        .background(Color.white.opacity(0.06))
-                        .cornerRadius(15)
-                        .shadow(color: Color.white.opacity(0.2), radius: 10, x: 0, y: 0)
-                    }
+//                    ForEach(stats_Data){stat in
+//                        VStack(spacing: 32){
+//                            HStack{
+//                                Text(stat.title)
+//                                    .font(.system(size: 22))
+//                                    .fontWeight(.bold)
+//                                    .foregroundColor(.white)
+//                                Spacer(minLength: 0)
+//                            }
+//
+//                            // Ring...
+//
+//                            ZStack{
+//                                Circle()
+//                                    .trim(from: 0, to: 1)
+//                                    .stroke(stat.color.opacity(0.05), lineWidth: 10)
+//                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+//
+//                                Circle()
+//                                    .trim(from: 0, to: (stat.currentData / stat.goal))
+//                                    .stroke(stat.color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+//                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+//
+//                                Text(getPercent(current: stat.currentData, Goal: stat.goal) + " %")
+//                                    .font(.system(size: 22))
+//                                    .fontWeight(.bold)
+//                                    .foregroundColor(stat.color)
+//                                    .rotationEffect(.init(degrees: 90))
+//                            }
+//                            .rotationEffect(.init(degrees: -90))
+//
+//                            Text(getDec(val: stat.currentData) + " " + getType(val: stat.title))
+//                                .font(.system(size: 22))
+//                                .foregroundColor(.white)
+//                                .fontWeight(.bold)
+//                        }
+//                        .padding()
+//                        .background(Color.white.opacity(0.06))
+//                        .cornerRadius(15)
+//                        .shadow(color: Color.white.opacity(0.2), radius: 10, x: 0, y: 0)
+//                    }
                 }
                 Button(action: {
                     //TODO: initiate cleaning protocol on button click
@@ -254,18 +254,18 @@ struct HomePage: View {
 //        }
         
         var day_count = 1
-        for i in Range(uncheckedBounds: (0,7)){
-            var waterLevel = "";
-            do{
-                waterLevel = state.waterReadings?.freeze()[i].water_level ?? "0";
-            }
-            catch{
-             waterLevel = "0";
-            }
-            arr.append(WaterLogEntry(id: day_count, day: "Day \(day_count)", water_consumed:getHeight(value: waterLevel)))
-            day_count+=1
-            
-        }
+//        for i in Range(uncheckedBounds: (0,7)){
+//            var waterLevel = "";
+//            do{
+//                waterLevel = state.waterReadings?.freeze()[i].water_level ?? "0";
+//            }
+//            catch{
+//             waterLevel = "0";
+//            }
+//            arr.append(WaterLogEntry(id: day_count, day: "Day \(day_count)", water_consumed:getHeight(value: waterLevel)))
+//            day_count+=1
+//
+//        }
         return arr
         
     }

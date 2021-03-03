@@ -8,6 +8,8 @@
 import SwiftUI
 import Firebase
 
+var displayName = ""
+
 struct RegisterView: View {
     
     @State var color = Color.black.opacity(0.7)
@@ -143,15 +145,12 @@ struct RegisterView: View {
                     if err != nil{
                         self.error = err!.localizedDescription
                         self.alert.toggle()
-                        
-                        //TODO: May need to add a guard bc of the force unwrap of the uid
-                        let userID = Auth.auth().currentUser!.uid
                     
                         return
                     }
-                    
                     print("success")
-                    
+                    displayName = self.firstName+" "+self.lastName
+                    print(displayName)
                     UserDefaults.standard.set(true, forKey: "status")
                     NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
                 }

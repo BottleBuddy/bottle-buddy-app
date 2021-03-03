@@ -7,7 +7,11 @@
 //
 
 import SwiftUI
+
 import UserNotifications
+
+import RealmSwift
+
 
 struct HomePage: View {
     @EnvironmentObject var state: AppState
@@ -17,20 +21,36 @@ struct HomePage: View {
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
     let bblightblue = UIColor(named: "BB_LightBlue")
     let bbyellow = UIColor(named: "BB_Yellow")
+
+
     @State var alert = false
     let notifContent = UNMutableNotificationContent()
+
+   
+    @EnvironmentObject var user: User
     
-     
+
+    @ObservedObject var notifcation = NotificationManager()
+
+    
+
     
     var body: some View {
-
+        //        let waterReadings = state.waterReadings?.freeze()
+        
+        //        for reading in waterReadings {
+        //            print(reading.water_level)
+        //        }
+        
         ScrollView(.vertical, showsIndicators: false) {
             
             VStack{
                 
                 HStack{
                     //TODO: update with dynamic user's name
+
                     Text("Welcome " + state.email + "!")
+
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -49,50 +69,48 @@ struct HomePage: View {
                 // Bar Chart...
                 
                 VStack(alignment: .leading, spacing: 25) {
-                    
                     Text("Daily Water Consumption")
                         .font(.system(size: 22))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                     
                     HStack(spacing: 15){
+                        var waterLogData = getWaterLog()
                         
-                        ForEach(workout_Data){work in
-                            
-                            // Bars...
-                            
-                            VStack{
-                                
-                                VStack{
-                                    
-                                    Spacer(minLength: 0)
-                                    
-                                    if selected == work.id{
-                                        
-                                        Text(getHrs(value: work.workout_In_Min))
-                                            .foregroundColor(Color(bbyellow!))
-                                            .padding(.bottom,5)
-                                    }
-                                    
-                                    RoundedShape()
-                                        .fill(LinearGradient(gradient: .init(colors: selected == work.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
-                                    // max height = 200
-                                        .frame(height: getHeight(value: work.workout_In_Min))
-                                }
-                                .frame(height: 220)
-                                .onTapGesture {
-                                    
-                                    withAnimation(.easeOut){
-                                        
-                                        selected = work.id
-                                    }
-                                }
-                                
-                                Text(work.day)
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                            }
-                        }
+//                        ForEach(waterLogData){waterLogEntry in
+//
+//                            // Bars...
+//
+//                            VStack{
+//                                VStack{
+//                                    Spacer(minLength: 0)
+//
+//                                    if selected == waterLogEntry.id{
+//
+//                                        Text(getDec(val: waterLogEntry.water_consumed))
+//                                            .foregroundColor(Color(bbyellow!))
+//                                            .padding(.bottom,5)
+//                                    }
+//
+//                                    RoundedShape()
+//                                        .fill(LinearGradient(gradient: .init(colors: selected == waterLogEntry.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
+//                                        // max height = 200
+//                                        .frame(height: waterLogEntry.water_consumed)
+//                                }
+//                                .frame(height: 220)
+//                                .onTapGesture {
+//
+//                                    withAnimation(.easeOut){
+//
+//                                        selected = waterLogEntry.id
+//                                    }
+//                                }
+//
+//                                Text(waterLogEntry.day)
+//                                    .font(.caption)
+//                                    .foregroundColor(.white)
+//                            }
+ //                       }
                     }
                 }
                 .padding()
@@ -115,79 +133,51 @@ struct HomePage: View {
                 
                 LazyVGrid(columns: columns,spacing: 30){
                     
-                    ForEach(stats_Data){stat in
-                        
-                        VStack(spacing: 32){
-                            
-                            HStack{
-                                
-                                Text(stat.title)
-                                    .font(.system(size: 22))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                
-                                Spacer(minLength: 0)
-                            }
-                            
-                            // Ring...
-                            
-                            ZStack{
-                                
-                                Circle()
-                                    .trim(from: 0, to: 1)
-                                    .stroke(stat.color.opacity(0.05), lineWidth: 10)
-                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-                                
-                                Circle()
-                                    .trim(from: 0, to: (stat.currentData / stat.goal))
-                                    .stroke(stat.color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-                                
-                                Text(getPercent(current: stat.currentData, Goal: stat.goal) + " %")
-                                    .font(.system(size: 22))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(stat.color)
-                                    .rotationEffect(.init(degrees: 90))
-                            }
-                            .rotationEffect(.init(degrees: -90))
-                            
-                            Text(getDec(val: stat.currentData) + " " + getType(val: stat.title))
-                                .font(.system(size: 22))
-                                .foregroundColor(.white)
-                                .fontWeight(.bold)
-                        }
-                        .padding()
-                        .background(Color.white.opacity(0.06))
-                        .cornerRadius(15)
-                        .shadow(color: Color.white.opacity(0.2), radius: 10, x: 0, y: 0)
-                    }
+//                    ForEach(stats_Data){stat in
+//                        VStack(spacing: 32){
+//                            HStack{
+//                                Text(stat.title)
+//                                    .font(.system(size: 22))
+//                                    .fontWeight(.bold)
+//                                    .foregroundColor(.white)
+//                                Spacer(minLength: 0)
+//                            }
+//
+//                            // Ring...
+//
+//                            ZStack{
+//                                Circle()
+//                                    .trim(from: 0, to: 1)
+//                                    .stroke(stat.color.opacity(0.05), lineWidth: 10)
+//                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+//
+//                                Circle()
+//                                    .trim(from: 0, to: (stat.currentData / stat.goal))
+//                                    .stroke(stat.color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+//                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+//
+//                                Text(getPercent(current: stat.currentData, Goal: stat.goal) + " %")
+//                                    .font(.system(size: 22))
+//                                    .fontWeight(.bold)
+//                                    .foregroundColor(stat.color)
+//                                    .rotationEffect(.init(degrees: 90))
+//                            }
+//                            .rotationEffect(.init(degrees: -90))
+//
+//                            Text(getDec(val: stat.currentData) + " " + getType(val: stat.title))
+//                                .font(.system(size: 22))
+//                                .foregroundColor(.white)
+//                                .fontWeight(.bold)
+//                        }
+//                        .padding()
+//                        .background(Color.white.opacity(0.06))
+//                        .cornerRadius(15)
+//                        .shadow(color: Color.white.opacity(0.2), radius: 10, x: 0, y: 0)
+//                    }
                 }
                 Button(action: {
                     //TODO: initiate cleaning protocol on button click
-                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge]) { (status, _) in
-                        
-                    }
-                        //if status{
-                            
-                            let content = UNMutableNotificationContent()
-                            content.title = "Notification"
-                            content.body = "Cleaning is starting, please ensure BottleBuddy cap is tightly secured."
-                            
-                            //timeInterval shows delay of notification delivery
-                            
-                            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                            
-                            let request = UNNotificationRequest(
-                                identifier: UUID().uuidString,
-                                content: content,
-                                trigger: trigger
-                            )
-                            UNUserNotificationCenter.current().add(request)
-                            
-                            //return
-                        //}
-                        
-                        //self.alert.toggle()
+                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 5)
                     
                 }){
                     Text("Start Cleaning")
@@ -202,35 +192,6 @@ struct HomePage: View {
         }
         .background(Color(bblightblue!).ignoresSafeArea())
     }
-    
-//    //does this need to be called from somewhere or is it enough to set these attributes?
-//    /*
-//     https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
-//     */
-//    func notificationLogic(){
-//        notifContent.title = "Notification"
-//        notifContent.body = "Time to clean your BottleBuddy! Please empty any contents and ensure the lid is tightly secured"
-//        var dateComponents = DateComponents()
-//        dateComponents.calendar = Calendar.current
-//
-//        dateComponents.weekday = 7  // Friday
-//        dateComponents.hour = 10    // 16:00 hours
-//
-//        // Create the trigger as a repeating event.
-//        let trigger = UNCalendarNotificationTrigger(
-//                 dateMatching: dateComponents, repeats: true)
-//        let uuidString = UUID().uuidString
-//        let request = UNNotificationRequest(identifier: uuidString,
-//                    content: notifContent, trigger: trigger)
-//
-//        // Schedule the request with the system.
-//        let notificationCenter = UNUserNotificationCenter.current()
-//        notificationCenter.add(request) { (error) in
-//           if error != nil {
-//              // Handle any errors.
-//           }
-//        }
-//    }
     
     // calculating Type...
     
@@ -264,14 +225,15 @@ struct HomePage: View {
     
     // calculating Hrs For Height...
     
-    func getHeight(value : CGFloat)->CGFloat{
+    func getHeight(value : String)->CGFloat{
         
         // the value in minutes....
         // 24 hrs in min = 1440
-        
-        let hrs = CGFloat(value / 1440) * 200
-        
-        return hrs
+        guard let n = NumberFormatter().number(from: value) else {return CGFloat(-1)}
+        return CGFloat(n)
+        //        let hrs = CGFloat(n / 1440) * 200
+        //
+        //        return hrs
     }
     
     // getting hrs...
@@ -282,13 +244,40 @@ struct HomePage: View {
         
         return String(format: "%.1f", hrs)
     }
+    
+    func getWaterLog()-> [WaterLogEntry] {
+        var arr =  [WaterLogEntry]()
+        
+//        var length = state.waterReadings?.freeze().count ?? 0
+//        if (length<7){
+//            length = 7
+//        }
+        
+        var day_count = 1
+//        for i in Range(uncheckedBounds: (0,7)){
+//            var waterLevel = "";
+//            do{
+//                waterLevel = state.waterReadings?.freeze()[i].water_level ?? "0";
+//            }
+//            catch{
+//             waterLevel = "0";
+//            }
+//            arr.append(WaterLogEntry(id: day_count, day: "Day \(day_count)", water_consumed:getHeight(value: waterLevel)))
+//            day_count+=1
+//
+//        }
+        return arr
+        
+    }
 }
+
+
 
 struct RoundedShape : Shape {
     
     func path(in rect: CGRect) -> Path {
         
-
+        
         let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft,.topRight], cornerRadii: CGSize(width: 5, height: 5))
         
         return Path(path.cgPath)
@@ -297,23 +286,24 @@ struct RoundedShape : Shape {
 
 // sample Data...
 
-struct Daily : Identifiable {
+struct WaterLogEntry : Identifiable {
     
     var id : Int
     var day : String
-    var workout_In_Min : CGFloat
+    var water_consumed : CGFloat
 }
 //TODO: update with water data from past 7 days
-var workout_Data = [
 
-    Daily(id: 0, day: "Day 1", workout_In_Min: 480),
-    Daily(id: 1, day: "Day 2", workout_In_Min: 880),
-    Daily(id: 2, day: "Day 3", workout_In_Min: 250),
-    Daily(id: 3, day: "Day 4", workout_In_Min: 360),
-    Daily(id: 4, day: "Day 5", workout_In_Min: 1220),
-    Daily(id: 5, day: "Day 6", workout_In_Min: 750),
-    Daily(id: 6, day: "Day 7", workout_In_Min: 950)
-]
+//var workout_Data = [
+//    Daily(id: 0, day: "Day 1" , workout_In_Min:480),
+//    Daily(id: 1, day: "Day 2", workout_In_Min: 880),
+//    Daily(id: 2, day: "Day 3", workout_In_Min: 250),
+//    Daily(id: 3, day: "Day 4", workout_In_Min: 360),
+//    Daily(id: 4, day: "Day 5", workout_In_Min: 1220),
+//    Daily(id: 5, day: "Day 6", workout_In_Min: 750),
+//    Daily(id: 6, day: "Day 7", workout_In_Min: 950)
+//]
+
 
 
 struct Stats : Identifiable {
@@ -336,6 +326,7 @@ var stats_Data = [
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
         HomePage()
+        
     }
 }
 

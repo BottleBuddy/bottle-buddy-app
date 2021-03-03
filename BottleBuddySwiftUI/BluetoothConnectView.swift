@@ -60,6 +60,10 @@ struct BluetoothConnectView: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
+                //idk if this is the right bluetooth attribute to access the data
+                var dataRecievedString = "\(bluetooth.dataRecieved)"
+                Text("Recieved Bluetooth Data: " + dataRecievedString)
+                
                 
                 
             }

@@ -16,12 +16,12 @@ final class userObject: Object, ObjectKeyIdentifiable {
     @objc dynamic var user_id: String = ""
     
     //user can manipulate these values
-    @objc dynamic var bottleType = 4
-    @objc dynamic var bottleSize = 1
+    @objc dynamic var bottleBrandName = 0
+    @objc dynamic var bottleSize = 0
     @objc dynamic var email = ""
     @objc dynamic var name = ""
-    @objc dynamic var age = ""
-    @objc dynamic var sex = 3
+    @objc dynamic var ageOfUser = ""
+    @objc dynamic var sex = 0
     @objc dynamic var weight = ""
     
     convenience init(uid: String, email: String){
@@ -30,11 +30,10 @@ final class userObject: Object, ObjectKeyIdentifiable {
         self.email = email
     }
     
-    
     override static func primaryKey() -> String? {
         return "_id"
     }
-
+    
 }
 
 struct EditProfileView: View {
@@ -42,29 +41,27 @@ struct EditProfileView: View {
     @EnvironmentObject var state: AppState
     
     let bblightblue = UIColor(named: "BB_LightBlue")
-    @State var bottleType = 4
-    @State var bottleSize = 1
+    @State var bottleBrandName = 0
+    @State var bottleSize = 0
     @State var email = ""
     @State var name = ""
-    @State var age = ""
-    @State var sex = 3
+    @State var ageOfUser = ""
+    @State var sex = 0
     @State var weight = ""
-    
-    @State var recieve = false //what is this for
-    @State var notifNumber = 1 //what is this for
     @State var submit = false
     
     var body: some View {
-        VStack{
+        
+        NavigationView{
             VStack{
                 Form{
                     Section(header: Text("About You")){
                         TextField("Name: " + self.name , text: $name)
-                        TextField("Age: " + self.age, text: $age)
+                        TextField("Age: " + self.ageOfUser, text: $ageOfUser)
                             .keyboardType(.numberPad)
                         TextField("Weight: " + self.weight, text: $weight)
                             .keyboardType(.numberPad)
-                        Picker(selection: $sex, label: Text("Sex: " + String(self.sex))){
+                        Picker(selection: $sex, label: Text("Sex")){
                             Text("Male").tag(1)
                             Text("Female").tag(2)
                             Text("Other").tag(3)
@@ -72,47 +69,62 @@ struct EditProfileView: View {
                         }
                         TextField("Email: " + self.email , text: $email)
                     }
+                    
                     Section(header: Text("About Your Bottle")){
-                        Picker(selection: $bottleType, label: Text("Water Bottle Brand: " + String(self.bottleType))){
+                        
+                        Picker(selection: $bottleBrandName, label: Text("Bottle Brand")){
                             Text("Yeti").tag(1)
-                            Text("HydroFlask").tag(2)
-                            Text("ThermoFlask").tag(3)
-                            Text("None").tag(4)
+                            Text("Hydroflask").tag(2)
+                            Text("Thermoflask").tag(3)
+                            Text("Other").tag(4)
                         }
-                        Picker(selection: $bottleSize, label: Text("Water Bottle Size: " + String(self.bottleSize))){
-                            Text("16oz").tag(1)
-                            Text("18oz").tag(2)
-                            Text("26oz").tag(3)
-                            Text("36oz").tag(4)
+                        
+                        Picker(selection: $bottleSize, label: Text("Bottle Size")){
+                            Text("16 oz").tag(1)
+                            Text("18 oz").tag(2)
+                            Text("26 oz").tag(3)
+                            Text("36 oz").tag(4)
                         }
-                    }
-                    Button(action: {
-                        self.submit.toggle()
-                        self.updateUserObject()
-                    }){
-                        Text("Submit")
-                    }
-                    .alert(isPresented:$submit){
-                        Alert(title: Text("Profile Saved"))
                     }
                     
                 }
-            }.onAppear{
+                
+                Button(action: {
+                    self.submit.toggle()
+                    self.updateUserObject()
+                }){
+                    Text("Submit")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                }
+                .background(Color(UIColor(named: "BB_DarkBlue")!))
+                .cornerRadius(10)
+                .padding()
+                .alert(isPresented:$submit){
+                    Alert(title: Text("Profile Saved"))
+                }
+                
+                
+            }
+            .background(Color(bblightblue!).ignoresSafeArea())
+            .onAppear{
                 self.bottleSize = state.userData!.bottleSize
-                self.bottleType = state.userData!.bottleType
+                self.bottleBrandName = state.userData!.bottleBrandName
                 self.email = state.userData!.email
                 self.name = state.userData!.name
-                self.age = state.userData!.age
+                self.ageOfUser = state.userData!.ageOfUser
                 self.sex = state.userData!.sex
                 self.weight = state.userData!.weight
             }
         }
+        .background(Color(bblightblue!).ignoresSafeArea())
     }
-
+    
+    
     struct EditProfileView_Previews: PreviewProvider {
         static var previews: some View {
-            EditProfileView()
-        }
+            EditProfileView().previewLayout(.fixed(width: 375, height: 1000))        }
     }
     
     
@@ -124,10 +136,10 @@ struct EditProfileView: View {
         
         try! realm.write {
             state.userData!.bottleSize = self.bottleSize
-            state.userData!.bottleType = self.bottleType
+            state.userData!.bottleBrandName = self.bottleBrandName
             state.userData!.email = self.email
             state.userData!.name = self.name
-            state.userData!.age = self.age
+            state.userData!.ageOfUser = self.ageOfUser
             state.userData!.sex = self.sex
             state.userData!.weight = self.weight
         }

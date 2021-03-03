@@ -16,6 +16,7 @@
 		4C11B179253B7CF800FEF692 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C11B178253B7CF800FEF692 /* HealthKit.framework */; };
 		4C49359B25C5FA1000FD44B1 /* BluetoothTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C49359A25C5FA1000FD44B1 /* BluetoothTestView.swift */; };
 		4C5CAA9A25D0CE6A005F9AB8 /* Bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5CAA9925D0CE6A005F9AB8 /* Bluetooth.swift */; };
+		4C80092125E80540000E447A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C80092025E80540000E447A /* NotificationManager.swift */; };
 		4C84DD7025D07CA900DD0376 /* BluetoothConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C84DD6F25D07CA900DD0376 /* BluetoothConnectView.swift */; };
 		4C84DD7825D07EB800DD0376 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C84DD7725D07EB800DD0376 /* EditProfileView.swift */; };
 		4C84DD8025D0819300DD0376 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C84DD7F25D0819300DD0376 /* RegisterView.swift */; };
@@ -62,6 +63,7 @@
 		4C11B178253B7CF800FEF692 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4C49359A25C5FA1000FD44B1 /* BluetoothTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTestView.swift; sourceTree = "<group>"; };
 		4C5CAA9925D0CE6A005F9AB8 /* Bluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bluetooth.swift; sourceTree = "<group>"; };
+		4C80092025E80540000E447A /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4C84DD6F25D07CA900DD0376 /* BluetoothConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothConnectView.swift; sourceTree = "<group>"; };
 		4C84DD7725D07EB800DD0376 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		4C84DD7F25D0819300DD0376 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				4C5CAA9925D0CE6A005F9AB8 /* Bluetooth.swift */,
 				4C49359A25C5FA1000FD44B1 /* BluetoothTestView.swift */,
 				4C84DD6F25D07CA900DD0376 /* BluetoothConnectView.swift */,
+				4C80092025E80540000E447A /* NotificationManager.swift */,
 				4CAC8AD025329BE7004A27F8 /* Assets.xcassets */,
 				4CAC8AD825329BE7004A27F8 /* Info.plist */,
 				4CD5F524253A39AB005711DB /* GoogleService-Info.plist */,
@@ -465,6 +468,7 @@
 				4CAC8ACD25329BE4004A27F8 /* SceneDelegate.swift in Sources */,
 				1A55664B2565A23F00683DE7 /* UserDataView.swift in Sources */,
 				4CAC8ACF25329BE4004A27F8 /* ContentView.swift in Sources */,
+				4C80092125E80540000E447A /* NotificationManager.swift in Sources */,
 				1A3D152225D4B64000782B8F /* WaterReadingView.swift in Sources */,
 				4C11B156253B783F00FEF692 /* HealthStore.swift in Sources */,
 			);

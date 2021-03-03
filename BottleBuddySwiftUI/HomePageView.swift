@@ -25,9 +25,7 @@ struct HomePage: View {
 
     @State var alert = false
     let notifContent = UNMutableNotificationContent()
-
-   
-    @EnvironmentObject var user: User
+    @State var name: String = ""
     
 
     @ObservedObject var notifcation = NotificationManager()
@@ -49,7 +47,7 @@ struct HomePage: View {
                 HStack{
                     //TODO: update with dynamic user's name
 
-                    Text("Welcome " + state.email + "!")
+                    Text("Welcome " + self.name + "!")
 
                         .font(.title)
                         .fontWeight(.bold)
@@ -65,6 +63,13 @@ struct HomePage: View {
                     }
                 }
                 .padding()
+                .onAppear {
+                    if(state.userData?.name != nil){
+                        self.name = state.userData!.name
+                    } else {
+                        self.name = state.email
+                    }
+                }
                 
                 // Bar Chart...
                 

@@ -3,30 +3,27 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "_swift_runtime_on_report:(null)">
-         <PersistentStrings>
-            <PersistentString
-               value = "app?.currentUser">
-            </PersistentString>
-            <PersistentString
-               value = "currentUser">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in userObject.syncUserObject():EditProfileView.swift">
-      </ContextState>
-      <ContextState
          contextName = "Dashboard.init():DashboardView.swift">
          <PersistentStrings>
             <PersistentString
-               value = "Auth.auth().currentUser">
+               value = "Auth.auth().currentUser!.email">
             </PersistentString>
             <PersistentString
                value = "user">
             </PersistentString>
             <PersistentString
-               value = "Auth.auth().currentUser!.email">
+               value = "Auth.auth().currentUser">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "_swift_runtime_on_report:(null)">
+         <PersistentStrings>
+            <PersistentString
+               value = "currentUser">
+            </PersistentString>
+            <PersistentString
+               value = "app?.currentUser">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -45,21 +42,24 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "SceneDelegate.init():SceneDelegate.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "Auth.auth().currentUser">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "closure #1 in userObject.syncUserObject():EditProfileView.swift">
       </ContextState>
       <ContextState
          contextName = "closure #2 in AppState.init():WaterReadingView.swift">
          <PersistentStrings>
             <PersistentString
-               value = "WaterReadingsGroup.self">
+               value = "Auth.auth().currentUser!.uid">
             </PersistentString>
             <PersistentString
-               value = "Auth.auth().currentUser!.uid">
+               value = "WaterReadingsGroup.self">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "SceneDelegate.init():SceneDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Auth.auth().currentUser">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

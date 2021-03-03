@@ -14,8 +14,8 @@
             filePath = "BottleBuddySwiftUI/EditProfileView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
             landmarkName = "EditProfileView"
             landmarkType = "14">
          </BreakpointContent>
@@ -206,42 +206,10 @@
             filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
+            startingLineNumber = "231"
+            endingLineNumber = "231"
             landmarkName = "addWaterReading()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "43672CE2-1452-4000-A4C3-89BB65A94BC6 - e0e82d01e5a7dad0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BottleBuddySwiftUI.waterReadingsView.addWaterReading() -&gt; ()"
-                  moduleName = "BottleBuddySwiftUI"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sphanse/Documents/Senior_Year/SeniorDesign/bottle-buddy-app/BottleBuddySwiftUI/WaterReadingView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "237"
-                  endingLineNumber = "237"
-                  offsetFromSymbolStart = "1629">
-               </Location>
-               <Location
-                  uuid = "43672CE2-1452-4000-A4C3-89BB65A94BC6 - 61588b9f5382f3fd"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in BottleBuddySwiftUI.waterReadingsView.addWaterReading() -&gt; ()"
-                  moduleName = "BottleBuddySwiftUI"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sphanse/Documents/Senior_Year/SeniorDesign/bottle-buddy-app/BottleBuddySwiftUI/WaterReadingView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
-                  offsetFromSymbolStart = "53">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -302,8 +270,8 @@
             filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>
@@ -318,8 +286,8 @@
             filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
             landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>
@@ -334,8 +302,8 @@
             filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>
@@ -350,8 +318,8 @@
             filePath = "BottleBuddySwiftUI/WaterReadingView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
             landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>

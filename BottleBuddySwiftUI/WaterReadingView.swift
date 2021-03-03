@@ -37,7 +37,7 @@ struct WaterReadingView_Previews: PreviewProvider {
 /// An individual reading. Part of a `WaterReadingsGroup`.
 final class waterReading: Object, ObjectKeyIdentifiable {
     @objc dynamic var _id: ObjectId = ObjectId.generate()
-    @objc dynamic var user_id: String = Auth.auth().currentUser!.uid
+    @objc dynamic var user_id: String = ""
     @objc dynamic var time: String = "12:00"
     @objc dynamic var date: String = "01-01-2021"
     @objc dynamic var water_level: String = ""
@@ -47,6 +47,7 @@ final class waterReading: Object, ObjectKeyIdentifiable {
     convenience init(water_level: String){
         self.init()
         self.water_level = water_level
+        self.user_id = Auth.auth().currentUser!.uid
     }
 
     override static func primaryKey() -> String? {
@@ -112,13 +113,8 @@ class AppState: ObservableObject {
                 
                 if realm.objects(userObject.self).count == 0 {
                     try! realm.write {
-                        realm.add(userObject(uid: self.partitionValue, email: self.email))
+                        realm.add(userObject(uid: self.partitionValue, email: self.email, name: displayName))
                     }
-                }
-                
-                if realm.objects(userObject.self)[0].user_id != self.partitionValue {
-                    realm.deleteAll()
-                    realm.add(userObject(uid:self.partitionValue, email:self.email))
                 }
                 
                 assert(realm.objects(userObject.self).count > 0)
@@ -218,7 +214,7 @@ struct waterReadingsView: View {
     }
 
     func addWaterReading() {
-        let newWaterReading = waterReading()
+        let newWaterReading = waterReading(water_level: "50")
         let now = Date()
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "nl_NL")
@@ -227,8 +223,6 @@ struct waterReadingsView: View {
         
         formatter.dateFormat = "HH:mm:ss"
         newWaterReading.time = formatter.string(from: now)
-        
-        newWaterReading.water_level = "50"
         
         guard let realm = waterReadings.realm else {
             waterReadings.append(newWaterReading)

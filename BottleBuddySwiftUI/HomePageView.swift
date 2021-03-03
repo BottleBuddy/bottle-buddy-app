@@ -177,7 +177,7 @@ struct HomePage: View {
                 }
                 Button(action: {
                     //TODO: initiate cleaning protocol on button click
-                    self.notifcation.sendNotification(title: "Sent!!", subtitle: nil, body: "woot", launchIn: 1)
+                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 5)
                     
                 }){
                     Text("Start Cleaning")

@@ -49,7 +49,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         //testService: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961",
         //testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
     
-    let mainService = NewService(testService: "19B10010-E8F2-537E-4F6C-D104768A1214", testCharacteristic: "19B10011-E8F2-537E-4F6C-D104768A1214")
+    let mainService = NewService(testService: "19B10010-E8F2-537E-4F6C-D104768A1214", testCharacteristic: "19B10013-E8F2-537E-4F6C-D104768A1214")
     
     override init(){
         sendingEOM = false      //this is j to make things compile,, may need to change later
@@ -141,6 +141,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             }
         }
 
+
         
        
             
@@ -148,6 +149,12 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         
     }
     
+    func centralManager(_ central: CBCentralManager,
+                        didFailToConnect peripheral: CBPeripheral,
+                        error: Error?) {
+        os_log("Failed to connect to %@. %s", peripheral, String(describing: error))
+       // cleanup()
+    }
     
     func centralManager(_ central: CBCentralManager,
                         didConnect peripheral: CBPeripheral) {
@@ -165,6 +172,12 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         // Search only for services that match our UUID
         //peripheral.discoverServices([TransferService.serviceUUID])
         peripheral.discoverServices([mainService.serviceUUID])
+        //deviceTableView.reloadData()
+    }
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral,
+                        error: Error?) {
+        os_log("Perhiperal Disconnected")
+        connectedPeripheral = nil
         //deviceTableView.reloadData()
     }
     
@@ -327,21 +340,29 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
         
         //Makes sure we don't transfer more than we can in any given cycle
-        let mtu = connectedPeripheral.maximumWriteValueLength (for: .withoutResponse)
+        //let mtu = connectedPeripheral.maximumWriteValueLength (for: .withoutResponse)
        
-        var rawPacket = 1
+        //var rawPacket = 1
         
         
 //        let bytesToCopy: size_t = min(mtu, dataRecieved.count)
         
 //        dataRecieved.copyBytes(to: &rawPacket, count: bytesToCopy)
-        let packetData = Data(bytes: &rawPacket, count: 1)
+        //let packetData = Data(bytes: &rawPacket, count: 1)
 //        let stringFromData = String(data: packetData, encoding: .utf8)
         
 //        os_log("Writing %d bytes: %s", bytesToCopy, String(describing: stringFromData))
-        os_log("%s", String(describing: packetData))
-        connectedPeripheral.writeValue(packetData, for: transferCharacteristic, type: .withoutResponse)
-        os_log("Successfully written data")
+//        os_log("%s", String(describing: packetData))
+//        connectedPeripheral.writeValue(packetData, for: transferCharacteristic, type: .withoutResponse)
+//        os_log("Successfully written data")
+        
+        let turn_on: Bool = true;
+        
+        let turn_off: Bool = false;
+        
+        let turnOnData = withUnsafeBytes(of: turn_on) { Data($0) }
+        let turnOffData = withUnsafeBytes(of: turn_off) { Data($0) }
+        connectedPeripheral.writeValue(turnOnData, for: transferCharacteristic, type: .withResponse)
     }
     
     
@@ -353,6 +374,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             peripheral.discoverServices([mainService.serviceUUID])//REVIEW WHAT THIS DOES BECAUSE IT DOESNT MAKE SENSE
         }
     }
+    
     
     /*
      *  The Transfer Service was discovered
@@ -397,7 +419,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         for characteristic in serviceCharacteristics where characteristic.uuid == mainService.characteristicUUID {
             // If it is, subscribe to it
             centralTransferCharacteristic = characteristic
-            peripheral.setNotifyValue(true, for: characteristic)
+            //peripheral.setNotifyValue(true, for: characteristic)
         }
         // Once this is complete, we just need to wait for the data to come in.
     }
@@ -428,7 +450,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             //            }
             
             // Write test data
-            writeData()
+            //writeData()
         } else {
             // Otherwise, just append the data to what we have previously received.
             dataRecieved.append(characteristicData)

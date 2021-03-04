@@ -7,9 +7,7 @@
 //
 
 import SwiftUI
-
 import UserNotifications
-
 import RealmSwift
 
 
@@ -23,40 +21,30 @@ struct HomePage: View {
     let bbyellow = UIColor(named: "BB_Yellow")
     //var waterLogData: [WaterLogEntry]
     @State var waterLogData = [WaterLogEntry]()
-
-
     @State var alert = false
     let notifContent = UNMutableNotificationContent()
+    let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
+    @State var runCount = 0
+    //@State var stateLoad = false
 
-   
+    
     @EnvironmentObject var user: User
     
-
+    
     @ObservedObject var notifcation = NotificationManager()
-
-    init() {
-        //self.init()
-        //self.waterLogData = getWaterLog()
-        
-    }
-
+    
     
     var body: some View {
-        //        let waterReadings = state.waterReadings?.freeze()
-        
-        //        for reading in waterReadings {
-        //            print(reading.water_level)
-        //        }
         
         ScrollView(.vertical, showsIndicators: false) {
-            var waterLogData = [WaterLogEntry]()
+            
             VStack{
                 
                 HStack{
                     //TODO: update with dynamic user's name
-
+                    
                     Text("Welcome " + state.email + "!")
-
+                        
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -79,25 +67,34 @@ struct HomePage: View {
                         .font(.system(size: 22))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
+                        .onReceive(timer){time in
+                            runCount += 1
+                            //run Count ==2 def not doable
+                            if(runCount == 3){
+                                getWaterLog()
+                                runCount = 0
+                            }
+                             }
+                        
                     
                     HStack(spacing: 15){
-                      
+                        
                         
                         ForEach(self.waterLogData){waterLogEntry in
-
+                            
                             // Bars...
-
+                            
                             VStack{
                                 VStack{
                                     Spacer(minLength: 0)
-
+                                    
                                     if selected == waterLogEntry.id{
-
+                                        
                                         Text(getDec(val: waterLogEntry.water_consumed))
                                             .foregroundColor(Color(bbyellow!))
                                             .padding(.bottom,5)
                                     }
-
+                                    
                                     RoundedShape()
                                         .fill(LinearGradient(gradient: .init(colors: selected == waterLogEntry.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
                                         // max height = 200
@@ -105,13 +102,13 @@ struct HomePage: View {
                                 }
                                 .frame(height: 220)
                                 .onTapGesture {
-
+                                    
                                     withAnimation(.easeOut){
-
+                                        
                                         selected = waterLogEntry.id
                                     }
                                 }
-
+                                
                                 Text(waterLogEntry.day)
                                     .font(.caption)
                                     .foregroundColor(.white)
@@ -123,7 +120,7 @@ struct HomePage: View {
                 .background(Color(bbdarkblue!).ignoresSafeArea())
                 .cornerRadius(10)
                 .padding()
-                .onAppear{getWaterLog()}
+                
                 
                 HStack{
                     
@@ -149,20 +146,20 @@ struct HomePage: View {
                                     .foregroundColor(.white)
                                 Spacer(minLength: 0)
                             }
-
+                            
                             // Ring...
-
+                            
                             ZStack{
                                 Circle()
                                     .trim(from: 0, to: 1)
                                     .stroke(stat.color.opacity(0.05), lineWidth: 10)
                                     .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-
+                                
                                 Circle()
                                     .trim(from: 0, to: (stat.currentData / stat.goal))
                                     .stroke(stat.color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                     .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-
+                                
                                 Text(getPercent(current: stat.currentData, Goal: stat.goal) + " %")
                                     .font(.system(size: 22))
                                     .fontWeight(.bold)
@@ -170,7 +167,7 @@ struct HomePage: View {
                                     .rotationEffect(.init(degrees: 90))
                             }
                             .rotationEffect(.init(degrees: -90))
-
+                            
                             Text(getDec(val: stat.currentData) + " " + getType(val: stat.title))
                                 .font(.system(size: 22))
                                 .foregroundColor(.white)
@@ -254,17 +251,10 @@ struct HomePage: View {
         return String(format: "%.1f", hrs)
     }
     
-     func getWaterLog(){
-        //var arr =  [WaterLogEntry]()
-        
-//        var length = state.waterReadings?.freeze().count ?? 0
-//        if (length<7){
-//            length = 7
-//        }
-        
-        //var day_count = 1
-       // let frozenWater = state.waterReadings?.freeze()
+    func getWaterLog(){
         var  i = 0
+
+        waterLogData.removeAll()
         state.waterReadings!.forEach{ waterReading in
             i+=1
             var waterLevel = waterReading.water_level
@@ -272,25 +262,8 @@ struct HomePage: View {
             
         }
         
-//        for i in Range(uncheckedBounds: (0,7)){
-//            var waterLevel = "";
-//            if(state.waterReadings?[i].water_level != nil){
-//                waterLevel = state.waterReadings?[i].water_level ?? "0";
-//            }else{
-//                waterLevel = "10";
-//            }
-//
-//            self.waterLogData.append(WaterLogEntry(id: (i+1), day: "Day \(i+1)", water_consumed:getHeight(value: waterLevel)))
-//
-//
-//
-//        }
-//        state.waterReadings?.realm?.resolve(ThreadSafeReference(to: frozenWater))
-        
-        //return arr
-        
     }
- 
+    
 }
 
 
@@ -314,18 +287,6 @@ struct WaterLogEntry : Identifiable {
     var day : String
     var water_consumed : CGFloat
 }
-//TODO: update with water data from past 7 days
-
-//var workout_Data = [
-//    Daily(id: 0, day: "Day 1" , workout_In_Min:480),
-//    Daily(id: 1, day: "Day 2", workout_In_Min: 880),
-//    Daily(id: 2, day: "Day 3", workout_In_Min: 250),
-//    Daily(id: 3, day: "Day 4", workout_In_Min: 360),
-//    Daily(id: 4, day: "Day 5", workout_In_Min: 1220),
-//    Daily(id: 5, day: "Day 6", workout_In_Min: 750),
-//    Daily(id: 6, day: "Day 7", workout_In_Min: 950)
-//]
-
 
 
 struct Stats : Identifiable {

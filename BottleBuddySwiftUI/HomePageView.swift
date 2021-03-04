@@ -19,13 +19,11 @@ struct HomePage: View {
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
     let bblightblue = UIColor(named: "BB_LightBlue")
     let bbyellow = UIColor(named: "BB_Yellow")
-    //var waterLogData: [WaterLogEntry]
     @State var waterLogData = [WaterLogEntry]()
     @State var alert = false
     let notifContent = UNMutableNotificationContent()
     let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
     @State var runCount = 0
-    //@State var stateLoad = false
 
     
     @EnvironmentObject var user: User

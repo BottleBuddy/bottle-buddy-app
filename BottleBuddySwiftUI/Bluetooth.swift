@@ -115,7 +115,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         os_log("Scanning for Devices...")
        
         centralManager.scanForPeripherals(
-            withServices: [CBUUID(string:"19B10010-E8F2-537E-4F6C-D104768A1214" )],
+            //withServices: [CBUUID(string:"19B10010-E8F2-537E-4F6C-D104768A1214" )],
+            withServices: nil,
             options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
         )
         if centralManager.isScanning {
@@ -138,7 +139,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         
         
         //if(String(describing: peripheral.identifier) == "F8DDCC5D-D2F0-FEC9-E400-575577FC5008"){
-            os_log("Discovered %s at %d with identifier %s", String(describing: peripheral.name), RSSI.intValue, String(describing: peripheral.identifier))
+          //  os_log("Discovered %s at %d with identifier %s", String(describing: peripheral.name), RSSI.intValue, String(describing: peripheral.identifier))
 //            os_log("%d",advertisementData.count)
 //            for advertisement in advertisementData{
 //                os_log("%s", String(describing: advertisement))

@@ -12,9 +12,10 @@ import Foundation
 
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
-    let timer = Timer.publish(every: 1, on : .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
     @State var result = UInt8()
     var bluetooth = Bluetooth.init()
+    @State var connected = false
     
     var body: some View{
         ScrollView(){
@@ -61,23 +62,26 @@ struct BluetoothConnectView: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
-//                Button(action:{result = bluetooth.getTofValue()}){
-//                    Text("Tof Data")
-//                        .foregroundColor(.white)
-//                        .padding(.vertical)
-//                        .frame(width: UIScreen.main.bounds.width - 50)
-//                        .background(Color(UIColor(named: "BB_DarkBlue")!))
-//                        .cornerRadius(10)
-//                }
-                //idk if this is the right bluetooth attribute to access the data
-                //let dataReceivedString = "\(result)"
-                //for num in result
+                Button(action:{connected = true}){
+                    Text("Tof Data")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                        .cornerRadius(10)
+                }
+//                idk if this is the right bluetooth attribute to access the data
+//                let dataReceivedString = "\(result)"
+//                for num in result
                
                     
                 Text("Received Bluetooth Data:  + \(result)")
                     .onReceive(timer){time in
-                        result = bluetooth.getTofValue()
+                        if(connected){
+                            result = bluetooth.getTofValue()
+                        }
                         
+
                 }
                 
                 
@@ -89,6 +93,10 @@ struct BluetoothConnectView: View {
         }
         .background(Color(bblightblue!).ignoresSafeArea())
         .frame(maxWidth: .infinity)
+    }
+    func connectBuddy(){
+        bluetooth.connectDevice()
+        connected = true
     }
 }
 

@@ -10,27 +10,20 @@ import UIKit
 import CoreBluetooth
 import os
 
-
-// Make this structure whenever you want to make a new service
 struct NewService{
-    var characteristicArray:[CBUUID]
+    var characteristicUUIDs:[CBUUID]
     var serviceUUID: CBUUID!
     init(service: String){
         self.serviceUUID = CBUUID(string: service)
-        self.characteristicArray = [CBUUID]()
-       
+        self.characteristicUUIDs = [CBUUID]()
     }
 }
 
 class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, ObservableObject, Identifiable{
     var centralManager: CBCentralManager!
-    
     var peripheralManager: CBPeripheralManager!
-    
-    var peripheralTransferCharacteristic: CBMutableCharacteristic?
-    
+    //var peripheralTransferCharacteristic: CBMutableCharacteristic?
     var centralTransferCharacteristic = [CBCharacteristic?]()
-    
     //which piece of hardware we are connected to
     var connectedCentral: CBCentral?
     
@@ -44,7 +37,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var dataRecieved = Data()
     
     var sendingEOM :Bool = false   //sending end of message
-
+    var connected = false
     var tofValue = Data()
     var stringVal = String()
     var intVal = Int()
@@ -69,8 +62,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         if centralManager != nil{
             os_log("initialized centralManager")
         }
-        demoService.characteristicArray.append(CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214"))//UVC
-        demoService.characteristicArray.append(CBUUID(string: "19B10011-E8F2-537E-4F6C-D104768A1214"))//TOF
+        demoService.characteristicUUIDs.append(CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214"))//UVC
+        demoService.characteristicUUIDs.append(CBUUID(string: "19B10011-E8F2-537E-4F6C-D104768A1214"))//TOF
 //        demoService.characteristicArray.append(CBUUID(string: "19B10013-E8F2-537E-4F6C-D104768A1214"))////Y
 //        demoService.characteristicArray.append(CBUUID(string: "19B10014-E8F2-537E-4F6C-D104768A1214"))//Z
 //        demoService.characteristicArray.append(CBUUID(string: "19B10012-E8F2-537E-4F6C-D104768A1214"))//X
@@ -115,9 +108,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         os_log("Scanning for Devices...")
        
         centralManager.scanForPeripherals(
-            //withServices: [CBUUID(string:"19B10010-E8F2-537E-4F6C-D104768A1214" )],
-            withServices: nil,
-            options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
+            withServices: [demoService.serviceUUID],
+            options: [CBCentralManagerScanOptionAllowDuplicatesKey: true]
         )
         if centralManager.isScanning {
             os_log("is scanning")
@@ -137,27 +129,22 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             return
         }
         
-        
-        //if(String(describing: peripheral.identifier) == "F8DDCC5D-D2F0-FEC9-E400-575577FC5008"){
-          //  os_log("Discovered %s at %d with identifier %s", String(describing: peripheral.name), RSSI.intValue, String(describing: peripheral.identifier))
-//            os_log("%d",advertisementData.count)
-//            for advertisement in advertisementData{
-//                os_log("%s", String(describing: advertisement))
-//            }
+        os_log("Discovered %s at %d with identifier %s", String(describing: peripheral.name), RSSI.intValue, String(describing: peripheral.identifier))
         if (advertisementData["kCBAdvDataLocalName"] != nil){
             if (String(describing: advertisementData["kCBAdvDataLocalName"]!) == "BBUDDY"){
                 connectedPeripheral = peripheral
                 connectedPeripheral.delegate = self
                 os_log("Successfully Discovered Bottle Buddy")
-                central.stopScan()
+                centralManager.connect(connectedPeripheral, options: nil)
+                if (connectedPeripheral.state == .connected){
+                    connected = true
+                    central.stopScan()
+                }else{
+                    centralManager.scanForPeripherals(withServices: [demoService.serviceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
+                }
+                
             }
         }
-
-
-        
-       
-            
-       // }
         
     }
     
@@ -234,85 +221,6 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
     }
     
-    
-    
-    
-    /*  sendData
-     *  Description: Standard sendData() function from Apple's Example code. Personally, I did not change anything in this function because I was just testing.
-     *  Usage: Call this function to actually send the data (as a peripheral) to another device. However, the way it is sent is up to you.
-     */
-    
-    //sending from phone to cap
-    func sendData() {
-        var sendDataIndex = 0
-        //Below defines the transferCharacteristic for this transfer and immediately returns if it is null/nil
-        guard let transferCharacteristic = peripheralTransferCharacteristic else {return}
-        //Below checks to see if we are suppose to be sending the end of message
-        if sendingEOM {
-            // send it
-            let didSend = peripheralManager.updateValue("EOM".data(using: .utf8)!, for: transferCharacteristic, onSubscribedCentrals: nil)
-            // Did it send?
-            if didSend {
-                // It did, so mark it as sent
-                sendingEOM = false
-                os_log("Sent: EOM")
-            }
-            // It didn't send, so we'll exit and wait for peripheralManagerIsReadyToUpdateSubscribers to call sendData again
-            return
-        }
-        // We're not sending an EOM, so we're sending data
-        // Is there any left to send?
-        if sendDataIndex >= dataToSend.count {
-            // No data left.  Do nothing
-            return
-        }
-        
-        // There's data left, so send until the callback fails, or we're done.
-        var didSend = true
-        while didSend {
-            
-            // Work out how big it should be
-            var amountToSend = dataToSend.count - sendDataIndex
-            if let mtu = connectedCentral?.maximumUpdateValueLength {
-                amountToSend = min(amountToSend, mtu)
-            }
-            
-            // Copy out the data we want
-            let chunk = dataToSend.subdata(in: sendDataIndex..<(sendDataIndex + amountToSend))
-            
-            // Send it
-            didSend = peripheralManager.updateValue(chunk, for: transferCharacteristic, onSubscribedCentrals: nil)
-            
-            // If it didn't work, drop out and wait for the callback
-            if !didSend {
-                return
-            }
-            
-            let stringFromData = String(data: chunk, encoding: .utf8)
-            os_log("Sent %d bytes: %s", chunk.count, String(describing: stringFromData))
-            
-            // It did send, so update our index
-            sendDataIndex += amountToSend
-            // Was it the last one?
-            if sendDataIndex >= dataToSend.count {
-                // It was - send an EOM
-                // Set this so if the send fails, we'll send it next time
-                sendingEOM = true
-                //Send it
-                let eomSent = peripheralManager.updateValue("EOM".data(using: .utf8)!,
-                                                            for: transferCharacteristic, onSubscribedCentrals: nil)
-                
-                if eomSent {
-                    // It sent; we're all done
-                    sendingEOM = false
-                    os_log("Sent: EOM")
-                }
-                return
-            }
-        }
-    }
-    
-    
     /*  cleanUp()
      *  Call this when things either go wrong, or you're done with the connection.
      *  This cancels any subscriptions if there are any, or straight disconnects if not.
@@ -353,7 +261,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
         
         //Makes sure we don't transfer more than we can in any given cycle
-        //let mtu = connectedPeripheral.maximumWriteValueLength (for: .withoutResponse)
+        //let mtu = connectedPmaximumWriteValueLength (for: .withoutResponse)
        
         //var rawPacket = 1
         
@@ -401,13 +309,10 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         // Discover the characteristic we want...
         // Loop through the newly filled peripheral.services array, just in case there's more than one.
         guard let peripheralServices = peripheral.services else { return }
-        /*for service in peripheralServices {
-         peripheral.discoverCharacteristics([TransferService.characteristicUUID], for: service)
-         }*/
+
         
         for service in peripheralServices {
-            peripheral.discoverCharacteristics([demoService.characteristicArray[0]], for: service)
-            peripheral.discoverCharacteristics([demoService.characteristicArray[1]], for: service)
+            peripheral.discoverCharacteristics(demoService.characteristicUUIDs, for: service)
            // peripheral.discoverCharacteristics([demoService.characteristicArray[2]], for: service)
         }
     }
@@ -428,11 +333,11 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         guard let serviceCharacteristics = service.characteristics else { return }
         
         
-            for cbuuid in demoService.characteristicArray {
+        for cbuuid in demoService.characteristicUUIDs {
                 for characteristic in serviceCharacteristics where characteristic.uuid == cbuuid {
                         // If it is, subscribe to it
                         centralTransferCharacteristic.append(characteristic)
-                    peripheral.setNotifyValue(true, for: characteristic)
+                        connectedPeripheral.setNotifyValue(true, for: characteristic)
                     }
             }
         
@@ -505,7 +410,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         // Exit if it's not the transfer characteristic
         //guard characteristic.uuid == TransferService.characteristicUUID else { return }
         
-        guard characteristic.uuid == demoService.characteristicArray[1] else { return }
+        //guard characteristic.uuid == demoService.characteristicUUIDs else { return }
         if characteristic.isNotifying {
             // Notification has started
             os_log("Notification began on %@", characteristic)
@@ -516,9 +421,13 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
     }
     
-    func getTofValue()->UInt8{
-       // if(self.tofValue == nil)
-        return self.tofValue[0]
+    func getTofValue()->UInt16{
+        if(self.tofValue.isEmpty){
+            return 0;
+        }
+        var result = UInt16()
+        result = (UInt16(self.tofValue[1])<<8) + (UInt16(self.tofValue[0]))
+        return result
     }
     func getStringValue()->String{
         return self.stringVal
@@ -526,5 +435,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     
     func getIntValue()->Int{
         return self.intVal
+    }
+    
+    func readTOF()->String{
+        return String(describing: centralTransferCharacteristic[0]?.value)
     }
 }

@@ -14,16 +14,18 @@ import UserNotifications
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
     let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
-    @State var result = UInt8()
+    @State var tof_distance = UInt16()
     var bluetooth = Bluetooth.init()
     @State var connected = false
+    @State var connected_status = "Not Connected To Buddy :("
     let notifContent = UNMutableNotificationContent()
     @ObservedObject var notifcation = NotificationManager()
-    
+    @State var alert = false
+
     var body: some View{
         ScrollView(){
             VStack{
-                Text("Bluetooth")
+                Text("Mid Semester Demo")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -37,7 +39,14 @@ struct BluetoothConnectView: View {
 //                        .cornerRadius(10)
 //                }
 //                .padding()
-                
+                Text("\(connected_status)")
+                    .onReceive(timer){time in
+                        if(connected){
+                            connected_status = "Connected To Buddy!"
+                        }
+                    }
+                    .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
+                    .padding(.vertical)
                 Button(action: {connectBuddy()}) {
                     Text("Connect to Buddy")
                         .foregroundColor(.white)
@@ -67,27 +76,35 @@ struct BluetoothConnectView: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
-                Button(action:{connected = true}){
-                    Text("Tof Data")
-                        .foregroundColor(.white)
-                        .padding(.vertical)
-                        .frame(width: UIScreen.main.bounds.width - 50)
-                        .background(Color(UIColor(named: "BB_DarkBlue")!))
-                        .cornerRadius(10)
-                }
+                Text("Time Of Flight Sensor Distance: \(tof_distance)")
+                    .onReceive(timer){time in
+                        if(connected){
+                            tof_distance = bluetooth.getTofValue()
+                        }
+                    }
+                    .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
+                    .padding(.vertical)
+                    .multilineTextAlignment(.center)
+                    .font(.system(size: 30))
+//                Button(action:{connected = true}){
+//                    Text("Tof Data")
+//                        .foregroundColor(.white)
+//                        .padding(.vertical)
+//                        .frame(width: UIScreen.main.bounds.width - 50)
+//                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+//                        .cornerRadius(10)
+//                }
                 //                idk if this is the right bluetooth attribute to access the data
                 //                let dataReceivedString = "\(result)"
                 //                for num in result
                 
                 
-                Text("Received Bluetooth Data:  + \(result)")
-                    .onReceive(timer){time in
-                        if(connected){
-                            result = bluetooth.getTofValue()
-                        }
+                /*Text("Received Bluetooth Data:  + \(result)")*/
+                
+              
                         
                         
-                    }
+                    
                 
                 
                 
@@ -101,8 +118,11 @@ struct BluetoothConnectView: View {
     }
     func connectBuddy(){
         bluetooth.scanForDevices()
-        bluetooth.connectDevice()
+        
+        //bluetooth.connectDevice()
+        //if(foundPeripheral.state == .connected){
         connected = true
+       // }
     }
 }
 
@@ -114,7 +134,7 @@ struct BluetoothConnectView: View {
 
 struct BluetoothConnectView_Previews: PreviewProvider {
     static var previews: some View {
-        BluetoothConnectView(result: 0)
+        BluetoothConnectView(tof_distance: 0)
     }
 }
 

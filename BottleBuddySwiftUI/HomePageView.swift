@@ -24,10 +24,8 @@ struct HomePage: View {
     let notifContent = UNMutableNotificationContent()
     @State var name: String = ""
     let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
-    @State var runCount = 0
-
-    @ObservedObject var notifcation = NotificationManager()
     
+    @ObservedObject var notifcation = NotificationManager()
     
     var body: some View {
         
@@ -35,11 +33,9 @@ struct HomePage: View {
             
             VStack{
                 
-                HStack{
-                    //TODO: update with dynamic user's name
-
+                HStack{                    
                     Text("Welcome " + self.name + "!")
-
+                        
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -54,13 +50,15 @@ struct HomePage: View {
                     }
                 }
                 .padding()
-                .onAppear {
-                    if(state.userData?.name != nil){
-                        self.name = state.userData!.name
-                    } else {
-                        self.name = state.email
+                .onReceive(timer, perform: { _ in
+                    if(state.userData != nil){
+                        if(state.userData?.name != nil){
+                            self.name = state.userData!.name
+                        } else {
+                            self.name = state.email
+                        }
                     }
-                }
+                })
                 
                 // Bar Chart...
                 
@@ -69,15 +67,12 @@ struct HomePage: View {
                         .font(.system(size: 22))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .onReceive(timer){time in
-                            runCount += 1
-                            //run Count ==2 def not doable
-                            if(runCount == 4){
+                        .onReceive(timer){_ in
+                            if(state.waterReadings != nil){
                                 getWaterLog()
-                                runCount = 0
                             }
-                             }
-                        
+                        }
+                    
                     
                     HStack(spacing: 15){
                         
@@ -255,7 +250,7 @@ struct HomePage: View {
     
     func getWaterLog(){
         var  i = 0
-
+        
         waterLogData.removeAll()
         state.waterReadings!.forEach{ waterReading in
             i+=1

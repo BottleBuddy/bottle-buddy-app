@@ -28,7 +28,7 @@ struct ProfileView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 
-                NavigationLink(destination: BluetoothConnectView()){
+                NavigationLink(destination: BluetoothConnectView(result: 0)){
                     Text("Bluetooth")
                         .foregroundColor(.white)
                         .padding(.vertical)

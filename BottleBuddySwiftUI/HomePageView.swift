@@ -77,40 +77,40 @@ struct HomePage: View {
                     HStack(spacing: 15){
                         var waterLogData = getWaterLog()
                         
-//                        ForEach(waterLogData){waterLogEntry in
-//
-//                            // Bars...
-//
-//                            VStack{
-//                                VStack{
-//                                    Spacer(minLength: 0)
-//
-//                                    if selected == waterLogEntry.id{
-//
-//                                        Text(getDec(val: waterLogEntry.water_consumed))
-//                                            .foregroundColor(Color(bbyellow!))
-//                                            .padding(.bottom,5)
-//                                    }
-//
-//                                    RoundedShape()
-//                                        .fill(LinearGradient(gradient: .init(colors: selected == waterLogEntry.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
-//                                        // max height = 200
-//                                        .frame(height: waterLogEntry.water_consumed)
-//                                }
-//                                .frame(height: 220)
-//                                .onTapGesture {
-//
-//                                    withAnimation(.easeOut){
-//
-//                                        selected = waterLogEntry.id
-//                                    }
-//                                }
-//
-//                                Text(waterLogEntry.day)
-//                                    .font(.caption)
-//                                    .foregroundColor(.white)
-//                            }
- //                       }
+                        ForEach(waterLogData){waterLogEntry in
+
+                            // Bars...
+
+                            VStack{
+                                VStack{
+                                    Spacer(minLength: 0)
+
+                                    if selected == waterLogEntry.id{
+
+                                        Text(getDec(val: waterLogEntry.water_consumed))
+                                            .foregroundColor(Color(bbyellow!))
+                                            .padding(.bottom,5)
+                                    }
+
+                                    RoundedShape()
+                                        .fill(LinearGradient(gradient: .init(colors: selected == waterLogEntry.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
+                                        // max height = 200
+                                        .frame(height: waterLogEntry.water_consumed)
+                                }
+                                .frame(height: 220)
+                                .onTapGesture {
+
+                                    withAnimation(.easeOut){
+
+                                        selected = waterLogEntry.id
+                                    }
+                                }
+
+                                Text(waterLogEntry.day)
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                            }
+                        }
                     }
                 }
                 .padding()
@@ -254,18 +254,18 @@ struct HomePage: View {
 //        }
         
         var day_count = 1
-//        for i in Range(uncheckedBounds: (0,7)){
-//            var waterLevel = "";
-//            do{
-//                waterLevel = state.waterReadings?.freeze()[i].water_level ?? "0";
-//            }
-//            catch{
-//             waterLevel = "0";
-//            }
-//            arr.append(WaterLogEntry(id: day_count, day: "Day \(day_count)", water_consumed:getHeight(value: waterLevel)))
-//            day_count+=1
-//
-//        }
+        for i in Range(uncheckedBounds: (0,7)){
+            var waterLevel = "";
+            do{
+                waterLevel = state.waterReadings?.freeze()[i].water_level ?? "0";
+            }
+            catch{
+             waterLevel = "0";
+            }
+            arr.append(WaterLogEntry(id: day_count, day: "Day \(day_count)", water_consumed:getHeight(value: waterLevel)))
+            day_count+=1
+
+        }
         return arr
         
     }

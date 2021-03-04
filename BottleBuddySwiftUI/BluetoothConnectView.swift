@@ -12,7 +12,8 @@ import Foundation
 
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
-    
+    let timer = Timer.publish(every: 1, on : .main, in: .common).autoconnect()
+    @State var result = UInt8()
     var bluetooth = Bluetooth.init()
     
     var body: some View{
@@ -60,9 +61,24 @@ struct BluetoothConnectView: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
+//                Button(action:{result = bluetooth.getTofValue()}){
+//                    Text("Tof Data")
+//                        .foregroundColor(.white)
+//                        .padding(.vertical)
+//                        .frame(width: UIScreen.main.bounds.width - 50)
+//                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+//                        .cornerRadius(10)
+//                }
                 //idk if this is the right bluetooth attribute to access the data
-                var dataRecievedString = "\(bluetooth.dataRecieved)"
-                Text("Recieved Bluetooth Data: " + dataRecievedString)
+                //let dataReceivedString = "\(result)"
+                //for num in result
+               
+                    
+                Text("Received Bluetooth Data:  + \(result)")
+                    .onReceive(timer){time in
+                        result = bluetooth.getTofValue()
+                        
+                }
                 
                 
                 
@@ -84,7 +100,7 @@ struct BluetoothConnectView: View {
 
 struct BluetoothConnectView_Previews: PreviewProvider {
     static var previews: some View {
-        BluetoothConnectView()
+        BluetoothConnectView(result: 0)
     }
 }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "closure #1 in Bluetooth.peripheral(_:didDiscoverCharacteristicsFor:error:):Bluetooth.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "characteristic.uuid">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Bluetooth.peripheral(_:didDiscoverCharacteristicsFor:error:):Bluetooth.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "">
+            </PersistentString>
+            <PersistentString
+               value = "demoService.characteristicArray">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

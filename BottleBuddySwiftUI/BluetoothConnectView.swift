@@ -13,8 +13,9 @@ import UserNotifications
 
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
-    let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.01, on : .main, in: .common).autoconnect()
     @State var tof_distance = UInt16()
+    @State var imu_reading = String()
     var bluetooth = Bluetooth.init()
     @State var connected = false
     @State var connected_status = "Not Connected To Buddy :("
@@ -40,6 +41,7 @@ struct BluetoothConnectView: View {
 //                }
 //                .padding()
                 Text("\(connected_status)")
+                    .font(.system(size: 30))
                     .onReceive(timer){time in
                         if(connected){
                             connected_status = "Connected To Buddy!"
@@ -76,10 +78,29 @@ struct BluetoothConnectView: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
-                Text("Time Of Flight Sensor Distance: \(tof_distance)")
+                Text("ToF Distance ")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                Text("\(tof_distance)")
                     .onReceive(timer){time in
                         if(connected){
                             tof_distance = bluetooth.getTofValue()
+                        }
+                    }
+                    .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
+                    .padding(.vertical)
+                    .multilineTextAlignment(.center)
+                    .font(.system(size: 30))
+                
+                Text("IMU Orientation ")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                Text("\(imu_reading)")
+                    .onReceive(timer){time in
+                        if(connected){
+                            imu_reading = bluetooth.getIMUValue()
                         }
                     }
                     .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
@@ -134,7 +155,7 @@ struct BluetoothConnectView: View {
 
 struct BluetoothConnectView_Previews: PreviewProvider {
     static var previews: some View {
-        BluetoothConnectView(tof_distance: 0)
+        BluetoothConnectView(tof_distance: 0, imu_reading: "\n X Value: \n Y Value: \n Z Value: ")
     }
 }
 

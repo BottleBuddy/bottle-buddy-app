@@ -39,6 +39,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var sendingEOM :Bool = false   //sending end of message
     var connected = false
     var tofValue = Data()
+    var IMUxValue = Data()
+    var IMUyValue = Data()
+    var IMUzValue = Data()
     var stringVal = String()
     var intVal = Int()
     
@@ -64,9 +67,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
         demoService.characteristicUUIDs.append(CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214"))//UVC
         demoService.characteristicUUIDs.append(CBUUID(string: "19B10011-E8F2-537E-4F6C-D104768A1214"))//TOF
-//        demoService.characteristicArray.append(CBUUID(string: "19B10013-E8F2-537E-4F6C-D104768A1214"))////Y
-//        demoService.characteristicArray.append(CBUUID(string: "19B10014-E8F2-537E-4F6C-D104768A1214"))//Z
-//        demoService.characteristicArray.append(CBUUID(string: "19B10012-E8F2-537E-4F6C-D104768A1214"))//X
+        demoService.characteristicUUIDs.append(CBUUID(string: "19B10013-E8F2-537E-4F6C-D104768A1214"))////Y
+        demoService.characteristicUUIDs.append(CBUUID(string: "19B10014-E8F2-537E-4F6C-D104768A1214"))//Z
+        demoService.characteristicUUIDs.append(CBUUID(string: "19B10012-E8F2-537E-4F6C-D104768A1214"))//X
         
     }
     
@@ -364,36 +367,28 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             return
         }
         
-        guard let characteristicData = characteristic.value,
-              let stringFromData = String(data: characteristicData, encoding: .utf8) else { return }
+        guard let characteristicData = characteristic.value
+               else { return }
+        
+        let stringFromData = String(describing: characteristicData)
                 
         os_log("Received %d bytes from CBUUID %s : %s", characteristicData.count, String(describing: characteristic.uuid), stringFromData)
         if( String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
-            //( stringFromData ?? "").isEmpty ? "0" :stringFromData!
-//            if(stringFromData == "\0\0"){
-//                tofValue = 0
-//            }
-//            else{
             tofValue = characteristic.value!
-            stringVal = stringFromData
-             intVal = Int(stringFromData) ?? 0
-//            }
+        }
+        if( String(describing: characteristic.uuid) == "19B10012-E8F2-537E-4F6C-D104768A1214"){
+            IMUxValue = characteristic.value!
+        }
+        if( String(describing: characteristic.uuid) == "19B10013-E8F2-537E-4F6C-D104768A1214"){
+            IMUyValue = characteristic.value!
+        }
+        if( String(describing: characteristic.uuid) == "19B10014-E8F2-537E-4F6C-D104768A1214"){
+            IMUzValue = characteristic.value!
         }
         // Have we received the end-of-message token?
-        if stringFromData == "EOM" {
-            // End-of-message case: show the data.
-            // Dispatch the text view update to the main queue for updating the UI, because
-            // we don't know which thread this method will be called back on.
-            //            DispatchQueue.main.async() {
-            //                self.centralTextView.text = String(data: self.dataRecieved, encoding: .utf8)
-            //            }
-            
-            // Write test data
-            //writeData()
-        } else {
             // Otherwise, just append the data to what we have previously received.
             dataRecieved.append(characteristicData)
-        }
+        
     }
     
     
@@ -421,12 +416,33 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
     }
     
+    
     func getTofValue()->UInt16{
+        if (connectedPeripheral != nil){
+            if(!centralTransferCharacteristic.isEmpty){
+                connectedPeripheral.readValue(for: centralTransferCharacteristic[0]!)
+            }
+            
+        }
         if(self.tofValue.isEmpty){
             return 0;
         }
         var result = UInt16()
         result = (UInt16(self.tofValue[1])<<8) + (UInt16(self.tofValue[0]))
+        return result
+    }
+    func getIMUValue()->String{
+        if (connectedPeripheral != nil){
+            if(!centralTransferCharacteristic.isEmpty){
+                connectedPeripheral.readValue(for: centralTransferCharacteristic[1]!)
+            }
+            
+        }
+
+        if(self.IMUxValue.isEmpty){
+            return "";
+        }
+        let result = "\n X Value: \(String(data: IMUxValue, encoding: .utf8)!) \n Y Value: \(String(data: IMUyValue, encoding: .utf8)!) \n Z Value \(String(data: IMUzValue, encoding: .utf8)!)"
         return result
     }
     func getStringValue()->String{
@@ -438,11 +454,13 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     }
     
     func readTOF()->UInt16{
-        /*if(centralTransferCharacteristic[0]?.value){
+        /*
+        if(centralTransferCharacteristic.isEmpty){
             return 0;
         }
         var result = UInt16()
-        result = (UInt16(self.tofValue[1])<<8) + (UInt16(self.tofValue[0]))
+        connectedPeripheral.readValue(for: centralTransferCharacteristic[1]!)
+    
         return result*/
         return 0
     }

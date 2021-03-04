@@ -437,7 +437,12 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         return self.intVal
     }
     
-    func readTOF()->String{
-        return String(describing: centralTransferCharacteristic[0]?.value)
+    func readTOF()->UInt16{
+        if(centralTransferCharacteristic[0]?.value){
+            return 0;
+        }
+        var result = UInt16()
+        result = (UInt16(self.tofValue[1])<<8) + (UInt16(self.tofValue[0]))
+        return result
     }
 }

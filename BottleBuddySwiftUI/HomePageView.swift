@@ -70,7 +70,7 @@ struct HomePage: View {
                         .onReceive(timer){time in
                             runCount += 1
                             //run Count ==2 def not doable
-                            if(runCount == 3){
+                            if(runCount == 4){
                                 getWaterLog()
                                 runCount = 0
                             }

@@ -9,6 +9,7 @@ import SwiftUI
 import CoreBluetooth
 import os
 import Foundation
+import UserNotifications
 
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
@@ -16,6 +17,8 @@ struct BluetoothConnectView: View {
     @State var result = UInt8()
     var bluetooth = Bluetooth.init()
     @State var connected = false
+    let notifContent = UNMutableNotificationContent()
+    @ObservedObject var notifcation = NotificationManager()
     
     var body: some View{
         ScrollView(){
@@ -25,18 +28,18 @@ struct BluetoothConnectView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 
-                Button(action: {bluetooth.scanForDevices()}) {
-                    Text("Search For Devices")
-                        .foregroundColor(.white)
-                        .padding(.vertical)
-                        .frame(width: UIScreen.main.bounds.width - 50)
-                        .background(Color(UIColor(named: "BB_DarkBlue")!))
-                        .cornerRadius(10)
-                }
-                .padding()
+//                Button(action: {bluetooth.scanForDevices()}) {
+//                    Text("Search For Devices")
+//                        .foregroundColor(.white)
+//                        .padding(.vertical)
+//                        .frame(width: UIScreen.main.bounds.width - 50)
+//                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+//                        .cornerRadius(10)
+//                }
+//                .padding()
                 
-                Button(action: {bluetooth.connectDevice()}) {
-                    Text("Connect")
+                Button(action: {connectBuddy()}) {
+                    Text("Connect to Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)
@@ -52,10 +55,12 @@ struct BluetoothConnectView: View {
                         .cornerRadius(10)
                 }
                 
-                //TextField(<#LocalizedStringKey#>, text: <#Binding<String>#>)
-                
-                Button(action:{bluetooth.writeData()}){
-                    Text("Write Data")
+                Button(action: {
+                    //TODO: initiate cleaning protocol on button click
+                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 5)
+                    
+                bluetooth.writeData()}){
+                    Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)
@@ -70,19 +75,19 @@ struct BluetoothConnectView: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
-//                idk if this is the right bluetooth attribute to access the data
-//                let dataReceivedString = "\(result)"
-//                for num in result
-               
-                    
+                //                idk if this is the right bluetooth attribute to access the data
+                //                let dataReceivedString = "\(result)"
+                //                for num in result
+                
+                
                 Text("Received Bluetooth Data:  + \(result)")
                     .onReceive(timer){time in
                         if(connected){
                             result = bluetooth.getTofValue()
                         }
                         
-
-                }
+                        
+                    }
                 
                 
                 
@@ -95,6 +100,7 @@ struct BluetoothConnectView: View {
         .frame(maxWidth: .infinity)
     }
     func connectBuddy(){
+        bluetooth.scanForDevices()
         bluetooth.connectDevice()
         connected = true
     }

@@ -13,7 +13,7 @@ import UserNotifications
 
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
-    let timer = Timer.publish(every: 0.01, on : .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
     @State var tof_distance = UInt16()
     @State var imu_reading = String()
     var bluetooth = Bluetooth.init()

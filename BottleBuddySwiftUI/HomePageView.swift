@@ -5,7 +5,6 @@
 //  Created by Christopher Erattuparambil on 10/6/20.
 //  Copyright © 2020 Christopher Erattuparambil. All rights reserved.
 //
-
 import SwiftUI
 import UserNotifications
 import RealmSwift
@@ -19,13 +18,20 @@ struct HomePage: View {
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
     let bblightblue = UIColor(named: "BB_LightBlue")
     let bbyellow = UIColor(named: "BB_Yellow")
+    //var waterLogData: [WaterLogEntry]
     @State var waterLogData = [WaterLogEntry]()
     @State var alert = false
     let notifContent = UNMutableNotificationContent()
-    @State var name: String = ""
     let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
+    @State var runCount = 0
+    //@State var stateLoad = false
+    
+    
+    @EnvironmentObject var user: User
+    
     
     @ObservedObject var notifcation = NotificationManager()
+    
     
     var body: some View {
         
@@ -33,8 +39,10 @@ struct HomePage: View {
             
             VStack{
                 
-                HStack{                    
-                    Text("Welcome " + self.name + "!")
+                HStack{
+                    //TODO: update with dynamic user's name
+                    
+                    Text("Welcome " + state.email + "!")
                         
                         .font(.title)
                         .fontWeight(.bold)
@@ -50,15 +58,6 @@ struct HomePage: View {
                     }
                 }
                 .padding()
-                .onReceive(timer, perform: { _ in
-                    if(state.userData != nil){
-                        if(state.userData?.name != nil){
-                            self.name = state.userData!.name
-                        } else {
-                            self.name = state.email
-                        }
-                    }
-                })
                 
                 // Bar Chart...
                 
@@ -67,15 +66,17 @@ struct HomePage: View {
                         .font(.system(size: 22))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .onReceive(timer){_ in
-                            if(state.waterReadings != nil){
+                        .onReceive(timer){time in
+                            runCount += 1
+                            //run Count ==2 def not doable
+                            if(runCount == 4){
                                 getWaterLog()
+                                runCount = 0
                             }
                         }
                     
                     
                     HStack(spacing: 15){
-                        
                         
                         ForEach(self.waterLogData){waterLogEntry in
                             
@@ -91,7 +92,6 @@ struct HomePage: View {
                                             .foregroundColor(Color(bbyellow!))
                                             .padding(.bottom,5)
                                     }
-                                    
                                     RoundedShape()
                                         .fill(LinearGradient(gradient: .init(colors: selected == waterLogEntry.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
                                         // max height = 200
@@ -105,7 +105,6 @@ struct HomePage: View {
                                         selected = waterLogEntry.id
                                     }
                                 }
-                                
                                 Text(waterLogEntry.day)
                                     .font(.caption)
                                     .foregroundColor(.white)
@@ -248,67 +247,66 @@ struct HomePage: View {
         return String(format: "%.1f", hrs)
     }
     
-    func getWaterLog(){
-        var  i = 0
-        
-        waterLogData.removeAll()
-        state.waterReadings!.forEach{ waterReading in
-            i+=1
-            var waterLevel = waterReading.water_level
-            self.waterLogData.append(WaterLogEntry(id: (i), day: "Day \(i)", water_consumed:getHeight(value: waterLevel)))
+        func getWaterLog(){
+            var  i = 0
+            
+            waterLogData.removeAll()
+            state.waterReadings!.forEach{ waterReading in
+                i+=1
+                var waterLevel = waterReading.water_level
+                self.waterLogData.append(WaterLogEntry(id: (i), day: "Day \(i)", water_consumed:getHeight(value: waterLevel)))
+                
+            }
             
         }
         
     }
     
-}
-
-
-
-struct RoundedShape : Shape {
     
-    func path(in rect: CGRect) -> Path {
+    
+    struct RoundedShape : Shape {
         
-        
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft,.topRight], cornerRadii: CGSize(width: 5, height: 5))
-        
-        return Path(path.cgPath)
+        func path(in rect: CGRect) -> Path {
+            
+            
+            let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft,.topRight], cornerRadii: CGSize(width: 5, height: 5))
+            
+            return Path(path.cgPath)
+        }
     }
-}
-
-// sample Data...
-
-struct WaterLogEntry : Identifiable {
     
-    var id : Int
-    var day : String
-    var water_consumed : CGFloat
-}
-
-
-struct Stats : Identifiable {
+    // sample Data...
     
-    var id : Int
-    var title : String
-    var currentData : CGFloat
-    var goal : CGFloat
-    var color : Color
-}
-
-//TODO: make currentData variable w data from database
-var stats_Data = [
-    
-    Stats(id: 1, title: "Water Intake Today", currentData: 3.5, goal: 5, color: Color(.yellow)),
-    
-    Stats(id: 3, title: "Days Until Cleaning", currentData: 6.2, goal: 10, color: Color(.yellow))
-]
-
-struct HomePage_Previews: PreviewProvider {
-    static var previews: some View {
-        HomePage()
+    struct WaterLogEntry : Identifiable {
         
+        var id : Int
+        var day : String
+        var water_consumed : CGFloat
     }
-}
-
+    
+    
+    struct Stats : Identifiable {
+        
+        var id : Int
+        var title : String
+        var currentData : CGFloat
+        var goal : CGFloat
+        var color : Color
+    }
+    
+    //TODO: make currentData variable w data from database
+    var stats_Data = [
+        
+        Stats(id: 1, title: "Water Intake Today", currentData: 3.5, goal: 5, color: Color(.yellow)),
+        
+        Stats(id: 3, title: "Days Until Cleaning", currentData: 6.2, goal: 10, color: Color(.yellow))
+    ]
+    
+    struct HomePage_Previews: PreviewProvider {
+        static var previews: some View {
+            HomePage()
+            
+        }
+    }
 
 

@@ -28,8 +28,8 @@ struct ProfileView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 
-                NavigationLink(destination: BluetoothConnectView()){
-                    Text("Bluetooth")
+                NavigationLink(destination: BluetoothConnectView(tof_distance: 0)){
+                    Text("DEMO MODE")
                         .foregroundColor(.white)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)

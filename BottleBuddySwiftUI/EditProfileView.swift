@@ -56,6 +56,10 @@ struct EditProfileView: View {
         
         NavigationView{
             VStack{
+                Text("Edit Profile")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
                 Form{
                     Section(header: Text("About You")){
                         TextField("Name: " + self.name , text: $name)

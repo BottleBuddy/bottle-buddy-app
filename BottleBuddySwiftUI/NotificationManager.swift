@@ -59,11 +59,11 @@ class NotificationManager: ObservableObject {
                 content.body = "Take a sip of water to meet your daily goal."
                 content.badge = 1
 
-                // 3.4 Create the actual notification
+                //Create the actual notification
                 let request = UNNotificationRequest(identifier: "drinknotif",
                                                     content: content,
                                                     trigger: trigger)
-                // 3.5 Add our notification to the notification center
+                //Add our notification to the notification center
                 UNUserNotificationCenter.current().add(request)
                 {
                     (error) in
@@ -89,11 +89,11 @@ class NotificationManager: ObservableObject {
                 content.body = "Secure your cap on the bottle and initiate cleaning withing the app."
                 content.badge = 1
 
-                // 3.4 Create the actual notification
+                //Create the actual notification
                 let request = UNNotificationRequest(identifier: "cleannotif",
                                                     content: content,
                                                     trigger: trigger)
-                // 3.5 Add our notification to the notification center
+                //Add our notification to the notification center
                 UNUserNotificationCenter.current().add(request)
                 {
                     (error) in

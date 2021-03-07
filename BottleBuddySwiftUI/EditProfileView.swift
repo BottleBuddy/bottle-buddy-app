@@ -50,6 +50,7 @@ struct EditProfileView: View {
     @State var sex = 0
     @State var weight = ""
     @State var submit = false
+    @State var firstDisplay = true
     
     var body: some View {
         
@@ -110,13 +111,16 @@ struct EditProfileView: View {
             }
             .background(Color(bblightblue!).ignoresSafeArea())
             .onAppear{
-                self.bottleSize = state.userData!.bottleSize
-                self.bottleBrandName = state.userData!.bottleBrandName
-                self.email = state.userData!.email
-                self.name = state.userData!.name
-                self.ageOfUser = state.userData!.ageOfUser
-                self.sex = state.userData!.sex
-                self.weight = state.userData!.weight
+                if(firstDisplay) {
+                    self.bottleSize = state.userData!.bottleSize
+                    self.bottleBrandName = state.userData!.bottleBrandName
+                    self.email = state.userData!.email
+                    self.name = state.userData!.name
+                    self.ageOfUser = state.userData!.ageOfUser
+                    self.sex = state.userData!.sex
+                    self.weight = state.userData!.weight
+                    firstDisplay = false
+                }
             }
         }
         .background(Color(bblightblue!).ignoresSafeArea())

@@ -23,8 +23,7 @@ struct HomePage: View {
     @State var alert = false
     let notifContent = UNMutableNotificationContent()
     let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
-    @State var runCount = 0
-    //@State var stateLoad = false
+    @State var name: String = ""
     
     
     @EnvironmentObject var user: User
@@ -42,7 +41,7 @@ struct HomePage: View {
                 HStack{
                     //TODO: update with dynamic user's name
                     
-                    Text("Welcome " + state.email + "!")
+                    Text("Welcome " + self.name + "!")
                         
                         .font(.title)
                         .fontWeight(.bold)
@@ -58,6 +57,16 @@ struct HomePage: View {
                     }
                 }
                 .padding()
+                .onReceive(timer, perform: { _ in
+                    if(state.userData != nil){
+                        if(state.userData?.name != nil){
+                            self.name = state.userData!.name
+                        } else {
+                            self.name = state.email
+                        }
+                    }
+                })
+
                 
                 // Bar Chart...
                 
@@ -66,14 +75,12 @@ struct HomePage: View {
                         .font(.system(size: 22))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .onReceive(timer){time in
-                            runCount += 1
-                            //run Count ==2 def not doable
-                            if(runCount == 4){
+                        .onReceive(timer){_ in
+                            if(state.waterReadings != nil){
                                 getWaterLog()
-                                runCount = 0
                             }
                         }
+
                     
                     
                     HStack(spacing: 15){

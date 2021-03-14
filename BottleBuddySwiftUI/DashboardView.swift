@@ -21,6 +21,7 @@ struct DashboardView_Previews: PreviewProvider {
 struct Dashboard : View {
     @ObservedObject var state = AppState()
     @State var error: Error?
+    @State var firstDashboard: Bool = true
     
     var body: some View {
         TabView{
@@ -52,23 +53,26 @@ struct Dashboard : View {
                 }.tag(3)
                 .environmentObject(state)
         }.onAppear {
-            guard let app = app else {
-                print("Not using Realm Sync - not logging in")
-                return
-            }
-            state.shouldIndicateActivity = true
-            app.login(credentials: .anonymous).receive(on: DispatchQueue.main).sink(receiveCompletion: {
-                state.shouldIndicateActivity = false
-                switch ($0) {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self.error = error
+            if(firstDashboard){
+                guard let app = app else {
+                    print("Not using Realm Sync - not logging in")
+                    return
                 }
-            }, receiveValue: {
-                self.error = nil
-                state.loginPublisher.send($0)
-            }).store(in: &state.cancellables)
+                state.shouldIndicateActivity = true
+                app.login(credentials: .anonymous).receive(on: DispatchQueue.main).sink(receiveCompletion: {
+                    state.shouldIndicateActivity = false
+                    switch ($0) {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        self.error = error
+                    }
+                }, receiveValue: {
+                    self.error = nil
+                    state.loginPublisher.send($0)
+                }).store(in: &state.cancellables)
+                firstDashboard = false
+            }
         }.disabled(state.shouldIndicateActivity)
     }
 }

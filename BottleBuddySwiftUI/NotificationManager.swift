@@ -78,9 +78,9 @@ class NotificationManager: ObservableObject {
         var dateComponents = DateComponents()
         
         //reminds the user to clean at 8am on Sundays
-        dateComponents.day = 2
-        dateComponents.hour = 13
-        dateComponents.minute = 30
+        dateComponents.day = 4
+        dateComponents.hour = 14
+        dateComponents.minute = 48
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents,
                                                             repeats: true)

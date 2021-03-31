@@ -50,6 +50,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         //testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
     
     var demoService = NewService(service: "19B10010-E8F2-537E-4F6C-D104768A1214")
+    var calibrationService = NewService(service: "19B10020-E8F2-537E-4F6C-D104768A1214")
+    var intakeService = NewService(service: "19B10030-E8F2-537E-4F6C-D104768A1214")
+    var cleaningSerivce = NewService(service: "19B10040-E8F2-537E-4F6C-D104768A1214")
 
     override init(){
         sendingEOM = false      //this is j to make things compile,, may need to change later

@@ -52,7 +52,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var demoService = NewService(service: "19B10010-E8F2-537E-4F6C-D104768A1214")
 
     override init(){
-        sendingEOM = false      //this is j to make things compile,, may need to change later
+      //  sendingEOM = false      //this is j to make things compile,, may need to change later
+        super.init()
+        initializeStream()
     }
     
     func initializeStream(){
@@ -181,6 +183,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         os_log("Perhiperal Disconnected")
         connectedPeripheral = nil
         //deviceTableView.reloadData()
+        connected = false
     }
     
     
@@ -343,7 +346,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
                         connectedPeripheral.setNotifyValue(true, for: characteristic)
                     }
             }
-        
+        connected = true
         
         /*for characteristic in serviceCharacteristics where characteristic.uuid == TransferService.characteristicUUID {
          // If it is, subscribe to it

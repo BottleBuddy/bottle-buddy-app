@@ -15,6 +15,7 @@ struct ProfileView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
     private var healthStore:  HealthStore?
     @EnvironmentObject var state: AppState
+    @EnvironmentObject var bluetooth: Bluetooth
     
     init(){
         healthStore = HealthStore()
@@ -28,7 +29,7 @@ struct ProfileView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 
-                NavigationLink(destination: BluetoothConnectView(tof_distance: 0)){
+                NavigationLink(destination: BluetoothConnectView(tof_distance: 0).environmentObject(bluetooth)){
                     Text("DEMO MODE")
                         .foregroundColor(.white)
                         .padding(.vertical)

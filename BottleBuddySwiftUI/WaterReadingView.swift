@@ -71,7 +71,7 @@ final class WaterReadingsGroup: Object, ObjectKeyIdentifiable {
 struct waterReadingsView: View {
     /// The waterReadings in this group.
     @ObservedObject var waterReadings: RealmSwift.List<waterReading>
-
+    @EnvironmentObject var bluetooth: Bluetooth
     /// The button to be displayed on the top left.
     var leadingBarButton: AnyView?
 
@@ -102,7 +102,7 @@ struct waterReadingsView: View {
                 // Action bar at bottom contains Add button.
                 HStack {
                     Spacer()
-                    Button(action: addWaterReading) { Image(systemName: "plus") }
+                    Button(action: addWaterReadingTOF) { Image(systemName: "plus") }
                 }.padding()
             }
         }
@@ -110,6 +110,27 @@ struct waterReadingsView: View {
 
     func addWaterReading() {
         let newWaterReading = waterReading(water_level: "50")
+        let now = Date()
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "nl_NL")
+        formatter.setLocalizedDateFormatFromTemplate("dd-MM-yyyy")
+        newWaterReading.date = formatter.string(from: now)
+        
+        formatter.dateFormat = "HH:mm:ss"
+        newWaterReading.time = formatter.string(from: now)
+        
+        guard let realm = waterReadings.realm else {
+            waterReadings.append(newWaterReading)
+            return
+        }
+        try! realm.write {
+            waterReadings.append(newWaterReading)
+        }
+    }
+
+    
+    func addWaterReadingTOF() {
+        let newWaterReading = waterReading(water_level: String(bluetooth.getTofValue()))
         let now = Date()
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "nl_NL")

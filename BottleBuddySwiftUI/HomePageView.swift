@@ -12,6 +12,7 @@ import RealmSwift
 
 struct HomePage: View {
     @EnvironmentObject var state: AppState
+    @EnvironmentObject var bluetooth: Bluetooth
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     @State var selected = 0
     var colors = [Color(.white)]
@@ -182,6 +183,18 @@ struct HomePage: View {
                         .shadow(color: Color.white.opacity(0.2), radius: 10, x: 0, y: 0)
                         
                     }
+                }
+                Button(action: {
+                    
+                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
+                    
+                bluetooth.writeData()}){
+                    Text("Clean My Buddy")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                        .cornerRadius(10)
                 }
 //                Button(action: {
 //                    //TODO: initiate cleaning protocol on button click

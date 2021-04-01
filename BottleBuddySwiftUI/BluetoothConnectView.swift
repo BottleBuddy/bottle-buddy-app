@@ -13,11 +13,12 @@ import UserNotifications
 
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
-    let timer = Timer.publish(every: 0.01, on : .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
     @State var tof_distance = UInt16()
     @State var imu_reading = String()
-    var bluetooth = Bluetooth.init()
-    @State var connected = false
+    //var bluetooth = Bluetooth.init()
+    @EnvironmentObject var bluetooth: Bluetooth
+    //@State var connected = false
     @State var connected_status = "Not Connected To Buddy :("
     let notifContent = UNMutableNotificationContent()
     @ObservedObject var notifcation = NotificationManager()
@@ -43,7 +44,7 @@ struct BluetoothConnectView: View {
                 Text("\(connected_status)")
                     .font(.system(size: 30))
                     .onReceive(timer){time in
-                        if(connected){
+                        if(bluetooth.connected){
                             connected_status = "Connected To Buddy!"
                         }
                     }
@@ -84,7 +85,7 @@ struct BluetoothConnectView: View {
                     .foregroundColor(.white)
                 Text("\(tof_distance)")
                     .onReceive(timer){time in
-                        if(connected){
+                        if(bluetooth.connected){
                             tof_distance = bluetooth.getTofValue()
                         }
                     }
@@ -99,7 +100,7 @@ struct BluetoothConnectView: View {
                     .foregroundColor(.white)
                 Text("\(imu_reading)")
                     .onReceive(timer){time in
-                        if(connected){
+                        if(bluetooth.connected){
                             imu_reading = bluetooth.getIMUValue()
                         }
                     }
@@ -132,7 +133,7 @@ struct BluetoothConnectView: View {
             }
             .background(Color(bblightblue!).ignoresSafeArea())
             .frame(maxWidth: .infinity)
-            .onAppear{bluetooth.initializeStream()}
+            //.onAppear{bluetooth.initializeStream()}
         }
         .background(Color(bblightblue!).ignoresSafeArea())
         .frame(maxWidth: .infinity)
@@ -142,7 +143,7 @@ struct BluetoothConnectView: View {
         
         //bluetooth.connectDevice()
         //if(foundPeripheral.state == .connected){
-        connected = true
+        //connected = true
        // }
     }
 }

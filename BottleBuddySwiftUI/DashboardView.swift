@@ -20,6 +20,7 @@ struct DashboardView_Previews: PreviewProvider {
 
 struct Dashboard : View {
     @ObservedObject var state = AppState()
+    @ObservedObject var bluetooth = Bluetooth()
     @State var error: Error?
     @State var firstDashboard: Bool = true
     
@@ -33,6 +34,7 @@ struct Dashboard : View {
                     }
                 }.tag(1)
                 .environmentObject(state)
+                .environmentObject(bluetooth)
 
             
             ProfileView()
@@ -43,6 +45,7 @@ struct Dashboard : View {
                     }
                 }.tag(2)
                 .environmentObject(state)
+                .environmentObject(bluetooth)
             
             UserDataView()
                 .tabItem{

@@ -347,6 +347,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
                     }
             }
         
+        connected = true
+        
         
         /*for characteristic in serviceCharacteristics where characteristic.uuid == TransferService.characteristicUUID {
          // If it is, subscribe to it

@@ -12,6 +12,7 @@ import RealmSwift
 
 struct HomePage: View {
     @EnvironmentObject var state: AppState
+    @EnvironmentObject var bluetooth: Bluetooth
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     @State var selected = 0
     var colors = [Color(.white)]

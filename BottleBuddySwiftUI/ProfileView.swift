@@ -15,6 +15,7 @@ struct ProfileView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
     private var healthStore:  HealthStore?
     @EnvironmentObject var state: AppState
+    @EnvironmentObject var bluetooth: Bluetooth
     
     init(){
         healthStore = HealthStore()

@@ -13,7 +13,7 @@ import UserNotifications
 
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
-    let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
+    //let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
     @State var tof_distance = UInt16()
     @State var imu_reading = String()
     //var bluetooth = Bluetooth.init()
@@ -43,11 +43,11 @@ struct BluetoothConnectView: View {
 //                .padding()
                 Text("\(connected_status)")
                     .font(.system(size: 30))
-                    .onReceive(timer){time in
+                    /*.onReceive(timer){time in
                         if(bluetooth.connected){
                             connected_status = "Connected To Buddy!"
                         }
-                    }
+                    }*/
                     .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
                     .padding(.vertical)
                 Button(action: {connectBuddy()}) {
@@ -84,11 +84,11 @@ struct BluetoothConnectView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 Text("\(tof_distance)")
-                    .onReceive(timer){time in
+                    /*.onReceive(timer){time in
                         if(bluetooth.connected){
                             tof_distance = bluetooth.getTofValue()
                         }
-                    }
+                    }*/
                     .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
                     .padding(.vertical)
                     .multilineTextAlignment(.center)
@@ -99,11 +99,11 @@ struct BluetoothConnectView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 Text("\(imu_reading)")
-                    .onReceive(timer){time in
+                    /*.onReceive(timer){time in
                         if(bluetooth.connected){
                             imu_reading = bluetooth.getIMUValue()
                         }
-                    }
+                    }*/
                     .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
                     .padding(.vertical)
                     .multilineTextAlignment(.center)

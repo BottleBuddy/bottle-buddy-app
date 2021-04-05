@@ -34,7 +34,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var dataToSend = Data()
     
     //data we will recieve, not send
-    var dataRecieved = Data()
+    var dataRecieved = [Data]()
     
     var sendingEOM :Bool = false   //sending end of message
     var connected = false
@@ -376,21 +376,14 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         let stringFromData = String(describing: characteristicData)
                 
         os_log("Received %d bytes from CBUUID %s : %s", characteristicData.count, String(describing: characteristic.uuid), stringFromData)
-        if( String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
-            tofValue = characteristic.value!
-        }
-        if( String(describing: characteristic.uuid) == "19B10012-E8F2-537E-4F6C-D104768A1214"){
-            IMUxValue = characteristic.value!
-        }
-        if( String(describing: characteristic.uuid) == "19B10013-E8F2-537E-4F6C-D104768A1214"){
-            IMUyValue = characteristic.value!
-        }
-        if( String(describing: characteristic.uuid) == "19B10014-E8F2-537E-4F6C-D104768A1214"){
-            IMUzValue = characteristic.value!
-        }
         // Have we received the end-of-message token?
             // Otherwise, just append the data to what we have previously received.
-            dataRecieved.append(characteristicData)
+        
+        if(String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
+            dataRecieved.append(characteristic.value!)
+            //dataRecieved[0] = characteristic.value?
+        }
+            
         
     }
     
@@ -423,21 +416,22 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     func getTofValue()->UInt16{
         if (connectedPeripheral != nil){
             if(!centralTransferCharacteristic.isEmpty){
-                connectedPeripheral.readValue(for: centralTransferCharacteristic[0]!)
+               connectedPeripheral.readValue(for: centralTransferCharacteristic[0]!)
             }
             
         }
-        if(self.tofValue.isEmpty){
+        if(self.dataRecieved.isEmpty){
             return 0;
         }
         var result = UInt16()
-        result = (UInt16(self.tofValue[1])<<8) + (UInt16(self.tofValue[0]))
+        result = (UInt16(self.dataRecieved[0][1])<<8) + (UInt16(self.dataRecieved[0][0]))
+        dataRecieved.removeAll()
         return result
     }
     func getIMUValue()->String{
         if (connectedPeripheral != nil){
             if(!centralTransferCharacteristic.isEmpty){
-                connectedPeripheral.readValue(for: centralTransferCharacteristic[1]!)
+               // connectedPeripheral.readValue(for: centralTransferCharacteristic[1]!)
             }
             
         }

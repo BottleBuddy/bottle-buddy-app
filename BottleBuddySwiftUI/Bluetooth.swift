@@ -10,13 +10,27 @@ import UIKit
 import CoreBluetooth
 import os
 
+
+//writeAcknowledgement
+//writeIntake
+//id, volume, and timestamp
+
 struct NewService{
-    var characteristicUUIDs:[CBUUID]
+    var characteristicUUIDs = [CBUUID]()
     var serviceUUID: CBUUID!
-    init(service: String){
+    init(service: String, numOfCharacteristics: Int){
         self.serviceUUID = CBUUID(string: service)
-        self.characteristicUUIDs = [CBUUID]()
+        for i in 1...numOfCharacteristics{
+            let str = String(service.prefix(7)) + String(i) + String(service.suffix(28))
+            self.characteristicUUIDs.append(CBUUID(string: str))
+            os_log("%s", str)
+        }
+        //self.characteristicUUIDs = [CBUUID]()
     }
+}
+
+enum BLEChar: Int{
+    case BottleType = 0, IntakePackage, Acknowledgement, Year, Month, Day, Hour, Minute, Second, WroteTime, DrinkWater, Clean
 }
 
 class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, ObservableObject, Identifiable{
@@ -31,26 +45,16 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var connectedPeripheral: CBPeripheral!
     
     //data we will actuall send not receive.
-    var dataToSend = Data()
+    //var dataToSend = Data()
     
     //data we will recieve, not send
-    var dataRecieved = [Data]()
-    
-    var sendingEOM :Bool = false   //sending end of message
+    var dataRecieved = Data()
     var connected = false
-    var tofValue = Data()
-    var IMUxValue = Data()
-    var IMUyValue = Data()
-    var IMUzValue = Data()
-    var stringVal = String()
-    var intVal = Int()
     
-    //let mainService = NewService(
-        //testService: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961",
-        //testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
+    var configurationService = NewService(service: "19B10010-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 1)
+    var waterIntakeService = NewService(service: "19B10020-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 10)
+    var cleaningService = NewService(service: "19B10030-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 1)
     
-    var demoService = NewService(service: "19B10010-E8F2-537E-4F6C-D104768A1214")
-
     override init(){
       //  sendingEOM = false      //this is j to make things compile,, may need to change later
         super.init()
@@ -67,11 +71,12 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         if centralManager != nil{
             os_log("initialized centralManager")
         }
-        demoService.characteristicUUIDs.append(CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214"))//UVC
+        /*demoService.characteristicUUIDs.append(CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214"))//UVC
         demoService.characteristicUUIDs.append(CBUUID(string: "19B10011-E8F2-537E-4F6C-D104768A1214"))//TOF
         demoService.characteristicUUIDs.append(CBUUID(string: "19B10013-E8F2-537E-4F6C-D104768A1214"))////Y
         demoService.characteristicUUIDs.append(CBUUID(string: "19B10014-E8F2-537E-4F6C-D104768A1214"))//Z
-        demoService.characteristicUUIDs.append(CBUUID(string: "19B10012-E8F2-537E-4F6C-D104768A1214"))//X
+        demoService.characteristicUUIDs.append(CBUUID(string: "19B10012-E8F2-537E-4F6C-D104768A1214"))//X*/
+        
         
     }
     
@@ -113,7 +118,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         os_log("Scanning for Devices...")
        
         centralManager.scanForPeripherals(
-            withServices: [demoService.serviceUUID],
+            withServices: [configurationService.serviceUUID],
             options: [CBCentralManagerScanOptionAllowDuplicatesKey: true]
         )
         if centralManager.isScanning {
@@ -145,7 +150,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
                     connected = true
                     central.stopScan()
                 }else{
-                    centralManager.scanForPeripherals(withServices: [demoService.serviceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
+                    centralManager.scanForPeripherals(withServices: [configurationService.serviceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
                 }
                 
             }
@@ -175,7 +180,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         
         // Search only for services that match our UUID
         //peripheral.discoverServices([TransferService.serviceUUID])
-        peripheral.discoverServices([demoService.serviceUUID])
+        peripheral.discoverServices([configurationService.serviceUUID])
         //deviceTableView.reloadData()
     }
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral,
@@ -259,7 +264,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         os_log("entered write data function")
         
         guard let connectedPeripheral = connectedPeripheral,
-            let transferCharacteristic = centralTransferCharacteristic[0]
+              let transferCharacteristic = centralTransferCharacteristic[BLEChar.Clean.rawValue]
         //let transferCharacteristic = [CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214")]
         else {
             os_log("returning if connected peripheral and transfer charac. did not work")
@@ -284,11 +289,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
 //        os_log("Successfully written data")
         
         let turn_on: Bool = true;
-        
-        let turn_off: Bool = false;
-        
         let turnOnData = withUnsafeBytes(of: turn_on) { Data($0) }
-        let turnOffData = withUnsafeBytes(of: turn_off) { Data($0) }
         connectedPeripheral.writeValue(turnOnData, for: transferCharacteristic, type: .withResponse)
     }
     
@@ -296,9 +297,19 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
         
-        for service in invalidatedServices where service.uuid == demoService.serviceUUID {
+        for service in invalidatedServices where service.uuid == configurationService.serviceUUID {
             os_log("Transfer service is invalidated - rediscover services")
-            peripheral.discoverServices([demoService.serviceUUID])//REVIEW WHAT THIS DOES BECAUSE IT DOESNT MAKE SENSE
+            peripheral.discoverServices([configurationService.serviceUUID])//REVIEW WHAT THIS DOES BECAUSE IT DOESNT MAKE SENSE
+        }
+        
+        for service in invalidatedServices where service.uuid == waterIntakeService.serviceUUID {
+            os_log("Transfer service is invalidated - rediscover services")
+            peripheral.discoverServices([waterIntakeService.serviceUUID])//REVIEW WHAT THIS DOES BECAUSE IT DOESNT MAKE SENSE
+        }
+        
+        for service in invalidatedServices where service.uuid == waterIntakeService.serviceUUID {
+            os_log("Transfer service is invalidated - rediscover services")
+            peripheral.discoverServices([waterIntakeService.serviceUUID])//REVIEW WHAT THIS DOES BECAUSE IT DOESNT MAKE SENSE
         }
     }
     
@@ -318,8 +329,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
 
         
         for service in peripheralServices {
-            peripheral.discoverCharacteristics(demoService.characteristicUUIDs, for: service)
-           // peripheral.discoverCharacteristics([demoService.characteristicArray[2]], for: service)
+            peripheral.discoverCharacteristics(configurationService.characteristicUUIDs, for: service)
+            peripheral.discoverCharacteristics(waterIntakeService.characteristicUUIDs, for: service)
+            peripheral.discoverCharacteristics(cleaningService.characteristicUUIDs, for: service)
         }
     }
     
@@ -339,11 +351,21 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         guard let serviceCharacteristics = service.characteristics else { return }
         
         
-        for cbuuid in demoService.characteristicUUIDs {
+        for cbuuid in configurationService.characteristicUUIDs {
                 for characteristic in serviceCharacteristics where characteristic.uuid == cbuuid {
-                        // If it is, subscribe to it
                         centralTransferCharacteristic.append(characteristic)
-                        connectedPeripheral.setNotifyValue(true, for: characteristic)
+                    }
+            }
+        
+        for cbuuid in waterIntakeService.characteristicUUIDs {
+                for characteristic in serviceCharacteristics where characteristic.uuid == cbuuid {
+                        centralTransferCharacteristic.append(characteristic)
+                    }
+            }
+        
+        for cbuuid in cleaningService.characteristicUUIDs {
+                for characteristic in serviceCharacteristics where characteristic.uuid == cbuuid {
+                        centralTransferCharacteristic.append(characteristic)
                     }
             }
         connected = true
@@ -379,10 +401,10 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         // Have we received the end-of-message token?
             // Otherwise, just append the data to what we have previously received.
         
-        if(String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
-            dataRecieved.append(characteristic.value!)
+        //if(String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
+        dataRecieved = characteristic.value!
             //dataRecieved[0] = characteristic.value?
-        }
+        //}
             
         
     }
@@ -416,7 +438,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     func getTofValue()->UInt16{
         if (connectedPeripheral != nil){
             if(!centralTransferCharacteristic.isEmpty){
-               connectedPeripheral.readValue(for: centralTransferCharacteristic[0]!)
+                connectedPeripheral.readValue(for: centralTransferCharacteristic[BLEChar.BottleType.rawValue]!)
             }
             
         }
@@ -424,41 +446,22 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             return 0;
         }
         var result = UInt16()
-        result = (UInt16(self.dataRecieved[0][1])<<8) + (UInt16(self.dataRecieved[0][0]))
+        result = (UInt16(self.dataRecieved[1])<<8) + (UInt16(self.dataRecieved[0]))
         dataRecieved.removeAll()
         return result
     }
     func getIMUValue()->String{
         if (connectedPeripheral != nil){
             if(!centralTransferCharacteristic.isEmpty){
-               // connectedPeripheral.readValue(for: centralTransferCharacteristic[1]!)
+               connectedPeripheral.readValue(for: centralTransferCharacteristic[1]!)
             }
             
         }
 
-        if(self.IMUxValue.isEmpty){
+        if(self.dataRecieved.isEmpty){
             return "";
         }
-        let result = "\n X Value: \(String(data: IMUxValue, encoding: .utf8)!) \n Y Value: \(String(data: IMUyValue, encoding: .utf8)!) \n Z Value \(String(data: IMUzValue, encoding: .utf8)!)"
+        let result = "\n X Value: \(String(data: dataRecieved, encoding: .utf8)!) \n Y Value: \(String(data: dataRecieved, encoding: .utf8)!) \n Z Value \(String(data: dataRecieved, encoding: .utf8)!)"
         return result
-    }
-    func getStringValue()->String{
-        return self.stringVal
-    }
-    
-    func getIntValue()->Int{
-        return self.intVal
-    }
-    
-    func readTOF()->UInt16{
-        /*
-        if(centralTransferCharacteristic.isEmpty){
-            return 0;
-        }
-        var result = UInt16()
-        connectedPeripheral.readValue(for: centralTransferCharacteristic[1]!)
-    
-        return result*/
-        return 0
     }
 }

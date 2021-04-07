@@ -30,7 +30,7 @@ struct ProfileView: View {
                     .foregroundColor(.white)
                 
                 NavigationLink(destination: BluetoothConnectView(tof_distance: 0).environmentObject(bluetooth)){
-                    Text("DEMO MODE")
+                    Text("Enter Debug Mode")
                         .foregroundColor(.white)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)

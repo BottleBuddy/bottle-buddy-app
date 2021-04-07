@@ -28,7 +28,7 @@ struct BluetoothConnectView: View {
     var body: some View{
         ScrollView(){
             VStack{
-                Text("Mid Semester Demo")
+                Text("Debug View")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.white)

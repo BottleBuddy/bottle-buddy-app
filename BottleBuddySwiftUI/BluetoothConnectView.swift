@@ -16,6 +16,7 @@ struct BluetoothConnectView: View {
     let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
     @State var tof_distance = UInt16()
     @State var imu_reading = String()
+    @State var pitch_val = String()
     //var bluetooth = Bluetooth.init()
     @EnvironmentObject var bluetooth: Bluetooth
     //@State var connected = false
@@ -71,7 +72,7 @@ struct BluetoothConnectView: View {
                     
                     self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
                     
-                bluetooth.writeData()}){
+                bluetooth.writeClean()}){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -108,6 +109,28 @@ struct BluetoothConnectView: View {
                     .padding(.vertical)
                     .multilineTextAlignment(.center)
                     .font(.system(size: 30))
+                
+            }
+            VStack{
+                
+                
+                Text("Airplane Orientation ")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                Text("\(pitch_val)")
+                    .onReceive(timer){time in
+                        if(bluetooth.connected){
+                            imu_reading = bluetooth.getOrientation()
+                        }
+                    }
+                    .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
+                    .padding(.vertical)
+                    .multilineTextAlignment(.center)
+                    .font(.system(size: 30))
+                
+            }
+            
 //                Button(action:{connected = true}){
 //                    Text("Tof Data")
 //                        .foregroundColor(.white)
@@ -134,7 +157,7 @@ struct BluetoothConnectView: View {
             .background(Color(bblightblue!).ignoresSafeArea())
             .frame(maxWidth: .infinity)
             //.onAppear{bluetooth.initializeStream()}
-        }
+        
         .background(Color(bblightblue!).ignoresSafeArea())
         .frame(maxWidth: .infinity)
     }

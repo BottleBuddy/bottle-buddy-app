@@ -12,12 +12,13 @@ import Firebase
 
 struct WaterReadingView : View {
     @EnvironmentObject var state: AppState
-    
+    @StateObject var bluetooth: Bluetooth
     var body: some View {
         ZStack {
             if let waterReadings = state.waterReadings {
-                waterReadingsView(waterReadings: waterReadings)
+                waterReadingsView(waterReadings: waterReadings, bluetooth: bluetooth)
                     .disabled(state.shouldIndicateActivity)
+                    .environmentObject(bluetooth)
             }
             // If the app is doing work in the background,
             // overlay an ActivityIndicator
@@ -71,7 +72,7 @@ final class WaterReadingsGroup: Object, ObjectKeyIdentifiable {
 struct waterReadingsView: View {
     /// The waterReadings in this group.
     @ObservedObject var waterReadings: RealmSwift.List<waterReading>
-    @EnvironmentObject var bluetooth: Bluetooth
+    @StateObject var bluetooth: Bluetooth
     /// The button to be displayed on the top left.
     var leadingBarButton: AnyView?
 
@@ -92,6 +93,7 @@ struct waterReadingsView: View {
                     }.onDelete(perform: delete)
                         .onMove(perform: move)
                 }.listStyle(GroupedListStyle())
+                    
                     .navigationBarTitle("waterReadings", displayMode: .large)
                     .navigationBarBackButtonHidden(true)
                     .navigationBarItems(
@@ -104,9 +106,12 @@ struct waterReadingsView: View {
                     Spacer()
                     Button(action: addWaterReadingTOF) { Image(systemName: "plus") }
                 }.padding()
+                .onAppear(perform: addWaterReadingTOF)
             }
+            
         }
     }
+    
 
     func addWaterReading() {
         let newWaterReading = waterReading(water_level: "50")
@@ -130,7 +135,7 @@ struct waterReadingsView: View {
 
     
     func addWaterReadingTOF() {
-        let newWaterReading = waterReading(water_level: String(bluetooth.getTofValue()))
+        let newWaterReading = waterReading(water_level: String(bluetooth.waterIntakeState))
         let now = Date()
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "nl_NL")
@@ -172,6 +177,7 @@ struct waterReadingsView: View {
         }
     }
 }
+
 
 /// Represents an waterReading in a list.
 struct waterReadingRow: View {

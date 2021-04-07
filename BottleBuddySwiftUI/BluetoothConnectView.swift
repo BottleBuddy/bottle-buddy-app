@@ -71,7 +71,7 @@ struct BluetoothConnectView: View {
                     
                     self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
                     
-                bluetooth.writeData()}){
+                bluetooth.writeClean()}){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)

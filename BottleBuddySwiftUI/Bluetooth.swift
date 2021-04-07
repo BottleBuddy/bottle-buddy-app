@@ -50,7 +50,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     //data we will recieve, not send
     var dataRecieved = Data()
     var connected = false
-    
+    @Published var waterIntakeState = UInt16()
     var configurationService = NewService(service: "19B10010-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 1)
     var waterIntakeService = NewService(service: "19B10020-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 10)
     var cleaningService = NewService(service: "19B10030-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 1)
@@ -260,8 +260,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
      *  Usage: This differs from sendData() because this writes the data to a peripheral as a central device
      */
     //this will change a tad based on pipeline,, but v important
-    func writeData() {
-        os_log("entered write data function")
+    func writeClean() {
+        os_log("entered write clean function")
         
         guard let connectedPeripheral = connectedPeripheral,
               let transferCharacteristic = centralTransferCharacteristic[BLEChar.Clean.rawValue]
@@ -291,6 +291,57 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         let turn_on: Bool = true;
         let turnOnData = withUnsafeBytes(of: turn_on) { Data($0) }
         connectedPeripheral.writeValue(turnOnData, for: transferCharacteristic, type: .withResponse)
+    }
+    
+    func writeAck() {
+        os_log("entered Ack data function")
+        
+        guard let connectedPeripheral = connectedPeripheral,
+              let transferCharacteristic = centralTransferCharacteristic[BLEChar.Acknowledgement.rawValue]
+        //let transferCharacteristic = [CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214")]
+        else {
+            os_log("returning if connected peripheral and transfer charac. did not work")
+            return
+        }
+        
+        
+        let ack: UInt16 = 1;
+        let turnOnData = withUnsafeBytes(of: ack) { Data($0) }
+        connectedPeripheral.writeValue(turnOnData, for: transferCharacteristic, type: .withResponse)
+    }
+    
+    
+    func writeTimestamp() {
+        os_log("entered Timestamp function")
+        
+        for i in 0...4{
+            guard let connectedPeripheral = connectedPeripheral,
+                  let transferCharacteristic = centralTransferCharacteristic[BLEChar[i].rawValue]
+            //let transferCharacteristic = [CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214")]
+            else {
+                os_log("returning if connected peripheral and transfer charac. did not work")
+                return
+            }
+            
+            let today = Date()
+            let formatter1 = DateFormatter()
+            formatter1.dateStyle = .short
+            
+            
+            let formatter2 = DateFormatter()
+            formatter2.timeStyle = .medium
+            var stringTime = formatter2.string(from: today);
+            var stringDate = formatter1.string(from: today);
+            var val =  UInt8(stringTime)
+            
+            print(stringDate)
+            print(stringTime)
+            let turnOnData = withUnsafeBytes(of: val) { Data($0) }
+            connectedPeripheral.writeValue(turnOnData, for: centralTransferCharacteristic[BLEChar.Year.rawValue]!, type: .withResponse)
+        }
+      
+        
+
     }
     
     
@@ -401,10 +452,12 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         // Have we received the end-of-message token?
             // Otherwise, just append the data to what we have previously received.
         
-        //if(String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
+        if(String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
         dataRecieved = characteristic.value!
+            waterIntakeState = (UInt16(self.dataRecieved[1])<<8) + (UInt16(self.dataRecieved[0]))
             //dataRecieved[0] = characteristic.value?
-        //}
+            dataRecieved.removeAll()
+        }
             
         
     }

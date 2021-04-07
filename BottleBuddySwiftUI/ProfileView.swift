@@ -57,7 +57,7 @@ struct ProfileView: View {
                     guard let app = app else {
                         print("Not using Realm Sync - not logging out")
                         return
-                    }
+                
                     state.shouldIndicateActivity = true
                     app.currentUser?.logOut().receive(on: DispatchQueue.main).sink(receiveCompletion: { _ in }, receiveValue: {
                         state.shouldIndicateActivity = false

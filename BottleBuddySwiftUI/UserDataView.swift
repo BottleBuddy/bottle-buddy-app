@@ -14,9 +14,11 @@ import SwiftUI
 //TODO: move most of this data to the home page and the profile page
 struct UserDataView: View {
     @EnvironmentObject var state: AppState
+    @StateObject var bluetooth: Bluetooth
     var body: some View {
         WaterReadingView()
             .environmentObject(state)
+           
     }
 }
 

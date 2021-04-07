@@ -20,7 +20,7 @@ struct DashboardView_Previews: PreviewProvider {
 
 struct Dashboard : View {
     @ObservedObject var state = AppState()
-    @ObservedObject var bluetooth = Bluetooth()
+    @StateObject var bluetooth = Bluetooth()
     @State var error: Error?
     @State var firstDashboard: Bool = true
     

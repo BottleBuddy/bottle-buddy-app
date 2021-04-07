@@ -47,11 +47,11 @@ struct Dashboard : View {
                 .environmentObject(state)
                 .environmentObject(bluetooth)
             
-            UserDataView()
+            waterReadingsView()
                 .tabItem{
                     VStack{
                         Image(systemName:"star")
-                        Text("UserInfo")
+                        Text("Water Readings")
                     }
                 }.tag(3)
                 .environmentObject(state)

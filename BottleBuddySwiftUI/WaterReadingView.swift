@@ -10,30 +10,6 @@ import Combine
 import SwiftUI
 import Firebase
 
-struct WaterReadingView : View {
-    @EnvironmentObject var state: AppState
-    
-    var body: some View {
-        ZStack {
-            if let waterReadings = state.waterReadings {
-                waterReadingsView(waterReadings: waterReadings)
-                    .disabled(state.shouldIndicateActivity)
-            }
-            // If the app is doing work in the background,
-            // overlay an ActivityIndicator
-            if state.shouldIndicateActivity {
-                ActivityIndicator().environmentObject(state)
-            }
-        }
-    }
-}
-
-struct WaterReadingView_Previews: PreviewProvider {
-    static var previews: some View {
-        WaterReadingView()
-    }
-}
-
 /// An individual reading. Part of a `WaterReadingsGroup`.
 final class waterReading: Object, ObjectKeyIdentifiable {
     @objc dynamic var _id: ObjectId = ObjectId.generate()
@@ -70,8 +46,8 @@ final class WaterReadingsGroup: Object, ObjectKeyIdentifiable {
 /// and deleting waterReadings in the group.
 struct waterReadingsView: View {
     /// The waterReadings in this group.
-    @ObservedObject var waterReadings: RealmSwift.List<waterReading>
     @EnvironmentObject var bluetooth: Bluetooth
+    @EnvironmentObject var state: AppState
     /// The button to be displayed on the top left.
     var leadingBarButton: AnyView?
 
@@ -83,12 +59,12 @@ struct waterReadingsView: View {
                     // ⚠️ ALWAYS freeze a Realm list while iterating in a SwiftUI
                     // View's ForEach(). Otherwise, unexpected behavior will occur,
                     // especially when deleting object from the list.
-                    ForEach(waterReadings.freeze()) { frozenwaterReading in
+                    ForEach(state.waterReadings!.freeze()) { frozenwaterReading in
                         // "Thaw" the waterReading before passing it in, as waterReadingRow
                         // may want to edit it, and cannot do so on a frozen object.
                         // This is a convenient place to thaw because we have access
                         // to the unfrozen realm via the waterReadings list.
-                        waterReadingRow(waterReading: waterReadings.realm!.resolve(ThreadSafeReference(to: frozenwaterReading))!)
+                        waterReadingRow(waterReading: state.waterReadings!.realm!.resolve(ThreadSafeReference(to: frozenwaterReading))!)
                     }.onDelete(perform: delete)
                         .onMove(perform: move)
                 }.listStyle(GroupedListStyle())
@@ -119,12 +95,12 @@ struct waterReadingsView: View {
         formatter.dateFormat = "HH:mm:ss"
         newWaterReading.time = formatter.string(from: now)
         
-        guard let realm = waterReadings.realm else {
-            waterReadings.append(newWaterReading)
+        guard let realm = state.waterReadings!.realm else {
+            state.waterReadings!.append(newWaterReading)
             return
         }
         try! realm.write {
-            waterReadings.append(newWaterReading)
+            state.waterReadings!.append(newWaterReading)
         }
     }
 
@@ -140,35 +116,35 @@ struct waterReadingsView: View {
         formatter.dateFormat = "HH:mm:ss"
         newWaterReading.time = formatter.string(from: now)
         
-        guard let realm = waterReadings.realm else {
-            waterReadings.append(newWaterReading)
+        guard let realm = state.waterReadings!.realm else {
+            state.waterReadings!.append(newWaterReading)
             return
         }
         try! realm.write {
-            waterReadings.append(newWaterReading)
+            state.waterReadings!.append(newWaterReading)
         }
     }
 
     /// Deletes the given waterReading.
     func delete(at offsets: IndexSet) {
-        guard let realm = waterReadings.realm else {
-            waterReadings.remove(at: offsets.first!)
+        guard let realm = state.waterReadings!.realm else {
+            state.waterReadings!.remove(at: offsets.first!)
             return
         }
         try! realm.write {
-            realm.delete(waterReadings[offsets.first!])
+            realm.delete(state.waterReadings![offsets.first!])
         }
     }
 
     /// Rearranges the given waterReading in the group.
     /// This is persisted because the waterReadings are stored in a Realm List.
     func move(fromOffsets offsets: IndexSet, toOffset to: Int) {
-        guard let realm = waterReadings.realm else {
-            waterReadings.move(fromOffsets: offsets, toOffset: to)
+        guard let realm = state.waterReadings!.realm else {
+            state.waterReadings!.move(fromOffsets: offsets, toOffset: to)
             return
         }
         try! realm.write {
-            waterReadings.move(fromOffsets: offsets, toOffset: to)
+            state.waterReadings!.move(fromOffsets: offsets, toOffset: to)
         }
     }
 }

@@ -24,7 +24,7 @@ struct BluetoothConnectView: View {
     let notifContent = UNMutableNotificationContent()
     @ObservedObject var notifcation = NotificationManager()
     @State var alert = false
-
+    
     var body: some View{
         ScrollView(){
             VStack{
@@ -33,15 +33,15 @@ struct BluetoothConnectView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 
-//                Button(action: {bluetooth.scanForDevices()}) {
-//                    Text("Search For Devices")
-//                        .foregroundColor(.white)
-//                        .padding(.vertical)
-//                        .frame(width: UIScreen.main.bounds.width - 50)
-//                        .background(Color(UIColor(named: "BB_DarkBlue")!))
-//                        .cornerRadius(10)
-//                }
-//                .padding()
+                //                Button(action: {bluetooth.scanForDevices()}) {
+                //                    Text("Search For Devices")
+                //                        .foregroundColor(.white)
+                //                        .padding(.vertical)
+                //                        .frame(width: UIScreen.main.bounds.width - 50)
+                //                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                //                        .cornerRadius(10)
+                //                }
+                //                .padding()
                 Text("\(connected_status)")
                     .font(.system(size: 30))
                     .onReceive(timer){time in
@@ -69,10 +69,10 @@ struct BluetoothConnectView: View {
                 }
                 
                 Button(action: {
-                    
-                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
-                    
-                bluetooth.writeClean()}){
+                        
+                        self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
+                        
+                        bluetooth.writeClean()}){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -111,63 +111,65 @@ struct BluetoothConnectView: View {
                     .font(.system(size: 30))
                 
             }
-            VStack{
-                
-                
-                Text("Airplane Orientation ")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                Text("\(pitch_val)")
-                    .onReceive(timer){time in
-                        if(bluetooth.connected){
-                            imu_reading = bluetooth.getOrientation()
-                        }
+            //            VStack{
+            //
+            //
+            Text("Airplane Orientation ")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+            Text("\(pitch_val)")
+                .onReceive(timer){time in
+                    if(bluetooth.connected){
+                       pitch_val = bluetooth.getOrientation()
                     }
-                    .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
-                    .padding(.vertical)
-                    .multilineTextAlignment(.center)
-                    .font(.system(size: 30))
-                
-            }
+                }
+                .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
+                .padding(.vertical)
+                .multilineTextAlignment(.center)
+                .font(.system(size: 30))
             
-//                Button(action:{connected = true}){
-//                    Text("Tof Data")
-//                        .foregroundColor(.white)
-//                        .padding(.vertical)
-//                        .frame(width: UIScreen.main.bounds.width - 50)
-//                        .background(Color(UIColor(named: "BB_DarkBlue")!))
-//                        .cornerRadius(10)
-//                }
-                //                idk if this is the right bluetooth attribute to access the data
-                //                let dataReceivedString = "\(result)"
-                //                for num in result
-                
-                
-                /*Text("Received Bluetooth Data:  + \(result)")*/
-                
-              
-                        
-                        
-                    
-                
-                
-                
-            }
-            .background(Color(bblightblue!).ignoresSafeArea())
-            .frame(maxWidth: .infinity)
-            //.onAppear{bluetooth.initializeStream()}
-        
+        }
         .background(Color(bblightblue!).ignoresSafeArea())
         .frame(maxWidth: .infinity)
+        
+        //                Button(action:{connected = true}){
+        //                    Text("Tof Data")
+        //                        .foregroundColor(.white)
+        //                        .padding(.vertical)
+        //                        .frame(width: UIScreen.main.bounds.width - 50)
+        //                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+        //                        .cornerRadius(10)
+        //                }
+        //                idk if this is the right bluetooth attribute to access the data
+        //                let dataReceivedString = "\(result)"
+        //                for num in result
+        
+        
+        /*Text("Received Bluetooth Data:  + \(result)")*/
+        
+        
+        
+        
+        
+        
+        
+        
+        //            }
+        //            .background(Color(bblightblue!).ignoresSafeArea())
+        //            .frame(maxWidth: .infinity)
+        //.onAppear{bluetooth.initializeStream()}
+        
+        
     }
+    
     func connectBuddy(){
         bluetooth.scanForDevices()
         
         //bluetooth.connectDevice()
         //if(foundPeripheral.state == .connected){
         //connected = true
-       // }
+        // }
     }
 }
 

@@ -62,35 +62,10 @@ struct EditProfileView: View {
                     .foregroundColor(.white)
                 Form{
                     Section(header: Text("About You")){
-                        TextField("Name: " + self.name , text: $name)
                         TextField("Age: " + self.ageOfUser, text: $ageOfUser)
                             .keyboardType(.numberPad)
                         TextField("Weight: " + self.weight, text: $weight)
                             .keyboardType(.numberPad)
-                        Picker(selection: $sex, label: Text("Sex")){
-                            Text("Male").tag(1)
-                            Text("Female").tag(2)
-                            Text("Other").tag(3)
-                            
-                        }
-                        TextField("Email: " + self.email , text: $email)
-                    }
-                    
-                    Section(header: Text("About Your Bottle")){
-                        
-                        Picker(selection: $bottleBrandName, label: Text("Bottle Brand")){
-                            Text("Yeti").tag(1)
-                            Text("Hydroflask").tag(2)
-                            Text("Thermoflask").tag(3)
-                            Text("Other").tag(4)
-                        }
-                        
-                        Picker(selection: $bottleSize, label: Text("Bottle Size")){
-                            Text("16 oz").tag(1)
-                            Text("18 oz").tag(2)
-                            Text("26 oz").tag(3)
-                            Text("36 oz").tag(4)
-                        }
                     }
                     
                 }
@@ -127,6 +102,7 @@ struct EditProfileView: View {
                 }
             }
         }
+    
         .background(Color(bblightblue!).ignoresSafeArea())
     }
     

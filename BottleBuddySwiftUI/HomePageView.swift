@@ -196,6 +196,7 @@ struct HomePage: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
+                .padding()
 //                Button(action: {
 //                    //TODO: initiate cleaning protocol on button click
 //                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 5)

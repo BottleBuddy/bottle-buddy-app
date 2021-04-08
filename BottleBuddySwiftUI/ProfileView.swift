@@ -24,6 +24,10 @@ struct ProfileView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(){
+              
+                
+                Text("tof \(String(describing : bluetooth.numTOF))")
+                
                 Text("Profile")
                     .font(.title)
                     .fontWeight(.bold)

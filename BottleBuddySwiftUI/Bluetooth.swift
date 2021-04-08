@@ -36,8 +36,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     //data we will recieve, not send
     var dataRecieved = Data()
     var connected = false
-   var tofValue = Data()
-    
+     var tofValue = Data()
+    @Published var numTOF = UInt16()
+    var lastTOF = UInt16()
     var IMUxValue = Data()
     var IMUyValue = Data()
     var IMUzValue = Data()
@@ -47,9 +48,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
    
     
     
-    var callibrationService = NewService(service: "19B10010-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 7)
-    var waterIntakeService = NewService(service: "19B10020-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 10)
-    var cleaningService = NewService(service: "19B10030-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics:1)
+    var callibrationService = NewService(service: "19B10010-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 1)
+//    var waterIntakeService = NewService(service: "19B10020-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 10)
+//    var cleaningService = NewService(service: "19B10030-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics:1)
 
 
     override init(){
@@ -118,6 +119,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         
         // Reject if the signal strength is too low to attempt data transfer.
         // Change the minimum RSSI value depending on your app’s use case.
+       
         guard RSSI.intValue >= -50
         else {
             //            os_log("Discovered perhiperal not in expected range, at %d", RSSI.intValue)
@@ -357,7 +359,13 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
                 
         os_log("Received %d bytes from CBUUID %s : %s", characteristicData.count, String(describing: characteristic.uuid), stringFromData)
         if(String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
-            pitchValue = characteristic.value!
+            tofValue = characteristic.value!
+            lastTOF = (UInt16(tofValue[1])<<8) + (UInt16(tofValue[0]))
+            if(60 < lastTOF && lastTOF < 80){
+                numTOF = lastTOF
+            }
+           
+            
         }
         if(String(describing: characteristic.uuid) == "19B10012-E8F2-537E-4F6C-D104768A1214"){
             rollValue = characteristic.value!
@@ -367,20 +375,20 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             yawValue = characteristic.value!
         }
         if(String(describing: characteristic.uuid) == "19B10014-E8F2-537E-4F6C-D104768A1214"){
-            tofValue = characteristic.value!
+            pitchValue = characteristic.value!
         }
         
         if(String(describing: characteristic.uuid) == "19B10015-E8F2-537E-4F6C-D104768A1214"){
             IMUxValue = characteristic.value!
         }
         
-        if(String(describing: characteristic.uuid) == "19B10016-E8F2-537E-4F6C-D104768A1214"){
-            IMUyValue = characteristic.value!
-        }
-        
-        if(String(describing: characteristic.uuid) == "19B10017-E8F2-537E-4F6C-D104768A1214"){
-            IMUzValue = characteristic.value!
-        }
+//        if(String(describing: characteristic.uuid) == "19B10016-E8F2-537E-4F6C-D104768A1214"){
+//            IMUyValue = characteristic.value!
+//        }
+//
+//        if(String(describing: characteristic.uuid) == "19B10017-E8F2-537E-4F6C-D104768A1214"){
+//            IMUzValue = characteristic.value!
+//        }
         dataRecieved.append(characteristicData)
         
     }
@@ -412,14 +420,14 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     
     
     func getTofValue()->UInt16{
-        var tofval = Data()
-//        if (connectedPeripheral != nil){
-//            if(!centralTransferCharacteristic.isEmpty){
-//                connectedPeripheral.readValue(for: centralTransferCharacteristic[0]!)
-//                tofval = dataRecieved
-//            }
-//        }
-        if(tofval.isEmpty){
+       
+        if (connectedPeripheral != nil){
+            if(!centralTransferCharacteristic.isEmpty){
+                connectedPeripheral.readValue(for: centralTransferCharacteristic[0]!)
+              
+            }
+        }
+        if(tofValue.isEmpty){
             return 0;
         }
         var result = UInt16()

@@ -70,7 +70,7 @@ struct BluetoothConnectView: View {
                 
                 Button(action: {
                         
-                        self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
+                        self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2);
                         
                         bluetooth.writeClean()}){
                     Text("Clean My Buddy")
@@ -118,6 +118,7 @@ struct BluetoothConnectView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
+            
             Text("\(pitch_val)")
                 .onReceive(timer){time in
                     if(bluetooth.connected){

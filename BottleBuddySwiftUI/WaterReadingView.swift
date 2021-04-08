@@ -55,6 +55,7 @@ struct waterReadingsView: View {
         NavigationView {
             VStack {
                 // The list shows the waterReadings in the realm.
+           
                 List {
                     // ⚠️ ALWAYS freeze a Realm list while iterating in a SwiftUI
                     // View's ForEach(). Otherwise, unexpected behavior will occur,
@@ -78,7 +79,7 @@ struct waterReadingsView: View {
                 // Action bar at bottom contains Add button.
                 HStack {
                     Spacer()
-                    Button(action: addWaterReadingTOF) { Image(systemName: "plus") }
+                    Button(action: addWaterReading) { Image(systemName: "plus") }
                 }.padding()
             }
         }

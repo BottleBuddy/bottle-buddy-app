@@ -56,10 +56,9 @@ class AppState: ObservableObject {
                 assert(realm.objects(WaterReadingsGroup.self).count > 0)
                 self.waterReadings = realm.objects(WaterReadingsGroup.self).first!.waterReadings
                 
-                
                 if realm.objects(userObject.self).count == 0 {
                     try! realm.write {
-                        realm.add(userObject(uid: self.partitionValue, email: self.email, name: displayName))
+                        realm.add(userObject(uid: self.partitionValue, email: self.email, name: displayName, bottleSize: size, bottleBrandName: bottleBrand))
                     }
                 }
                 

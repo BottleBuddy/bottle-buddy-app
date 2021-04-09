@@ -24,11 +24,13 @@ final class userObject: Object, ObjectKeyIdentifiable {
     @objc dynamic var sex = 0
     @objc dynamic var weight = ""
     
-    convenience init(uid: String, email: String, name: String){
+    convenience init(uid: String, email: String, name: String, bottleSize: Int, bottleBrandName: Int){
         self.init()
         self.user_id = uid
         self.email = email
         self.name = name
+        self.bottleSize = bottleSize
+        self.bottleBrandName = bottleBrandName
     }
     
     override static func primaryKey() -> String? {

@@ -8,9 +8,7 @@
 import SwiftUI
 import Firebase
 
-var displayName = ""
-var bottleBrand = 0
-var size = 0
+var registeredUser: RegisterView? = nil
 
 struct RegisterView: View {
     
@@ -174,10 +172,7 @@ struct RegisterView: View {
                         return
                     }
                     print("success")
-                    displayName = self.fullName
-                    size = self.bottleSize
-                    bottleBrand = self.bottleBrandName
-                    print(displayName)
+                    registeredUser = self
                     UserDefaults.standard.set(true, forKey: "status")
                     NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
                 }

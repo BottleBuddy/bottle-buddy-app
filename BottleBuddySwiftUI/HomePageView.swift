@@ -187,7 +187,12 @@ struct HomePage: View {
                 Button(action: {
                     
                     self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
-                    
+                        
+                        DispatchQueue.global(qos: .background).async {
+                            for i in 1...100{
+                               print(i)
+                            }
+                        }
                 bluetooth.writeClean()}){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)

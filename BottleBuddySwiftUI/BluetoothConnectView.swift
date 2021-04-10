@@ -19,6 +19,7 @@ struct BluetoothConnectView: View {
     @State var pitch_val = String()
     //var bluetooth = Bluetooth.init()
     @EnvironmentObject var bluetooth: Bluetooth
+    @EnvironmentObject var state: AppState
     //@State var connected = false
     @State var connected_status = "Not Connected To Buddy :("
     let notifContent = UNMutableNotificationContent()
@@ -166,12 +167,22 @@ struct BluetoothConnectView: View {
     
     func connectBuddy(){
         bluetooth.scanForDevices()
-        
+//        DispatchQueue.global(qos: .background).async {
+//            var previousTOF = UInt16()
+//            while(true){
+//                if(bluetooth.numTOF > 12500 && bluetooth.numTOF < 12550){
+//                addWaterReading()
+//                previousTOF = bluetooth.numTOF
+//                }
+//            }
+//        }
         //bluetooth.connectDevice()
         //if(foundPeripheral.state == .connected){
         //connected = true
         // }
     }
+
+    
 }
 
 //struct Buddy: Identifiable {

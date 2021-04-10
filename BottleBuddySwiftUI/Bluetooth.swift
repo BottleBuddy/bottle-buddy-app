@@ -24,6 +24,7 @@ struct NewService{
     }
 }
 
+
 class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, ObservableObject, Identifiable{
     var centralManager: CBCentralManager!
     var peripheralManager: CBPeripheralManager!
@@ -45,6 +46,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var pitchValue = Data()
     var yawValue = Data()
     var rollValue = Data()
+    var state: AppState? = nil
    
     
     
@@ -65,7 +67,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         }
     }
 
-    
+    func setState(state: AppState){
+            self.state = state
+        }
     func closeStream(){
         centralManager.stopScan()   //stops looking for devices
         dataRecieved.removeAll(keepingCapacity: false)  //clearing BLE queue
@@ -361,10 +365,11 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         if(String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
             tofValue = characteristic.value!
             lastTOF = (UInt16(tofValue[1])<<8) + (UInt16(tofValue[0]))
-            if(60 < lastTOF && lastTOF < 80){
+            if(12500 < lastTOF && lastTOF < 12550){
                 numTOF = lastTOF
             }
-           
+           //call addwaterReading
+            addWaterReading()
             
         }
         if(String(describing: characteristic.uuid) == "19B10012-E8F2-537E-4F6C-D104768A1214"){
@@ -472,6 +477,24 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     }
     
     
-    
+    func addWaterReading() {
+        let newWaterReading = waterReading(water_level: String(describing: lastTOF))
+        let now = Date()
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "nl_NL")
+        formatter.setLocalizedDateFormatFromTemplate("dd-MM-yyyy")
+        newWaterReading.date = formatter.string(from: now)
+        
+        formatter.dateFormat = "HH:mm:ss"
+        newWaterReading.time = formatter.string(from: now)
+        
+        guard let realm = state!.waterReadings!.realm else {
+            state!.waterReadings!.append(newWaterReading)
+            return
+        }
+        try! realm.write {
+            state!.waterReadings!.append(newWaterReading)
+        }
+    }
 
 }

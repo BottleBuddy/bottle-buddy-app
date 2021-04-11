@@ -29,8 +29,18 @@ struct ProfileView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 
-                NavigationLink(destination: BluetoothConnectView(tof_distance: 0).environmentObject(bluetooth)){
-                    Text("DEMO MODE")
+//                NavigationLink(destination: BluetoothConnectView(tof_distance: 0).environmentObject(bluetooth)){
+//                    Text("Bluetooth")
+//                        .foregroundColor(.white)
+//                        .padding(.vertical)
+//                        .frame(width: UIScreen.main.bounds.width - 50)
+//                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+//                        .cornerRadius(10)
+//                }
+//                .padding()
+                
+                NavigationLink(destination: EditProfileView().environmentObject(state)){
+                    Text("Edit Profile Information")
                         .foregroundColor(.white)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)
@@ -39,8 +49,8 @@ struct ProfileView: View {
                 }
                 .padding()
                 
-                NavigationLink(destination: EditProfileView().environmentObject(state)){
-                    Text("Edit Profile Information")
+                NavigationLink(destination: AboutView().environmentObject(state)){
+                    Text("About the Developers")
                         .foregroundColor(.white)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)

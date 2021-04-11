@@ -15,6 +15,7 @@
 		4C11B160253B78C100FEF692 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C11B15F253B78C000FEF692 /* ProfileView.swift */; };
 		4C11B179253B7CF800FEF692 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C11B178253B7CF800FEF692 /* HealthKit.framework */; };
 		4C5CAA9A25D0CE6A005F9AB8 /* Bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5CAA9925D0CE6A005F9AB8 /* Bluetooth.swift */; };
+		4C7C3FA8262294E8008F73C8 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C3FA7262294E8008F73C8 /* AboutView.swift */; };
 		4C80092125E80540000E447A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C80092025E80540000E447A /* NotificationManager.swift */; };
 		4C84DD7025D07CA900DD0376 /* BluetoothConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C84DD6F25D07CA900DD0376 /* BluetoothConnectView.swift */; };
 		4C84DD7825D07EB800DD0376 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C84DD7725D07EB800DD0376 /* EditProfileView.swift */; };
@@ -61,6 +62,7 @@
 		4C11B177253B7CF800FEF692 /* BottleBuddySwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BottleBuddySwiftUI.entitlements; sourceTree = "<group>"; };
 		4C11B178253B7CF800FEF692 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4C5CAA9925D0CE6A005F9AB8 /* Bluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bluetooth.swift; sourceTree = "<group>"; };
+		4C7C3FA7262294E8008F73C8 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		4C80092025E80540000E447A /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4C84DD6F25D07CA900DD0376 /* BluetoothConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothConnectView.swift; sourceTree = "<group>"; };
 		4C84DD7725D07EB800DD0376 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				4C11B14B253B781600FEF692 /* HomePageView.swift */,
 				4C11B155253B783F00FEF692 /* HealthStore.swift */,
 				4C11B15F253B78C000FEF692 /* ProfileView.swift */,
+				4C7C3FA7262294E8008F73C8 /* AboutView.swift */,
 				4C84DD7725D07EB800DD0376 /* EditProfileView.swift */,
 				4C5CAA9925D0CE6A005F9AB8 /* Bluetooth.swift */,
 				4C84DD6F25D07CA900DD0376 /* BluetoothConnectView.swift */,
@@ -457,6 +460,7 @@
 				4C84DD7825D07EB800DD0376 /* EditProfileView.swift in Sources */,
 				4C11B14C253B781600FEF692 /* HomePageView.swift in Sources */,
 				4C11B160253B78C100FEF692 /* ProfileView.swift in Sources */,
+				4C7C3FA8262294E8008F73C8 /* AboutView.swift in Sources */,
 				1AF2D29125FE5467008FB384 /* AppStateManager.swift in Sources */,
 				4CFE21CC253B5E5600666A61 /* DashboardView.swift in Sources */,
 				4C84DD8025D0819300DD0376 /* RegisterView.swift in Sources */,

@@ -163,11 +163,11 @@ struct HomePage: View {
                                     .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
                                 
                                 Circle()
-                                    .trim(from: 0, to: (stat.currentData / stat.goal))
+                                    .trim(from: 0, to: CGFloat(self.stats?.getPercent() ?? 0))
                                     .stroke(stat.color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                     .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
                                 
-                                Text(getPercent(current: stat.currentData, Goal: stat.goal) + " %")
+                                Text(getPercent(val: self.stats?.getPercent() ?? 0) + "%")
                                     .font(.system(size: 22))
                                     .fontWeight(.bold)
                                     .foregroundColor(stat.color)
@@ -175,7 +175,7 @@ struct HomePage: View {
                             }
                             .rotationEffect(.init(degrees: -90))
                             
-                            Text(getDec(val: stat.currentData) + " " + getType(val: stat.title))
+                            Text(String(self.stats?.getDailyTotal() ?? 0) + " " + getType(val: stat.title))
                                 .font(.system(size: 22))
                                 .foregroundColor(.white)
                                 .fontWeight(.bold)
@@ -245,11 +245,8 @@ struct HomePage: View {
     
     // calculating percent...
     
-    func getPercent(current : CGFloat,Goal : CGFloat)->String{
-        
-        let per = (current / Goal) * 100
-        
-        return String(format: "%.1f", per)
+    func getPercent(val: Double)->String{
+        return String(format: "%.1f", val*100)
     }
     
     // calculating Hrs For Height...
@@ -283,10 +280,6 @@ struct HomePage: View {
                                                    water_consumed:getHeight(value: String(volume))))
             i = i + 1
         }
-        
-        stats.getTotalGoal()
-        stats.getPercent()
-        
     }
     
     
@@ -323,9 +316,7 @@ struct HomePage: View {
     
     //TODO: make currentData variable w data from database
     var stats_Data = [
-        
         Stats(id: 1, title: "Water Intake Today", currentData: 3.5, goal: 5, color: Color(.yellow)),
-        
         Stats(id: 3, title: "Days Until Cleaning", currentData: 6.2, goal: 10, color: Color(.yellow))
     ]
     

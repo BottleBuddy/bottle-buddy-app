@@ -67,7 +67,7 @@ struct HomePage: View {
                         }
                     }
                 })
-
+                
                 
                 // Bar Chart...
                 
@@ -81,7 +81,7 @@ struct HomePage: View {
                                 getWaterLog()
                             }
                         }
-
+                    
                     
                     
                     HStack(spacing: 15){
@@ -185,15 +185,23 @@ struct HomePage: View {
                     }
                 }
                 Button(action: {
-                    
-                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
+                        
+                        self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
                         
                         DispatchQueue.global(qos: .background).async {
                             for i in 1...100{
-                               print(i)
+                                print(i)
                             }
+                             var date = UInt32(789516)
+                            var dateString = convertDate(date: date)
+                            print(dateString)
+                            var time = UInt32(789516)
+                            var timeString = convertTime(time: time)
+                            convertDatetoString()
+                            print(convertTimetoString())
+                            
                         }
-                bluetooth.writeClean()}){
+                        bluetooth.writeClean()}){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -201,19 +209,19 @@ struct HomePage: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
-//                Button(action: {
-//                    //TODO: initiate cleaning protocol on button click
-//                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 5)
-//
-//                }){
-//                    Text("Start Cleaning")
-//                        .foregroundColor(.white)
-//                        .padding(.vertical)
-//                        .frame(width: UIScreen.main.bounds.width - 50)
-//                }
-//                .background(Color(UIColor(named: "BB_DarkBlue")!))
-//                .cornerRadius(10)
-//                .padding()
+                //                Button(action: {
+                //                    //TODO: initiate cleaning protocol on button click
+                //                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 5)
+                //
+                //                }){
+                //                    Text("Start Cleaning")
+                //                        .foregroundColor(.white)
+                //                        .padding(.vertical)
+                //                        .frame(width: UIScreen.main.bounds.width - 50)
+                //                }
+                //                .background(Color(UIColor(named: "BB_DarkBlue")!))
+                //                .cornerRadius(10)
+                //                .padding()
             }
         }
         .background(Color(bblightblue!).ignoresSafeArea())
@@ -272,66 +280,233 @@ struct HomePage: View {
         return String(format: "%.1f", hrs)
     }
     
-        func getWaterLog(){
-            var  i = 0
-            
-            waterLogData.removeAll()
-            state.waterReadings!.forEach{ waterReading in
-                i+=1
-                var waterLevel = waterReading.water_level
-                self.waterLogData.append(WaterLogEntry(id: (i), day: "Day \(i)", water_consumed:getHeight(value: waterLevel)))
-                
-            }
+    func getWaterLog(){
+        var  i = 0
+        
+        waterLogData.removeAll()
+        state.waterReadings!.forEach{ waterReading in
+            i+=1
+            var waterLevel = waterReading.water_level
+            self.waterLogData.append(WaterLogEntry(id: (i), day: "Day \(i)", water_consumed:getHeight(value: waterLevel)))
             
         }
         
     }
     
-    
-    
-    struct RoundedShape : Shape {
+    func convertDate(date : UInt32) -> String {
+         var dateNum = String(date)
+        let dateString = String(Int(dateNum)!, radix: 2)
         
-        func path(in rect: CGRect) -> Path {
-            
-            
-            let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft,.topRight], cornerRadii: CGSize(width: 5, height: 5))
-            
-            return Path(path.cgPath)
+//        var year = dateTimeString.substring(from: String.index(8), to: String.index(16))
+       print(dateString)
+        var start = dateString.index(dateString.startIndex, offsetBy: 0)
+        var end = dateString.index(dateString.endIndex, offsetBy: -16)
+        var range = start..<end
+        let year = dateString[range]
+        print(year)
+        let yearNum = Int(year, radix: 2)!
+        print(yearNum)
+
+
+        start = dateString.index(dateString.endIndex, offsetBy: -17)
+        end = dateString.index(dateString.endIndex, offsetBy: -9)
+        range = start..<end
+        let month = dateString[range]
+        print(month)
+        let monthNum = Int(month, radix: 2)!
+        print(monthNum)
+        
+        
+        start = dateString.index(dateString.endIndex, offsetBy: -8)
+        end = dateString.index(dateString.endIndex, offsetBy: 0)
+        range = start..<end
+        let day = dateString[range]
+        print(day)
+        let dayNum = Int(day, radix: 2)!
+        print(dayNum)
+        
+        
+        var finalString = String()
+        finalString = String(describing: dayNum)+"-"+String(describing: monthNum)+"-"+String(describing: yearNum)
+//
+        print("final: ", finalString) // Output: 25
+        return finalString
+        
+    }
+    
+    func convertTime(time : UInt32) -> String {
+         var timeNum = String(time)
+        let timeString = String(Int(timeNum)!, radix: 2)
+
+//        var year = dateTimeString.substring(from: String.index(8), to: String.index(16))
+       print(timeString)
+        var start = timeString.index(timeString.startIndex, offsetBy: 0)
+        var end = timeString.index(timeString.endIndex, offsetBy: -16)
+        var range = start..<end
+        let hour = timeString[range]
+        print(hour)
+        let hourNum = Int(hour, radix: 2)!
+        print(hourNum)
+
+
+        start = timeString.index(timeString.endIndex, offsetBy: -17)
+        end = timeString.index(timeString.endIndex, offsetBy: -9)
+        range = start..<end
+        let min = timeString[range]
+        print(min)
+        let minNum = Int(min, radix: 2)!
+        print(minNum)
+
+
+        start = timeString.index(timeString.endIndex, offsetBy: -8)
+        end = timeString.index(timeString.endIndex, offsetBy: 0)
+        range = start..<end
+        let second = timeString[range]
+        print(second)
+        let secondNum = Int(second, radix: 2)!
+        print(secondNum)
+
+
+        var finalString = String()
+        finalString = String(describing: hourNum)+":"+String(describing: minNum)+":"+String(describing: secondNum)
+        print("final: ", finalString) // Output: 25
+        return finalString
+        
+    }
+    
+    
+    func convertDatetoString() -> String {
+        
+        var finalDateString = String()
+        
+        let now = Date()
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "nl_NL")
+        formatter.setLocalizedDateFormatFromTemplate("dd-MM-yyyy")
+        var date =  formatter.string(from: now)
+        print(date)
+        
+        var dateArr = date.split(separator: "-")
+        var day: Int = Int(dateArr[0])!
+        let month : Int = Int(dateArr[1])!
+        let year : Int = Int(dateArr[2])!
+        var dayBinary = String(day, radix: 2)
+        var monthBinary = String(month, radix: 2)
+        var yearBinary = String(year, radix: 2)
+        
+        
+        for i in Range(0...(8-dayBinary.count-1)){
+            dayBinary = "0"+dayBinary
         }
-    }
-    
-    // sample Data...
-    
-    struct WaterLogEntry : Identifiable {
-        
-        var id : Int
-        var day : String
-        var water_consumed : CGFloat
-    }
-    
-    
-    struct Stats : Identifiable {
-        
-        var id : Int
-        var title : String
-        var currentData : CGFloat
-        var goal : CGFloat
-        var color : Color
-    }
-    
-    //TODO: make currentData variable w data from database
-    var stats_Data = [
-        
-        Stats(id: 1, title: "Water Intake Today", currentData: 3.5, goal: 5, color: Color(.yellow)),
-        
-        Stats(id: 3, title: "Days Until Cleaning", currentData: 6.2, goal: 10, color: Color(.yellow))
-    ]
-    
-    struct HomePage_Previews: PreviewProvider {
-        static var previews: some View {
-            HomePage()
-            
+        for i in Range(0...(8-monthBinary.count-1)){
+            monthBinary = "0"+monthBinary
         }
+        
+        for i in Range(0...(16-yearBinary.count-1)){
+            yearBinary = "0"+yearBinary
+        }
+        print("day", dayBinary)
+        print("month", monthBinary)
+        print("year", yearBinary)
+        finalDateString = yearBinary+monthBinary+dayBinary
+        print(finalDateString.count)
+        
+        var dateAnswer = UInt32(finalDateString, radix: 2)
+        return finalDateString
+        
     }
+    
+    func convertTimetoString() -> String {
+        var finalTimeString = String()
+        
+        
+        let now = Date()
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "nl_NL")
+        formatter.dateFormat = "HH:mm:ss"
+        var time = formatter.string(from: now)
+        print(time)
+        
+        var timeArr = time.split(separator: ":")
+        var hour: Int = Int(timeArr[0])!
+        let min : Int = Int(timeArr[1])!
+        let second : Int = Int(timeArr[2])!
+        var hourBinary = String(hour, radix: 2)
+        var minBinary = String(min, radix: 2)
+        var secondBinary = String(second, radix: 2)
+        
+        
+        
+        for i in Range(0...(8-hourBinary.count-1)){
+            hourBinary = "0"+hourBinary
+        }
+        for i in Range(0...(8-minBinary.count-1)){
+            minBinary = "0"+minBinary
+        }
+        
+        for i in Range(0...(8-secondBinary.count-1)){
+            secondBinary = "0"+secondBinary
+        }
+        print("hour", hourBinary)
+        print("min", minBinary)
+        print("second", secondBinary)
+        finalTimeString = "00000000"+hourBinary+secondBinary+minBinary
+        print(finalTimeString.count)
+        
+        var timeAnswer = UInt32(finalTimeString, radix: 2)
+        print(timeAnswer)
+        return finalTimeString
+        
+    }
+
+    
+}
+
+
+
+struct RoundedShape : Shape {
+    
+    func path(in rect: CGRect) -> Path {
+        
+        
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft,.topRight], cornerRadii: CGSize(width: 5, height: 5))
+        
+        return Path(path.cgPath)
+    }
+}
+
+// sample Data...
+
+struct WaterLogEntry : Identifiable {
+    
+    var id : Int
+    var day : String
+    var water_consumed : CGFloat
+}
+
+
+struct Stats : Identifiable {
+    
+    var id : Int
+    var title : String
+    var currentData : CGFloat
+    var goal : CGFloat
+    var color : Color
+}
+
+//TODO: make currentData variable w data from database
+var stats_Data = [
+    
+    Stats(id: 1, title: "Water Intake Today", currentData: 3.5, goal: 5, color: Color(.yellow)),
+    
+    Stats(id: 3, title: "Days Until Cleaning", currentData: 6.2, goal: 10, color: Color(.yellow))
+]
+
+struct HomePage_Previews: PreviewProvider {
+    static var previews: some View {
+        HomePage()
+        
+    }
+}
 
 

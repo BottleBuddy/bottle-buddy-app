@@ -12,6 +12,10 @@ import RealmSwift
 let USE_REALM_SYNC = true
 let app = USE_REALM_SYNC ? App(id: "bottlebuddyrealm2-ohcmu") : nil
 
+let bbdarkblue = UIColor(named: "BB_DarkBlue")
+let bblightblue = UIColor(named: "BB_LightBlue")
+let bbyellow = UIColor(named: "BB_Yellow")
+
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
         Dashboard()
@@ -56,7 +60,20 @@ struct Dashboard : View {
                 }.tag(3)
                 .environmentObject(state)
                 .environmentObject(bluetooth)
-        }.onAppear {
+            BluetoothConnectView(tof_distance: 0)
+                .tabItem{
+                    VStack{
+                        Image(systemName:"paperplane")
+                        Text("Bluetooth")
+                    }
+                }.tag(4)
+                .environmentObject(state)
+                .environmentObject(bluetooth)
+            
+        }
+        .accentColor(Color(bbdarkblue!))
+        .onAppear {
+            UITabBar.appearance().barTintColor = bblightblue
             if(firstDashboard){
                 guard let app = app else {
                     print("Not using Realm Sync - not logging in")

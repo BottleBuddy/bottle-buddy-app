@@ -117,8 +117,11 @@ struct HomePage: View {
                                     .foregroundColor(.white)
                             }
                         }
+                        .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
+
                     }
                 }
+                .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
                 .padding()
                 .background(Color(bbdarkblue!).ignoresSafeArea())
                 .cornerRadius(10)
@@ -179,9 +182,12 @@ struct HomePage: View {
                         .padding()
                         .background(Color.white.opacity(0.06))
                         .cornerRadius(15)
-                        .shadow(color: Color.white.opacity(0.2), radius: 10, x: 0, y: 0)
+                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 0)
                         
                     }
+                    .padding()
+                    .cornerRadius(20)
+                    .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
                 }
                 Button(action: {
                     

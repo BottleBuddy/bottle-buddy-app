@@ -64,10 +64,14 @@ struct EditProfileView: View {
                     .foregroundColor(.white)
                 Form{
                     Section(header: Text("About You")){
+                        Text("Name: " + self.name)
                         TextField("Age: " + self.ageOfUser, text: $ageOfUser)
                             .keyboardType(.numberPad)
                         TextField("Weight: " + self.weight, text: $weight)
                             .keyboardType(.numberPad)
+                        Text("Sex: " + String(self.sex))
+                        Text("Bottle brand: " + String(self.bottleBrandName))
+                        Text("Bottle size: " + String(self.bottleSize))
                     }
                     
                 }

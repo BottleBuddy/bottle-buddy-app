@@ -53,6 +53,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var cleaning_start = Data()
     var cleaning_finished = Data()
     
+    
     var state: AppState? = nil
    
     
@@ -250,7 +251,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         
         /*guard let connectedPeripheral = connectedPeripheral,
             let transferCharacteristic = centralTransferCharacteristic[0]
-        //let transferCharacteristic = [CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214")]
+        let transferCharacteristic = [CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214")]
         else {
             os_log("returning if connected peripheral and transfer charac. did not work")
             return
@@ -278,7 +279,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         let clean: Bool = true;
         
         let cleanData = withUnsafeBytes(of: clean) { Data($0) }
-        connectedPeripheral.writeValue(cleanData, for: centralTransferCharacteristic[11]!, type: .withResponse)
+        connectedPeripheral.writeValue(cleanData, for: centralTransferCharacteristic[14]!, type: .withResponse)
     }
     
     
@@ -425,6 +426,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         if(String(describing: characteristic.uuid) == "19B10021-E8F2-537E-4F6C-D104768A1214"){
             cleaning_start = characteristic.value!
         }
+        
         if(String(describing: characteristic.uuid) == "19B10022-E8F2-537E-4F6C-D104768A1214"){
             cleaning_finished = characteristic.value!
         }
@@ -485,13 +487,13 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
 //
 //        }
 
-        if(self.IMUxValue.isEmpty){
+        /*if(self.IMUxValue.isEmpty){
             return "-1";
         }
         let result = "\n IMU  X Value: \(String(data: IMUxValue, encoding: .utf8)!)" + "\n IMU  Y Value: \(String(data: IMUyValue, encoding: .utf8)!)"
             + "\n IMU  Z Value: \(String(data: IMUzValue, encoding: .utf8)!)"
-        //dataRecieved.removeAll()
-        //let result = ""
+        //dataRecieved.removeAll()*/
+        let result = ""
         return result
     }
     
@@ -506,9 +508,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
 //        if(pitchValue.isEmpty){
 //            return "0";
 //        }
-        let result = "\n Pitch Value: \(String(data: pitchValue, encoding: .utf8)!)" + "\n Yaw Value: \(String(data: yawValue, encoding: .utf8)!)" + "\n Roll Value: \(String(data: rollValue, encoding: .utf8)!)"
-        //dataRecieved.removeAll()
-        //let result = ""
+        /*let result = "\n Pitch Value: \(String(data: pitchValue, encoding: .utf8)!)" + "\n Yaw Value: \(String(data: yawValue, encoding: .utf8)!)" + "\n Roll Value: \(String(data: rollValue, encoding: .utf8)!)"
+        //dataRecieved.removeAll()*/
+        let result = ""
         return result
     }
     

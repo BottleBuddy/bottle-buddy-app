@@ -25,10 +25,7 @@ struct HomePage: View {
     let notifContent = UNMutableNotificationContent()
     let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
     @State var name: String = ""
-    
-    
-    @EnvironmentObject var user: User
-    
+    @State var stats: Statistics? = nil
     
     @ObservedObject var notifcation = NotificationManager()
     
@@ -60,6 +57,8 @@ struct HomePage: View {
                 .padding()
                 .onReceive(timer, perform: { _ in
                     if(state.userData != nil){
+                        stats = Statistics(state: state)
+                        stats!.getSevenWeekLog()
                         if(state.userData?.name != nil){
                             self.name = state.userData!.name
                         } else {

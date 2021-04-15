@@ -20,6 +20,7 @@ class HealthStore{
             healthStore = HKHealthStore()
         }
     }
+    
     func calculateSteps(completion: @escaping (HKStatisticsCollection?)-> Void){
         let stepType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
         
@@ -42,23 +43,6 @@ class HealthStore{
             healthStore.execute(query)
         }
         
-        
-    }
-    
-    func getSex()->Int{
-        var sex = -1
-        if try! healthStore?.biologicalSex().biologicalSex == HKBiologicalSex.male  {
-            print("You are male")
-             sex = 1
-        }else if try! healthStore?.biologicalSex().biologicalSex == HKBiologicalSex.female  {
-            print("You are female")
-             sex = 2
-        } else if try! healthStore?.biologicalSex().biologicalSex == HKBiologicalSex.other {
-            print("You are not categorized as male or female")
-             sex = 3
-            
-        }
-         return sex
     }
     
     func requestAuthorization(completion: @escaping (Bool) ->Void){
@@ -82,6 +66,12 @@ extension Date {
     static func mondayAt12AM() -> Date {
         return Calendar(identifier: .iso8601).date(from: Calendar(identifier: .iso8601).dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
     }
+}
+
+struct Step: Identifiable {
+    let id = UUID()
+    let count: Int
+    let date: Date
 }
     
 

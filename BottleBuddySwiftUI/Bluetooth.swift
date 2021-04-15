@@ -45,6 +45,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var stringVal = String()
     var intVal = Int()
     
+    var state: AppState? = nil
+    
     //let mainService = NewService(
         //testService: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961",
         //testCharacteristic: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
@@ -55,6 +57,10 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
       //  sendingEOM = false      //this is j to make things compile,, may need to change later
         super.init()
         initializeStream()
+    }
+    
+    func setState(state: AppState){
+        self.state = state
     }
     
     func initializeStream(){

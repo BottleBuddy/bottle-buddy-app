@@ -62,7 +62,7 @@ class Statistics {
     }
     
     func getPercent() -> Double {
-        return getDailyTotal() / Double(self.totalGoal)
+        return getDailyTotal() / Double(getTotalGoal())
     }
     
     func getTotalGoal() -> Int{

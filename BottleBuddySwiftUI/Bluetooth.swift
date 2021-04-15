@@ -40,19 +40,28 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
      var tofValue = Data()
     @Published var numTOF = UInt16()
     var lastTOF = UInt16()
-    var IMUxValue = Data()
-    var IMUyValue = Data()
-    var IMUzValue = Data()
-    var pitchValue = Data()
-    var yawValue = Data()
-    var rollValue = Data()
+    
+    var waterIntake_ID = Data()
+    var waterIntake_Timestamp_Date = Data()
+    var waterIntake_Timestamp_Time = Data()
+    var waterIntake_Heights = Data()
+    var recieved_acknowledgement = Data()
+    var Timestamp_Date = Data()
+    var Timestamp_Time = Data()
+    var WroteTime = Data()
+    var DrinkWater = Data()
+    var cleaning_start = Data()
+    var cleaning_finished = Data()
+    
+    
     var state: AppState? = nil
    
     
     
-    var callibrationService = NewService(service: "19B10010-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 1)
-//    var waterIntakeService = NewService(service: "19B10020-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 10)
-//    var cleaningService = NewService(service: "19B10030-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics:1)
+    var waterIntakeService = NewService(service: "19B10010-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 9)
+    var cleaningService = NewService(service: "19B10020-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 2)
+    //var calibrationService = NewService(service: "19B10030-E8F2-537E-4F6C-D104768A1214", numOfCharacteristics: 1)
+    
 
 
     override init(){
@@ -108,7 +117,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         os_log("Scanning for Devices...")
        
         centralManager.scanForPeripherals(
-            withServices: [callibrationService.serviceUUID],
+            withServices: [waterIntakeService.serviceUUID, cleaningService.serviceUUID],
             options: [CBCentralManagerScanOptionAllowDuplicatesKey: true]
         )
         if centralManager.isScanning {
@@ -141,7 +150,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
                     connected = true
                     central.stopScan()
                 }else{
-                    centralManager.scanForPeripherals(withServices: [callibrationService.serviceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
+                    centralManager.scanForPeripherals(withServices: [waterIntakeService.serviceUUID, cleaningService.serviceUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
                 }
                 
             }
@@ -171,7 +180,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         
         // Search only for services that match our UUID
         //peripheral.discoverServices([TransferService.serviceUUID])
-        peripheral.discoverServices([callibrationService.serviceUUID])
+        peripheral.discoverServices([waterIntakeService.serviceUUID, cleaningService.serviceUUID])
         //deviceTableView.reloadData()
     }
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral,
@@ -242,7 +251,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         
         /*guard let connectedPeripheral = connectedPeripheral,
             let transferCharacteristic = centralTransferCharacteristic[0]
-        //let transferCharacteristic = [CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214")]
+        let transferCharacteristic = [CBUUID(string: "19B10015-E8F2-537E-4F6C-D104768A1214")]
         else {
             os_log("returning if connected peripheral and transfer charac. did not work")
             return
@@ -270,7 +279,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         let clean: Bool = true;
         
         let cleanData = withUnsafeBytes(of: clean) { Data($0) }
-        connectedPeripheral.writeValue(cleanData, for: centralTransferCharacteristic[11]!, type: .withResponse)
+        connectedPeripheral.writeValue(cleanData, for: centralTransferCharacteristic[14]!, type: .withResponse)
     }
     
     
@@ -278,9 +287,9 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
         
     
-        for service in invalidatedServices where service.uuid == callibrationService.serviceUUID {
+        for service in invalidatedServices where ((service.uuid == waterIntakeService.serviceUUID) || (service.uuid == cleaningService.serviceUUID)){
             os_log("Transfer service is invalidated - rediscover services")
-            peripheral.discoverServices([callibrationService.serviceUUID])//REVIEW WHAT THIS DOES BECAUSE IT DOESNT MAKE SENSE
+            peripheral.discoverServices([waterIntakeService.serviceUUID, cleaningService.serviceUUID])//REVIEW WHAT THIS DOES BECAUSE IT DOESNT MAKE SENSE
         }
         
     }
@@ -301,7 +310,8 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
 
     
         for service in peripheralServices {
-            peripheral.discoverCharacteristics(callibrationService.characteristicUUIDs, for: service)
+            peripheral.discoverCharacteristics(waterIntakeService.characteristicUUIDs, for: service)
+            peripheral.discoverCharacteristics(cleaningService.characteristicUUIDs, for: service)
            // peripheral.discoverCharacteristics([demoService.characteristicArray[2]], for: service)
         }
         
@@ -323,7 +333,16 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         guard let serviceCharacteristics = service.characteristics else { return }
         
    
-        for cbuuid in callibrationService.characteristicUUIDs {
+        for cbuuid in waterIntakeService.characteristicUUIDs {
+                for characteristic in serviceCharacteristics where characteristic.uuid == cbuuid {
+                        // If it is, subscribe to it
+                    os_log("adding %@", String(describing: characteristic.uuid))
+                        centralTransferCharacteristic.append(characteristic)
+                        connectedPeripheral.setNotifyValue(true, for: characteristic)
+                    }
+            }
+        
+        for cbuuid in cleaningService.characteristicUUIDs {
                 for characteristic in serviceCharacteristics where characteristic.uuid == cbuuid {
                         // If it is, subscribe to it
                     os_log("adding %@", String(describing: characteristic.uuid))
@@ -365,35 +384,54 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         if(String(describing: characteristic.uuid) == "19B10011-E8F2-537E-4F6C-D104768A1214"){
             tofValue = characteristic.value!
             lastTOF = (UInt16(tofValue[1])<<8) + (UInt16(tofValue[0]))
-            if(12500 < lastTOF && lastTOF < 12550){
+            if(250 < lastTOF && lastTOF < 260){
                 numTOF = lastTOF
+                addWaterReading(tofValue: numTOF)
             }
            //call addwaterReading
-            addWaterReading()
-            
         }
         if(String(describing: characteristic.uuid) == "19B10012-E8F2-537E-4F6C-D104768A1214"){
-            rollValue = characteristic.value!
+            waterIntake_Timestamp_Date = characteristic.value!
         }
         
         if(String(describing: characteristic.uuid) == "19B10013-E8F2-537E-4F6C-D104768A1214"){
-            yawValue = characteristic.value!
+            waterIntake_Timestamp_Time = characteristic.value!
         }
         if(String(describing: characteristic.uuid) == "19B10014-E8F2-537E-4F6C-D104768A1214"){
-            pitchValue = characteristic.value!
+            waterIntake_Heights = characteristic.value!
         }
         
         if(String(describing: characteristic.uuid) == "19B10015-E8F2-537E-4F6C-D104768A1214"){
-            IMUxValue = characteristic.value!
+            recieved_acknowledgement = characteristic.value!
         }
         
-//        if(String(describing: characteristic.uuid) == "19B10016-E8F2-537E-4F6C-D104768A1214"){
-//            IMUyValue = characteristic.value!
-//        }
-//
-//        if(String(describing: characteristic.uuid) == "19B10017-E8F2-537E-4F6C-D104768A1214"){
-//            IMUzValue = characteristic.value!
-//        }
+        if(String(describing: characteristic.uuid) == "19B10016-E8F2-537E-4F6C-D104768A1214"){
+            Timestamp_Date = characteristic.value!
+        }
+        if(String(describing: characteristic.uuid) == "19B10017-E8F2-537E-4F6C-D104768A1214"){
+            Timestamp_Time = characteristic.value!
+        }
+        
+        if(String(describing: characteristic.uuid) == "19B10018-E8F2-537E-4F6C-D104768A1214"){
+            WroteTime = characteristic.value!
+        }
+        if(String(describing: characteristic.uuid) == "19B10019-E8F2-537E-4F6C-D104768A1214"){
+            DrinkWater = characteristic.value!
+        }
+        
+        if(String(describing: characteristic.uuid) == "19B10019-E8F2-537E-4F6C-D104768A1214"){
+            DrinkWater = characteristic.value!
+        }
+        
+        if(String(describing: characteristic.uuid) == "19B10021-E8F2-537E-4F6C-D104768A1214"){
+            cleaning_start = characteristic.value!
+        }
+        
+        if(String(describing: characteristic.uuid) == "19B10022-E8F2-537E-4F6C-D104768A1214"){
+            cleaning_finished = characteristic.value!
+        }
+        
+        
         dataRecieved.append(characteristicData)
         
     }
@@ -428,7 +466,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
        
         if (connectedPeripheral != nil){
             if(!centralTransferCharacteristic.isEmpty){
-                connectedPeripheral.readValue(for: centralTransferCharacteristic[0]!)
+               // connectedPeripheral.readValue(for: centralTransferCharacteristic[0]!)
               
             }
         }
@@ -449,13 +487,13 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
 //
 //        }
 
-        if(self.IMUxValue.isEmpty){
+        /*if(self.IMUxValue.isEmpty){
             return "-1";
         }
         let result = "\n IMU  X Value: \(String(data: IMUxValue, encoding: .utf8)!)" + "\n IMU  Y Value: \(String(data: IMUyValue, encoding: .utf8)!)"
             + "\n IMU  Z Value: \(String(data: IMUzValue, encoding: .utf8)!)"
-        //dataRecieved.removeAll()
-        //let result = ""
+        //dataRecieved.removeAll()*/
+        let result = ""
         return result
     }
     
@@ -470,15 +508,15 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
 //        if(pitchValue.isEmpty){
 //            return "0";
 //        }
-        let result = "\n Pitch Value: \(String(data: pitchValue, encoding: .utf8)!)" + "\n Yaw Value: \(String(data: yawValue, encoding: .utf8)!)" + "\n Roll Value: \(String(data: rollValue, encoding: .utf8)!)"
-        //dataRecieved.removeAll()
-        //let result = ""
+        /*let result = "\n Pitch Value: \(String(data: pitchValue, encoding: .utf8)!)" + "\n Yaw Value: \(String(data: yawValue, encoding: .utf8)!)" + "\n Roll Value: \(String(data: rollValue, encoding: .utf8)!)"
+        //dataRecieved.removeAll()*/
+        let result = ""
         return result
     }
     
     
-    func addWaterReading() {
-        let newWaterReading = waterReading(water_level: String(describing: lastTOF))
+    func addWaterReading(tofValue :UInt16) {
+        let newWaterReading = waterReading(water_level: String(describing: tofValue))
         let now = Date()
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "nl_NL")

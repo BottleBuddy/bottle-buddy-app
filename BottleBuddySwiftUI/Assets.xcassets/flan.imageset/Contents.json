@@ -1,7 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Screen Shot 2021-01-24 at 10.44.21 AM.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -10,6 +9,7 @@
       "scale" : "2x"
     },
     {
+      "filename" : "flan.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

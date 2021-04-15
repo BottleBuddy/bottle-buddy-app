@@ -42,7 +42,7 @@ struct GridView: View {
                     VStack(alignment: .leading, spacing: 20){
                         Text(profile.name)
                         Text(profile.info)
-                        Image("FlanSquare")
+                        Image(profile.image)
                             .scaledToFit()
                             .padding()
                             .clipShape(Rectangle())
@@ -66,14 +66,14 @@ struct Profile: Identifiable {
     var id: Int
     var name: String
     var info: String
-    var image: Image
+    var image: String
 }
 
 var profileData = [
-    Profile(id: 0, name: "Flannery", info: "Front-end", image: Image("FlanImage")),
-    Profile(id: 1, name: "Zane", info: "Hardware", image: Image("FlanImage")),
-    Profile(id: 2, name: "Josh", info: "Embedded", image: Image("FlanImage")),
-    Profile(id: 3, name: "Sanika", info: "Back-end", image: Image("FlanImage")),
-    Profile(id: 4, name: "Jason", info: "Hardware", image: Image("FlanImage")),
-    Profile(id: 5, name: "Chris", info: "Embedded", image: Image("FlanImage"))
+    Profile(id: 0, name: "Flannery", info: "Front-end", image: "flan"),
+    Profile(id: 1, name: "Zane", info: "Hardware", image: "zane"),
+    Profile(id: 2, name: "Josh", info: "Embedded", image: "josh"),
+    Profile(id: 3, name: "Sanika", info: "Back-end", image: "sanika"),
+    Profile(id: 4, name: "Jason", info: "Hardware", image: "chris"),
+    Profile(id: 5, name: "Chris", info: "Embedded", image: "chris")
 ]

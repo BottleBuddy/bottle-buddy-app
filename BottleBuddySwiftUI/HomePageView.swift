@@ -57,8 +57,6 @@ struct HomePage: View {
                 .padding()
                 .onReceive(timer, perform: { _ in
                     if(state.userData != nil){
-                        stats = Statistics(state: state)
-                        stats!.getSevenWeekLog()
                         if(state.userData?.name != nil){
                             self.name = state.userData!.name
                         } else {
@@ -77,7 +75,10 @@ struct HomePage: View {
                         .foregroundColor(.white)
                         .onReceive(timer){_ in
                             if(state.waterReadings != nil){
-                                getWaterLog()
+                                if(stats == nil){
+                                    stats = Statistics(state: state)
+                                }
+                                getWaterLog(stats: self.stats!)
                             }
                         }
 
@@ -273,18 +274,18 @@ struct HomePage: View {
         return String(format: "%.1f", hrs)
     }
     
-        func getWaterLog(){
-            var  i = 0
-            
-            waterLogData.removeAll()
-            state.waterReadings!.forEach{ waterReading in
-                i+=1
-                var waterLevel = waterReading.water_level
-                self.waterLogData.append(WaterLogEntry(id: (i), day: "Day \(i)", water_consumed:getHeight(value: waterLevel)))
-                
-            }
-            
+    func getWaterLog(stats: Statistics){
+        var  i = 0
+        
+        waterLogData.removeAll()
+        for volume in stats.getSevenDayLog()! {
+            self.waterLogData.append(WaterLogEntry(id: (i), day: "Day \(i)",
+                                                   water_consumed:getHeight(value: String(volume))))
+            i = i + 1
         }
+        
+        stats.getTotalGoal()
+        stats.getPercent()
         
     }
     
@@ -336,3 +337,4 @@ struct HomePage: View {
     }
 
 
+}

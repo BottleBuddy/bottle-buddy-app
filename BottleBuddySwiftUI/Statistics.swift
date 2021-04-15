@@ -9,23 +9,27 @@ import Foundation
 
 
 class Statistics {
-    var sevenWeekLog: Array<Int>?
-    var percent: Int
-    var dailyGoal: Int
+    var sevenDayLog: Array<Int>?
+    var baseGoal: Int
     var state: AppState
     let formatter = DateFormatter()
+    var totalGoal: Int
     
     init(state: AppState){
         self.state = state
-        sevenWeekLog = nil
-        percent = 0
-        dailyGoal  = Int(state.userData!.weight)! * 2/3
+        sevenDayLog = nil
+        if(state.userData!.weight == "") {
+            baseGoal = 80
+        } else {
+            baseGoal  = Int(state.userData!.weight)! * 2/3
+        }
+        totalGoal = baseGoal
         formatter.locale = Locale(identifier: "nl_NL")
         formatter.setLocalizedDateFormatFromTemplate("dd-MM-yyyy")
     }
     
-    func getSevenWeekLog() -> Array<Int>?{
-        self.sevenWeekLog = Array<Int>()
+    func getSevenDayLog() -> Array<Int>?{
+        self.sevenDayLog = Array<Int>()
         
         var date = Calendar.current.date(byAdding: .day, value: -6, to: Date())!
         var i = 0
@@ -38,24 +42,27 @@ class Statistics {
             state.waterReadings!.filter(predicate).forEach{waterReading in
                 waterTotal = waterTotal + Int(waterReading.water_level)!
             }
-            self.sevenWeekLog?.append(waterTotal)
+            self.sevenDayLog?.append(waterTotal)
             i = i + 1
         }
         
-        return self.sevenWeekLog
+        return self.sevenDayLog
     }
     
-    func getPercent() -> Int{
+    func getPercent() -> Int {
         let predicate = "date == " + "'" + String(formatter.string(from: Date())) + "'"
         var waterTotal = 0
         state.waterReadings!.filter(predicate).forEach{waterReading in
             waterTotal = waterTotal + Int(waterReading.water_level)!
         }
-        
-        return waterTotal / self.dailyGoal
+        return Int(Double(waterTotal) / Double(self.totalGoal) * 100)
     }
     
-    func getDailyGoal() -> Int{
-        return dailyGoal
+    func getTotalGoal() -> Int{
+        if(state.userData!.weight != "") {
+            baseGoal  = Int(state.userData!.weight)! * 2/3
+            totalGoal = baseGoal
+        }
+        return totalGoal
     }
 }

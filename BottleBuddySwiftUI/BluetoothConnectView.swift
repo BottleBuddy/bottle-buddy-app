@@ -73,7 +73,7 @@ struct BluetoothConnectView: View {
                         
                         self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2);
                         
-                        bluetooth.writeClean()}){
+                        bluetooth.startBottleClean()}){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -88,7 +88,7 @@ struct BluetoothConnectView: View {
                 Text("\(tof_distance)")
                     .onReceive(timer){time in
                         if(bluetooth.connected){
-                            tof_distance = bluetooth.getTofValue()
+                            tof_distance = 1
                         }
                     }
                     .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
@@ -103,7 +103,7 @@ struct BluetoothConnectView: View {
                 Text("\(imu_reading)")
                     .onReceive(timer){time in
                         if(bluetooth.connected){
-                            imu_reading = bluetooth.getIMUValue()
+                            //imu_reading = bluetooth.getIMUValue()
                         }
                     }
                     .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
@@ -123,7 +123,7 @@ struct BluetoothConnectView: View {
             Text("\(pitch_val)")
                 .onReceive(timer){time in
                     if(bluetooth.connected){
-                       pitch_val = bluetooth.getOrientation()
+                      // pitch_val = bluetooth.getOrientation()
                     }
                 }
                 .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))

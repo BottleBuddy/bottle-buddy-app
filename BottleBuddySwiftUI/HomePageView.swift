@@ -9,11 +9,12 @@ import SwiftUI
 import UserNotifications
 import RealmSwift
 
+ var notification = NotificationManager()
 
 struct HomePage: View {
     @EnvironmentObject var state: AppState
     @EnvironmentObject var bluetooth: Bluetooth
-    var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
+    var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)git 
     @State var selected = 0
     var colors = [Color(.white)]
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
@@ -30,7 +31,6 @@ struct HomePage: View {
     @EnvironmentObject var user: User
     
     
-    @ObservedObject var notifcation = NotificationManager()
     
     
     var body: some View {
@@ -186,22 +186,13 @@ struct HomePage: View {
                 }
                 Button(action: {
                         
-                        self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
+                        notification.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
                         
-                        DispatchQueue.global(qos: .background).async {
-                            for i in 1...100{
-                                print(i)
-                            }
-                             var date = UInt32(789516)
-                            var dateString = convertDate(date: date)
-                            print(dateString)
-                            var time = UInt32(789516)
-                            var timeString = convertTime(time: time)
-                            convertDatetoString()
-                            print(convertTimetoString())
-                            
-                        }
-                        bluetooth.writeClean()}){
+//                        DispatchQueue.global(qos: .background).async {
+//
+//
+//                        }
+                        bluetooth.startBottleClean()}){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -293,171 +284,10 @@ struct HomePage: View {
         
     }
     
-    func convertDate(date : UInt32) -> String {
-         var dateNum = String(date)
-        let dateString = String(Int(dateNum)!, radix: 2)
-        
-//        var year = dateTimeString.substring(from: String.index(8), to: String.index(16))
-       print(dateString)
-        var start = dateString.index(dateString.startIndex, offsetBy: 0)
-        var end = dateString.index(dateString.endIndex, offsetBy: -16)
-        var range = start..<end
-        let year = dateString[range]
-        print(year)
-        let yearNum = Int(year, radix: 2)!
-        print(yearNum)
-
-
-        start = dateString.index(dateString.endIndex, offsetBy: -17)
-        end = dateString.index(dateString.endIndex, offsetBy: -9)
-        range = start..<end
-        let month = dateString[range]
-        print(month)
-        let monthNum = Int(month, radix: 2)!
-        print(monthNum)
-        
-        
-        start = dateString.index(dateString.endIndex, offsetBy: -8)
-        end = dateString.index(dateString.endIndex, offsetBy: 0)
-        range = start..<end
-        let day = dateString[range]
-        print(day)
-        let dayNum = Int(day, radix: 2)!
-        print(dayNum)
-        
-        
-        var finalString = String()
-        finalString = String(describing: dayNum)+"-"+String(describing: monthNum)+"-"+String(describing: yearNum)
-//
-        print("final: ", finalString) // Output: 25
-        return finalString
-        
-    }
-    
-    func convertTime(time : UInt32) -> String {
-         var timeNum = String(time)
-        let timeString = String(Int(timeNum)!, radix: 2)
-
-//        var year = dateTimeString.substring(from: String.index(8), to: String.index(16))
-       print(timeString)
-        var start = timeString.index(timeString.startIndex, offsetBy: 0)
-        var end = timeString.index(timeString.endIndex, offsetBy: -16)
-        var range = start..<end
-        let hour = timeString[range]
-        print(hour)
-        let hourNum = Int(hour, radix: 2)!
-        print(hourNum)
-
-
-        start = timeString.index(timeString.endIndex, offsetBy: -17)
-        end = timeString.index(timeString.endIndex, offsetBy: -9)
-        range = start..<end
-        let min = timeString[range]
-        print(min)
-        let minNum = Int(min, radix: 2)!
-        print(minNum)
-
-
-        start = timeString.index(timeString.endIndex, offsetBy: -8)
-        end = timeString.index(timeString.endIndex, offsetBy: 0)
-        range = start..<end
-        let second = timeString[range]
-        print(second)
-        let secondNum = Int(second, radix: 2)!
-        print(secondNum)
-
-
-        var finalString = String()
-        finalString = String(describing: hourNum)+":"+String(describing: minNum)+":"+String(describing: secondNum)
-        print("final: ", finalString) // Output: 25
-        return finalString
-        
-    }
+  
+   
     
     
-    func convertDatetoString() -> String {
-        
-        var finalDateString = String()
-        
-        let now = Date()
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "nl_NL")
-        formatter.setLocalizedDateFormatFromTemplate("dd-MM-yyyy")
-        var date =  formatter.string(from: now)
-        print(date)
-        
-        var dateArr = date.split(separator: "-")
-        var day: Int = Int(dateArr[0])!
-        let month : Int = Int(dateArr[1])!
-        let year : Int = Int(dateArr[2])!
-        var dayBinary = String(day, radix: 2)
-        var monthBinary = String(month, radix: 2)
-        var yearBinary = String(year, radix: 2)
-        
-        
-        for i in Range(0...(8-dayBinary.count-1)){
-            dayBinary = "0"+dayBinary
-        }
-        for i in Range(0...(8-monthBinary.count-1)){
-            monthBinary = "0"+monthBinary
-        }
-        
-        for i in Range(0...(16-yearBinary.count-1)){
-            yearBinary = "0"+yearBinary
-        }
-        print("day", dayBinary)
-        print("month", monthBinary)
-        print("year", yearBinary)
-        finalDateString = yearBinary+monthBinary+dayBinary
-        print(finalDateString.count)
-        
-        var dateAnswer = UInt32(finalDateString, radix: 2)
-        return finalDateString
-        
-    }
-    
-    func convertTimetoString() -> String {
-        var finalTimeString = String()
-        
-        
-        let now = Date()
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "nl_NL")
-        formatter.dateFormat = "HH:mm:ss"
-        var time = formatter.string(from: now)
-        print(time)
-        
-        var timeArr = time.split(separator: ":")
-        var hour: Int = Int(timeArr[0])!
-        let min : Int = Int(timeArr[1])!
-        let second : Int = Int(timeArr[2])!
-        var hourBinary = String(hour, radix: 2)
-        var minBinary = String(min, radix: 2)
-        var secondBinary = String(second, radix: 2)
-        
-        
-        
-        for i in Range(0...(8-hourBinary.count-1)){
-            hourBinary = "0"+hourBinary
-        }
-        for i in Range(0...(8-minBinary.count-1)){
-            minBinary = "0"+minBinary
-        }
-        
-        for i in Range(0...(8-secondBinary.count-1)){
-            secondBinary = "0"+secondBinary
-        }
-        print("hour", hourBinary)
-        print("min", minBinary)
-        print("second", secondBinary)
-        finalTimeString = "00000000"+hourBinary+secondBinary+minBinary
-        print(finalTimeString.count)
-        
-        var timeAnswer = UInt32(finalTimeString, radix: 2)
-        print(timeAnswer)
-        return finalTimeString
-        
-    }
 
     
 }

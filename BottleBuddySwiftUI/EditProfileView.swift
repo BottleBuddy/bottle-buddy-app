@@ -10,6 +10,9 @@ import Firebase
 import Combine
 import RealmSwift
 
+var time = Date()
+var day = 0
+
 final class userObject: Object, ObjectKeyIdentifiable {
     //user cannot manually update these values
     @objc dynamic var _id: ObjectId = ObjectId.generate()
@@ -54,6 +57,8 @@ struct EditProfileView: View {
     @State var weight = ""
     @State var submit = false
     @State var firstDisplay = true
+    @State var cleanTime = Date()
+    @State var cleanDate = 0
     
     var body: some View {
         
@@ -73,11 +78,26 @@ struct EditProfileView: View {
                         Text("Sex: " + String(self.sex))
                         Text("Bottle brand: " + String(self.bottleBrandName))
                         Text("Bottle size: " + String(self.bottleSize))
+                        Picker(selection: $cleanDate, label: Text("Day for cleaning reminders")){
+                            Text("Sunday").tag(1)
+                            Text("Monday").tag(2)
+                            Text("Tuesday").tag(3)
+                            Text("Wednesday").tag(4)
+                            Text("Thursday").tag(5)
+                            Text("Friday").tag(6)
+                            Text("Saturday").tag(7)
+                        }
+                        DatePicker("Time for cleaning reminders: ", selection: $cleanTime, displayedComponents: [.hourAndMinute])
                     }
                     
                 }
                 
                 Button(action: {
+                    time = cleanTime
+                    day = cleanDate
+                    print("hour " + String(Calendar.current.dateComponents([.hour], from: time).hour ?? 0))
+                    print("min " + String(Calendar.current.dateComponents([.minute], from: time).minute ?? 0))
+                    cleanReminderNotification()
                     self.submit.toggle()
                     self.updateUserObject()
                 }){
@@ -119,9 +139,65 @@ struct EditProfileView: View {
             EditProfileView().previewLayout(.fixed(width: 375, height: 1000))        }
     }
     
+    func cleanReminderNotification() {
+        var dateComponents = DateComponents()
+        dateComponents.calendar = Calendar.current
+        
+        //reminds the user to clean at 8am on Sundays
+
+        //dateComponents.weekday = 5
+        let selectedHour = Calendar.current.dateComponents([.hour], from: time).hour
+        let selectedMinute = Calendar.current.dateComponents([.minute], from: time).minute
+       
+        dateComponents.hour = selectedHour
+        dateComponents.minute = selectedMinute
+        
+        let acceptAction = UNNotificationAction(identifier: "ACCEPT_ACTION",
+              title: "Accept",
+              options: UNNotificationActionOptions(rawValue: 0))
+        let declineAction = UNNotificationAction(identifier: "DECLINE_ACTION",
+              title: "Decline",
+              options: UNNotificationActionOptions(rawValue: 0))
+        // Define the notification type
+        let meetingInviteCategory =
+              UNNotificationCategory(identifier: "cleanRequest",
+              actions: [acceptAction, declineAction],
+              intentIdentifiers: [],
+              hiddenPreviewsBodyPlaceholder: "",
+              options: .customDismissAction)
+        // Register the notification type.
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.setNotificationCategories([meetingInviteCategory])
+        
+        
+        
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching:dateComponents, repeats: true)
+        let content = UNMutableNotificationContent()
+        content.title = "Cleaning time!"
+        content.body = "Secure your cap on the bottle and initiate cleaning withing the app."
+        content.badge = 1
+        content.categoryIdentifier = "cleanRequest"
+        //Create the actual notification
+        let request = UNNotificationRequest(
+            identifier: "cleannotif",
+            content: content,
+            trigger: trigger)
+        //Add our notification to the notification center
+        UNUserNotificationCenter.current().add(request)
+        {
+            (error) in
+            if let error = error
+            {
+                print("Uh oh! We had an error: \(error)")
+            }
+        }
+    }
+    
     
     
     func updateUserObject() {
+        
         guard let realm = state.userData!.realm else {
             return
         }

@@ -75,6 +75,6 @@ var profileData = [
     Profile(id: 1, name: "Zane", info: "Hardware", image: "zane"),
     Profile(id: 2, name: "Josh", info: "Embedded", image: "josh"),
     Profile(id: 3, name: "Sanika", info: "Back-end", image: "sanika"),
-    Profile(id: 4, name: "Jason", info: "Hardware", image: "chris"),
+    Profile(id: 4, name: "Jason", info: "Hardware", image: "jason"),
     Profile(id: 5, name: "Chris", info: "Embedded", image: "chris")
 ]

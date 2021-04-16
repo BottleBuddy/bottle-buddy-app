@@ -21,7 +21,6 @@
 		4C84DD7025D07CA900DD0376 /* BluetoothConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C84DD6F25D07CA900DD0376 /* BluetoothConnectView.swift */; };
 		4C84DD7825D07EB800DD0376 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C84DD7725D07EB800DD0376 /* EditProfileView.swift */; };
 		4C84DD8025D0819300DD0376 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C84DD7F25D0819300DD0376 /* RegisterView.swift */; };
-		4C8F335C2627E24800426EC0 /* RegisterConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F335B2627E24800426EC0 /* RegisterConnectView.swift */; };
 		4CAC8ACB25329BE4004A27F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAC8ACA25329BE4004A27F8 /* AppDelegate.swift */; };
 		4CAC8ACD25329BE4004A27F8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAC8ACC25329BE4004A27F8 /* SceneDelegate.swift */; };
 		4CAC8ACF25329BE4004A27F8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAC8ACE25329BE4004A27F8 /* ContentView.swift */; };
@@ -70,7 +69,6 @@
 		4C84DD6F25D07CA900DD0376 /* BluetoothConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothConnectView.swift; sourceTree = "<group>"; };
 		4C84DD7725D07EB800DD0376 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		4C84DD7F25D0819300DD0376 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
-		4C8F335B2627E24800426EC0 /* RegisterConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterConnectView.swift; sourceTree = "<group>"; };
 		4CAC8AC725329BE4004A27F8 /* BottleBuddySwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BottleBuddySwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CAC8ACA25329BE4004A27F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CAC8ACC25329BE4004A27F8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -155,7 +153,6 @@
 				1AF2D29025FE5467008FB384 /* AppStateManager.swift */,
 				4CAC8ACE25329BE4004A27F8 /* ContentView.swift */,
 				4C84DD7F25D0819300DD0376 /* RegisterView.swift */,
-				4C8F335B2627E24800426EC0 /* RegisterConnectView.swift */,
 				4CFE21CB253B5E5600666A61 /* DashboardView.swift */,
 				4C11B14B253B781600FEF692 /* HomePageView.swift */,
 				1AFC3C432628E5E400426733 /* Statistics.swift */,
@@ -477,7 +474,6 @@
 				4C80092125E80540000E447A /* NotificationManager.swift in Sources */,
 				1AFC3C442628E5E400426733 /* Statistics.swift in Sources */,
 				1A3D152225D4B64000782B8F /* WaterReadingView.swift in Sources */,
-				4C8F335C2627E24800426EC0 /* RegisterConnectView.swift in Sources */,
 				4C11B156253B783F00FEF692 /* HealthStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

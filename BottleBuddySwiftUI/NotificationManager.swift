@@ -11,6 +11,8 @@ import UserNotifications
 
 class NotificationManager: ObservableObject {
     var notifications = [Notification]()
+    @EnvironmentObject var state: AppState
+    
     
     init() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound], completionHandler: { granted, error in
@@ -21,11 +23,11 @@ class NotificationManager: ObservableObject {
             }
         })
         drinkNotification()
-        cleanReminderNotification()
+        
     }
     
     func sendNotification(title: String, subtitle: String?, body: String, launchIn: Double) {
-            
+        
         let content = UNMutableNotificationContent()
         content.title = title
         if let subtitle = subtitle {
@@ -38,10 +40,10 @@ class NotificationManager: ObservableObject {
         let request = UNNotificationRequest(identifier: "demoNotification", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request, withCompletionHandler: { (error) in
             if error != nil
-                {
-                    print("Issue with sending notification")
-                }
-             })
+            {
+                print("Issue with sending notification")
+            }
+        })
         print("finished notification method")
     }
     
@@ -53,55 +55,23 @@ class NotificationManager: ObservableObject {
         dateComponents.minute = 0
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents,
-                                                            repeats: true)
+                                                    repeats: true)
         let content = UNMutableNotificationContent()
-                content.title = "Reminder to hydrate!"
-                content.body = "Take a sip of water to meet your daily goal."
-                content.badge = 1
-
-                //Create the actual notification
-                let request = UNNotificationRequest(identifier: "drinknotif",
-                                                    content: content,
-                                                    trigger: trigger)
-                //Add our notification to the notification center
-                UNUserNotificationCenter.current().add(request)
-                {
-                    (error) in
-                    if let error = error
-                    {
-                        print("Uh oh! We had an error: \(error)")
-                    }
-                }
-    }
-    
-    func cleanReminderNotification() {
-        var dateComponents = DateComponents()
+        content.title = "Reminder to hydrate!"
+        content.body = "Take a sip of water to meet your daily goal."
+        content.badge = 1
         
-        //reminds the user to clean at 8am on Sundays
-        dateComponents.day = 4
-        dateComponents.hour = 14
-        dateComponents.minute = 48
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents,
-                                                            repeats: true)
-        let content = UNMutableNotificationContent()
-                content.title = "Cleaning time!"
-                content.body = "Secure your cap on the bottle and initiate cleaning withing the app."
-                content.badge = 1
-
-                //Create the actual notification
-                let request = UNNotificationRequest(identifier: "cleannotif",
-                                                    content: content,
-                                                    trigger: trigger)
-                //Add our notification to the notification center
-                UNUserNotificationCenter.current().add(request)
-                {
-                    (error) in
-                    if let error = error
-                    {
-                        print("Uh oh! We had an error: \(error)")
-                    }
-                }
+        //Create the actual notification
+        let request = UNNotificationRequest(identifier: "drinknotif", content: content, trigger: trigger)
+        //Add our notification to the notification center
+        UNUserNotificationCenter.current().add(request)
+        {
+            (error) in
+            if let error = error
+            {
+                print("Uh oh! We had an error: \(error)")
+            }
+        }
     }
 }
 

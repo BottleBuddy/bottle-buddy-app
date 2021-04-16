@@ -17,7 +17,7 @@ struct BluetoothConnectView: View {
     @State var tof_distance = UInt16()
     @State var imu_reading = String()
     //var bluetooth = Bluetooth.init()
-    @EnvironmentObject var bluetooth: Bluetooth
+    //@EnvironmentObject var bluetooth: Bluetooth
     //@State var connected = false
     @State var connected_status = "Not Connected To Buddy :("
     let notifContent = UNMutableNotificationContent()
@@ -137,18 +137,8 @@ struct BluetoothConnectView: View {
     func connectBuddy(){
         bluetooth.scanForDevices()
         
-        //bluetooth.connectDevice()
-        //if(foundPeripheral.state == .connected){
-        //connected = true
-        // }
     }
 }
-
-//struct Buddy: Identifiable {
-//    var id = UUID()
-//    var bottleID: String = ""
-//    var connected: Bool = false
-//}
 
 struct BluetoothConnectView_Previews: PreviewProvider {
     static var previews: some View {

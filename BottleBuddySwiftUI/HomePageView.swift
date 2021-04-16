@@ -12,7 +12,7 @@ import RealmSwift
 
 struct HomePage: View {
     @EnvironmentObject var state: AppState
-    @EnvironmentObject var bluetooth: Bluetooth
+   // @EnvironmentObject var bluetooth: Bluetooth
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     @State var selected = 0
     var colors = [Color(.white)]
@@ -38,10 +38,7 @@ struct HomePage: View {
         ScrollView(.vertical, showsIndicators: false) {
             
             VStack{
-                
                 HStack{
-                    //TODO: update with dynamic user's name
-                    
                     Text("Welcome " + self.name + "!")
                         
                         .font(.title)
@@ -82,8 +79,6 @@ struct HomePage: View {
                             }
                         }
 
-                    
-                    
                     HStack(spacing: 15){
                         
                         ForEach(self.waterLogData){waterLogEntry in
@@ -203,19 +198,6 @@ struct HomePage: View {
                         .cornerRadius(10)
                 }
                 .padding()
-//                Button(action: {
-//                    //TODO: initiate cleaning protocol on button click
-//                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 5)
-//
-//                }){
-//                    Text("Start Cleaning")
-//                        .foregroundColor(.white)
-//                        .padding(.vertical)
-//                        .frame(width: UIScreen.main.bounds.width - 50)
-//                }
-//                .background(Color(UIColor(named: "BB_DarkBlue")!))
-//                .cornerRadius(10)
-//                .padding()
             }
         }
         .background(Color(bblightblue!).ignoresSafeArea())

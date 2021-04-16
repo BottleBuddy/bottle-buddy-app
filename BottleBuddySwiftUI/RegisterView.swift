@@ -10,8 +10,11 @@ import Firebase
 
 var registeredUser: RegisterView? = nil
 
+var bluetooth = Bluetooth()
+
 struct RegisterView: View {
-    
+    //@ObservedObject var bluetooth = Bluetooth()
+    @EnvironmentObject var state: AppState
     @State var color = Color.black.opacity(0.7)
     @State var email = ""
     @State var fullName = ""
@@ -171,11 +174,13 @@ struct RegisterView: View {
                         
                         return
                     }
-                    print("success")
+                    print("registered successly")
                     registeredUser = self
                     UserDefaults.standard.set(true, forKey: "status")
                     NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
                 }
+                print("about to scan for bluetooth devices upon registering")
+                bluetooth.scanForDevices()
             }
             else{
                 self.error = "Password mismatch"

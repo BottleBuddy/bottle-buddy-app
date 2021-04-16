@@ -16,6 +16,8 @@ let bbdarkblue = UIColor(named: "BB_DarkBlue")
 let bblightblue = UIColor(named: "BB_LightBlue")
 let bbyellow = UIColor(named: "BB_Yellow")
 
+
+
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
         Dashboard()
@@ -24,7 +26,7 @@ struct DashboardView_Previews: PreviewProvider {
 
 struct Dashboard : View {
     @ObservedObject var state = AppState()
-    @ObservedObject var bluetooth = Bluetooth()
+    //@ObservedObject var bluetooth : Bluetooth
     @State var error: Error?
     @State var firstDashboard: Bool = true
     

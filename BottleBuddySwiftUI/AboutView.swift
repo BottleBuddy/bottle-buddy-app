@@ -41,6 +41,7 @@ struct GridView: View {
                 ZStack(alignment: Alignment(horizontal: .trailing, vertical: .top)) {
                     VStack(alignment: .leading, spacing: 20){
                         Text(profile.name)
+                            .bold()
                         Text(profile.info)
                         Image(profile.image)
                             .scaledToFit()

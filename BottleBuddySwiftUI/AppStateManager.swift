@@ -58,7 +58,10 @@ class AppState: ObservableObject {
                 
                 if realm.objects(userObject.self).count == 0 {
                     try! realm.write {
-                        realm.add(userObject(uid: self.partitionValue, email: registeredUser!.email, name: registeredUser!.fullName, bottleSize: registeredUser!.bottleSize, bottleBrandName: registeredUser!.bottleBrandName))
+                        realm.add(userObject(uid: self.partitionValue, email: registeredUser!.email,
+                            name: registeredUser!.fullName,
+                            bottleSize: registeredUser!.bottleSize,
+                            bottleBrandName: registeredUser!.bottleBrandName))
                     }
                 }
                 

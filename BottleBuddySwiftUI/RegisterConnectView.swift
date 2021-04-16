@@ -12,13 +12,13 @@ import Foundation
 import UserNotifications
 
 struct RegisterConnectView: View {
+    
+    @EnvironmentObject var state: AppState
+    
     let bblightblue = UIColor(named: "BB_LightBlue")
     let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
     @State var tof_distance = UInt16()
     @State var imu_reading = String()
-    //var bluetooth = Bluetooth.init()
-    @EnvironmentObject var bluetooth: Bluetooth
-    //@State var connected = false
     @State var connected_status = "Not Connected To Buddy :("
     let notifContent = UNMutableNotificationContent()
     @ObservedObject var notifcation = NotificationManager()
@@ -59,16 +59,6 @@ struct RegisterConnectView: View {
                         .cornerRadius(10)
                 }
                 .padding()
-                
-                Button(action: {}) {
-                    Text("Continue")
-                        .foregroundColor(.white)
-                        .padding(.vertical)
-                        .frame(width: UIScreen.main.bounds.width - 50)
-                        .background(Color(UIColor(named: "BB_DarkBlue")!))
-                        .cornerRadius(10)
-                }
-                .padding()
 
             }
             .background(Color(bblightblue!).ignoresSafeArea())
@@ -80,11 +70,6 @@ struct RegisterConnectView: View {
     }
     func connectBuddy(){
         bluetooth.scanForDevices()
-        
-        //bluetooth.connectDevice()
-        //if(foundPeripheral.state == .connected){
-        //connected = true
-        // }
     }
 }
 

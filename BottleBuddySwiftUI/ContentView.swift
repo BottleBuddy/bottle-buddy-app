@@ -131,9 +131,7 @@ struct Login : View {
                     }
                 }
                 .padding(.top, 20)
-                Button(action: {
-                    self.verify()
-                }) {
+                Button(action: {self.verify()}) {
                     Text("Log in")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -180,7 +178,6 @@ struct Login : View {
             }
         }
         else{
-            
             self.error = "Please fill all the contents properly"
             self.alert.toggle()
         }

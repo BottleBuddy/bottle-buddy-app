@@ -37,7 +37,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var dataRecieved = Data()
     
     var sendingEOM :Bool = false   //sending end of message
-    var connected = false
+    @Published var connected = false
     var tofValue = Data()
     var IMUxValue = Data()
     var IMUyValue = Data()

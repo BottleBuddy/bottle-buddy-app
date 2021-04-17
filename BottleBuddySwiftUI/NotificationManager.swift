@@ -22,8 +22,10 @@ class NotificationManager: ObservableObject {
                 print("Notifications not permitted")
             }
         })
-        drinkNotification()
-        
+        drinkEarlyNotification()
+        drinkMidNotification()
+        drinkLateNotification()
+        drinkFinalNotification()
     }
     
     func sendNotification(title: String, subtitle: String?, body: String, launchIn: Double) {
@@ -48,21 +50,87 @@ class NotificationManager: ObservableObject {
     }
     
     
-    func drinkNotification() {
+    func drinkEarlyNotification() {
         var dateComponents = DateComponents()
         
         //reminds user at the top of every hour to drink water
-        dateComponents.minute = 0
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents,
-                                                    repeats: true)
+        dateComponents.hour = 9
+        dateComponents.minute = 5
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         let content = UNMutableNotificationContent()
         content.title = "Reminder to hydrate!"
         content.body = "Take a sip of water to meet your daily goal."
         content.badge = 1
+        let request = UNNotificationRequest(identifier: "drinkEarlyNotif", content: content, trigger: trigger)
+        //Add our notification to the notification center
+        UNUserNotificationCenter.current().add(request)
+        {
+            (error) in
+            if let error = error
+            {
+                print("Uh oh! We had an error: \(error)")
+            }
+        }
+    }
+    
+    func drinkMidNotification() {
+        var dateComponents = DateComponents()
         
-        //Create the actual notification
-        let request = UNNotificationRequest(identifier: "drinknotif", content: content, trigger: trigger)
+        //reminds user at the top of every hour to drink water
+        dateComponents.hour = 14
+        dateComponents.minute = 5
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let content = UNMutableNotificationContent()
+        content.title = "Reminder to hydrate!"
+        content.body = "Drink more water in the next hour to meet your 50% goal."
+        content.badge = 1
+        let request = UNNotificationRequest(identifier: "drinkMidNotif", content: content, trigger: trigger)
+        //Add our notification to the notification center
+        UNUserNotificationCenter.current().add(request)
+        {
+            (error) in
+            if let error = error
+            {
+                print("Uh oh! We had an error: \(error)")
+            }
+        }
+    }
+    
+    func drinkLateNotification() {
+        var dateComponents = DateComponents()
+        
+        //reminds user at the top of every hour to drink water
+        dateComponents.hour = 17
+        dateComponents.minute = 5
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let content = UNMutableNotificationContent()
+        content.title = "Reminder to hydrate!"
+        content.body = "Drink more water in the next hour to meet your 75% goal."
+        content.badge = 1
+        let request = UNNotificationRequest(identifier: "drinkLateNotif", content: content, trigger: trigger)
+        //Add our notification to the notification center
+        UNUserNotificationCenter.current().add(request)
+        {
+            (error) in
+            if let error = error
+            {
+                print("Uh oh! We had an error: \(error)")
+            }
+        }
+    }
+    
+    func drinkFinalNotification() {
+        var dateComponents = DateComponents()
+        
+        //reminds user at the top of every hour to drink water
+        dateComponents.hour = 20
+        dateComponents.minute = 5
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let content = UNMutableNotificationContent()
+        content.title = "Reminder to hydrate!"
+        content.body = "Drink more water in the next hour to meet 100% of your daily goal!"
+        content.badge = 1
+        let request = UNNotificationRequest(identifier: "drinkFinalNotif", content: content, trigger: trigger)
         //Add our notification to the notification center
         UNUserNotificationCenter.current().add(request)
         {

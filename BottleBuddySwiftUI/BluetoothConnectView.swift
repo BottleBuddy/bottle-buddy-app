@@ -13,7 +13,7 @@ import UserNotifications
 
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
-    let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
+    //let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
     @State var tof_distance = UInt16()
     @State var imu_reading = String()
     //var bluetooth = Bluetooth.init()
@@ -42,11 +42,9 @@ struct BluetoothConnectView: View {
                 //                }
                 //                .padding()
                 Text("\(connected_status)")
-                    .onReceive(timer){time in
-                        if(bluetooth.connected){
-                            connected_status = "Connected To Buddy!"
-                        }
-                    }
+                    
+                        
+                    
                     .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
                     .padding(.vertical)
                 Button(action: {connectBuddy()}) {
@@ -129,7 +127,15 @@ struct BluetoothConnectView: View {
             }
             .background(Color(bblightblue!).ignoresSafeArea())
             .frame(maxWidth: .infinity)
-            //.onAppear{bluetooth.initializeStream()}
+            .onAppear{
+                if(bluetooth.connected){
+                    connected_status = "Connected To Buddy!"
+                }
+                else {
+                    connected_status = "Not Connected"
+                }
+            
+            }
         }
         .background(Color(bblightblue!).ignoresSafeArea())
         .frame(maxWidth: .infinity)

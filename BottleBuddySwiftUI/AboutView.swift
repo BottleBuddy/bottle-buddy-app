@@ -44,10 +44,10 @@ struct GridView: View {
                             .bold()
                         Text(profile.info)
                         Image(profile.image)
-                            .scaledToFit()
                             .padding()
-                            .clipShape(Rectangle())
+                            
                     }
+                    .scaledToFit()
                     
                 }
                 .padding()

@@ -193,7 +193,9 @@ struct HomePage: View {
                     
                     self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
                     
-                bluetooth.writeData()}){
+                    bluetooth.writeData()
+                    
+                }){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -204,10 +206,58 @@ struct HomePage: View {
                 .padding()
             }
         }
+        .onAppear{checkProgress()}
         .background(Color(bblightblue!).ignoresSafeArea())
         
     }
     
+    func checkProgress() {
+        let hour = Calendar.current.component(.hour, from: Date())
+        print(String(self.stats?.getPercent() ?? 0))
+        
+        if ((self.stats?.getPercent() ?? 0)*100 > 0.25)  && (hour > 9) && (hour < 12){
+            UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
+                 for notificationRequest:UNNotificationRequest in notificationRequests {
+                    print(notificationRequest.identifier)
+                }
+            }
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkEarlyNotif"])
+            
+        }
+        else if ((self.stats?.getPercent() ?? 0)*100 > 0.50) && (hour > 12) && (hour < 15){
+            UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
+                 for notificationRequest:UNNotificationRequest in notificationRequests {
+                    print(notificationRequest.identifier)
+                }
+            }
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkMidNotif"])
+            
+        }
+        else if ((self.stats?.getPercent() ?? 0) > 0.75)  && (hour > 15) && (hour < 19){
+            UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
+                 for notificationRequest:UNNotificationRequest in notificationRequests {
+                    print(notificationRequest.identifier)
+                }
+            }
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkLateNotif"])
+            
+        }
+        else if ((self.stats?.getPercent() ?? 0)*100 > 1) && (hour >= 20){
+            UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
+                 for notificationRequest:UNNotificationRequest in notificationRequests {
+                    print(notificationRequest.identifier)
+                }
+            }
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkFinalNotif"])
+            
+            
+        }
+        UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
+             for notificationRequest:UNNotificationRequest in notificationRequests {
+                print(notificationRequest.identifier)
+            }
+        }
+    }
     // calculating Type...
     
     func getType(val: String)->String{
@@ -310,9 +360,6 @@ struct HomePage: View {
     struct HomePage_Previews: PreviewProvider {
         static var previews: some View {
             HomePage()
-            
         }
     }
-
-
 }

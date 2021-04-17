@@ -143,9 +143,6 @@ struct EditProfileView: View {
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar.current
         
-        //reminds the user to clean at 8am on Sundays
-
-        //dateComponents.weekday = 5
         let selectedHour = Calendar.current.dateComponents([.hour], from: time).hour
         let selectedMinute = Calendar.current.dateComponents([.minute], from: time).minute
        
@@ -168,9 +165,6 @@ struct EditProfileView: View {
         // Register the notification type.
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.setNotificationCategories([meetingInviteCategory])
-        
-        
-        
         
         let trigger = UNCalendarNotificationTrigger(dateMatching:dateComponents, repeats: true)
         let content = UNMutableNotificationContent()

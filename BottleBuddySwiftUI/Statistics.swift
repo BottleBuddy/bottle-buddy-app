@@ -14,11 +14,13 @@ class Statistics {
     var state: AppState
     let formatter = DateFormatter()
     var totalGoal: Int
-    let healthStore: HealthStore? = HealthStore()
+    var healthStore: HealthStore?
     var dailyTotal: Double = 0.0
+    var steps2: Double = 0.0
     
     init(state: AppState){
         self.state = state
+        self.healthStore = HealthStore()
         
         if(state.userData!.weight == "") {
             baseGoal = 80
@@ -49,6 +51,23 @@ class Statistics {
             i = i + 1
         }
         return self.sevenDayLog
+    }
+    
+    func getDaysLabels() -> Array<String> {
+        var labels: Array<String> = Array<String>()
+        
+        var date = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        var i = 0
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "E"
+        
+        while i < 7 {
+            date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+            labels.append(dateFormatter.string(from: date))
+            i = i + 1
+        }
+        
+        return labels
     }
     
     func getDailyTotal() -> Double {
@@ -88,22 +107,24 @@ class Statistics {
     }
     
     func numSteps() -> Int{
-        var steps = 0
         if let healthStore = healthStore{
             healthStore.requestAuthorization { success in
                 if(success){
                     healthStore.calculateSteps{statisticsCollection in
                         if let statisticsCollection = statisticsCollection{
-                            print(statisticsCollection)
-                            let data = statisticsCollection.statistics(for: Date())
-                            let count = data?.sumQuantity()?.doubleValue(for: .count())
-                            steps = Int(count ?? 0)
+                            let startDate = Calendar.current.date(byAdding: .day , value: -1, to: Date())!
+                            let endDate = Date()
+                            
+                            statisticsCollection.enumerateStatistics(from: startDate, to: endDate) { (statistics,stop) in
+                                self.steps2 = statistics.sumQuantity()?.doubleValue(for: .count()) ?? 10
+                            }
                         }
                     }
                 }
             }
         }
-        return steps
+        
+        return Int(steps2)
     }
 }
 

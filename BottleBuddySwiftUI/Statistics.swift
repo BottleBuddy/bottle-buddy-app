@@ -100,8 +100,6 @@ class Statistics {
         }
         
         let steps = numSteps(day: day)
-        print("steps:")
-        print(steps)
         
         if(steps >= 5000 && steps < 8000){
             totalGoal += 5

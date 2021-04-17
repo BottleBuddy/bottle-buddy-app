@@ -142,53 +142,90 @@ struct HomePage: View {
                 // stats Grid....
                 
                 LazyVGrid(columns: columns,spacing: 30){
-                    
-                    ForEach(stats_Data){stat in
-                        VStack(spacing: 32){
-                            HStack{
-                                Text(stat.title)
-                                    .font(.system(size: 22))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                Spacer(minLength: 0)
-                            }
-                            
-                            // Ring...
-                            
-                            ZStack{
-                                Circle()
-                                    .trim(from: 0, to: 1)
-                                    .stroke(stat.color.opacity(0.05), lineWidth: 10)
-                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-                                
-                                Circle()
-                                    .trim(from: 0, to: CGFloat(self.stats?.getPercent(day: "Today") ?? 0))
-                                    .stroke(stat.color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-                                
-                                Text(getPercent(val: self.stats?.getPercent(day: "Today") ?? 0) + "%")
-                                    .font(.system(size: 22))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(stat.color)
-                                    .rotationEffect(.init(degrees: 90))
-                            }
-                            .rotationEffect(.init(degrees: -90))
-                            
-                            Text(String(self.stats?.getDailyTotal(day: "Today") ?? 0) + " " + getType(val: stat.title))
+                    VStack(spacing: 32){
+                        HStack{
+                            Text("Water Intake Today")
                                 .font(.system(size: 22))
-                                .foregroundColor(.white)
                                 .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            Spacer(minLength: 0)
                         }
-                        .padding()
-                        .background(Color.white.opacity(0.06))
-                        .cornerRadius(15)
-                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 0)
                         
+                        // Ring...
+                        
+                        ZStack{
+                            Circle()
+                                .trim(from: 0, to: 1)
+                                .stroke(Color(.yellow).opacity(0.05), lineWidth: 10)
+                                .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+                            
+                            Circle()
+                                .trim(from: 0, to: CGFloat(self.stats?.getPercent(day: "Today") ?? 0))
+                                .stroke(Color(.yellow), style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+                            
+                            Text(getPercent(val: self.stats?.getPercent(day: "Today") ?? 0) + "%")
+                                .font(.system(size: 22))
+                                .fontWeight(.bold)
+                                .foregroundColor(Color(.yellow))
+                                .rotationEffect(.init(degrees: 90))
+                        }
+                        .rotationEffect(.init(degrees: -90))
+                        
+                        Text(String(self.stats?.getDailyTotal(day: "Today") ?? 0) + " oz")
+                            .font(.system(size: 22))
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
                     }
                     .padding()
-                    .cornerRadius(20)
-                    .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
+                    .background(Color.white.opacity(0.06))
+                    .cornerRadius(15)
+                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 0)
+                    
+                    VStack(spacing: 32){
+                        HStack{
+                            Text("Water Intake Yesterday")
+                                .font(.system(size: 22))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            Spacer(minLength: 0)
+                        }
+                        
+                        // Ring...
+                        
+                        ZStack{
+                            Circle()
+                                .trim(from: 0, to: 1)
+                                .stroke(Color(.yellow).opacity(0.05), lineWidth: 10)
+                                .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+                            
+                            Circle()
+                                .trim(from: 0, to: CGFloat(self.stats?.getPercent(day: "Yesterday") ?? 0))
+                                .stroke(Color(.yellow), style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+                            
+                            Text(getPercent(val: self.stats?.getPercent(day: "Yesterday") ?? 0) + "%")
+                                .font(.system(size: 22))
+                                .fontWeight(.bold)
+                                .foregroundColor(Color(.yellow))
+                                .rotationEffect(.init(degrees: 90))
+                        }
+                        .rotationEffect(.init(degrees: -90))
+                        
+                        Text(String(self.stats?.getDailyTotal(day: "Yesterday") ?? 0) + " oz")
+                            .font(.system(size: 22))
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.06))
+                    .cornerRadius(15)
+                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 0)
                 }
+                .padding()
+                .cornerRadius(20)
+                .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
+                
                 Button(action: {
                         
                         self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)

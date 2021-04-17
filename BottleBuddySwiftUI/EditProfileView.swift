@@ -27,14 +27,16 @@ final class userObject: Object, ObjectKeyIdentifiable {
     @objc dynamic var sex = 0
     @objc dynamic var weight = ""
     
-    convenience init(uid: String, email: String, name: String, bottleSize: Int, bottleBrandName: Int, weight: String){
+    convenience init(uid: String){
         self.init()
         self.user_id = uid
-        self.email = email
-        self.name = name
-        self.bottleSize = bottleSize
-        self.bottleBrandName = bottleBrandName
-        self.weight = weight
+        self.email = registeredUser?.email ?? ""
+        self.name = registeredUser?.fullName ?? ""
+        self.bottleSize = registeredUser?.bottleSize ?? 0
+        self.bottleBrandName = registeredUser?.bottleBrandName ?? 0
+        self.weight = registeredUser?.weight ?? ""
+        self.ageOfUser = registeredUser?.ageOfUser ?? ""
+        self.sex = registeredUser?.sex ?? 0
     }
     
     override static func primaryKey() -> String? {
@@ -70,14 +72,44 @@ struct EditProfileView: View {
                     .foregroundColor(.white)
                 Form{
                     Section(header: Text("About You")){
-                        Text("Name: " + self.name)
-                        TextField("Age: " + self.ageOfUser, text: $ageOfUser)
-                            .keyboardType(.numberPad)
-                        TextField("Weight: " + self.weight, text: $weight)
-                            .keyboardType(.numberPad)
-                        Text("Sex: " + String(self.sex))
-                        Text("Bottle brand: " + String(self.bottleBrandName))
-                        Text("Bottle size: " + String(self.bottleSize))
+                        Text(self.name)
+                        HStack{
+                            Text("Age")
+                            Spacer()
+                            TextField(String(self.ageOfUser), text: $ageOfUser)
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                                .foregroundColor(Color.gray)
+                            Text("Years")
+                                .foregroundColor(Color.gray)
+                        }
+                        HStack{
+                            Text("Weight")
+                            Spacer()
+                            TextField(String(self.weight), text: $weight)
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                                .foregroundColor(Color.gray)
+                            Text("lbs")
+                                .foregroundColor(Color.gray)
+                        }
+                        Picker(selection: $sex, label: Text("Sex")){
+                            Text("Male").tag(1)
+                            Text("Female").tag(2)
+                            Text("Nonbinary").tag(3)
+                        }
+                        Picker(selection: $bottleBrandName, label: Text("Bottle Brand")){
+                            Text("Yeti").tag(1)
+                            Text("Hydroflask").tag(2)
+                            Text("Thermoflask").tag(3)
+                            Text("Other").tag(4)
+                        }
+                        Picker(selection: $bottleSize, label: Text("Bottle Size")){
+                            Text("16 oz").tag(1)
+                            Text("18 oz").tag(2)
+                            Text("26 oz").tag(3)
+                            Text("36 oz").tag(4)
+                        }
                         Picker(selection: $cleanDate, label: Text("Day for cleaning reminders")){
                             Text("Sunday").tag(1)
                             Text("Monday").tag(2)

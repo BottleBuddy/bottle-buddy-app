@@ -53,7 +53,7 @@ class NotificationManager: ObservableObject {
     func drinkEarlyNotification() {
         var dateComponents = DateComponents()
         
-        //reminds user at the top of every hour to drink water
+        //9:05am reminder to drink
         dateComponents.hour = 9
         dateComponents.minute = 5
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
@@ -76,7 +76,7 @@ class NotificationManager: ObservableObject {
     func drinkMidNotification() {
         var dateComponents = DateComponents()
         
-        //reminds user at the top of every hour to drink water
+        //2:05 reminder to drink
         dateComponents.hour = 14
         dateComponents.minute = 5
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
@@ -99,7 +99,7 @@ class NotificationManager: ObservableObject {
     func drinkLateNotification() {
         var dateComponents = DateComponents()
         
-        //reminds user at the top of every hour to drink water
+        //5:05 reminder to drink
         dateComponents.hour = 17
         dateComponents.minute = 5
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
@@ -122,7 +122,7 @@ class NotificationManager: ObservableObject {
     func drinkFinalNotification() {
         var dateComponents = DateComponents()
         
-        //reminds user at the top of every hour to drink water
+        //8:05 reminder to drink
         dateComponents.hour = 20
         dateComponents.minute = 5
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)

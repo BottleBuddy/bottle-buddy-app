@@ -12,7 +12,7 @@ import RealmSwift
 
 struct HomePage: View {
     @EnvironmentObject var state: AppState
-   // @EnvironmentObject var bluetooth: Bluetooth
+    // @EnvironmentObject var bluetooth: Bluetooth
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     @State var selected = 0
     var colors = [Color(.white)]
@@ -27,7 +27,7 @@ struct HomePage: View {
     @State var stats: Statistics? = nil
     
     @ObservedObject var notifcation = NotificationManager()
-
+    
     var body: some View {
         
         ScrollView(.vertical, showsIndicators: false) {
@@ -48,7 +48,7 @@ struct HomePage: View {
                             .renderingMode(.template)
                             .foregroundColor(.white)
                     }
-                   
+                    
                 }
                 .padding()
                 .onReceive(timer, perform: { _ in
@@ -61,7 +61,7 @@ struct HomePage: View {
                     }
                 })
                 VStack{
-                    let dailyGoal : String = String(self.stats?.getTotalGoal() ?? 0)
+                    let dailyGoal : String = String(self.stats?.getTotalGoal(day: "Today") ?? 0)
                     Text("We calculated your suggested water consumption for today to be " + dailyGoal + " oz")
                         .font(.body)
                         .foregroundColor(.white)
@@ -82,7 +82,7 @@ struct HomePage: View {
                                 getWaterLog(stats: self.stats!)
                             }
                         }
-
+                    
                     HStack(spacing: 15){
                         
                         ForEach(self.waterLogData){waterLogEntry in
@@ -118,7 +118,7 @@ struct HomePage: View {
                             }
                         }
                         .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
-
+                        
                     }
                 }
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
@@ -142,55 +142,91 @@ struct HomePage: View {
                 // stats Grid....
                 
                 LazyVGrid(columns: columns,spacing: 30){
-                    
-                    ForEach(stats_Data){stat in
-                        VStack(spacing: 32){
-                            HStack{
-                                Text(stat.title)
-                                    .font(.system(size: 22))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                Spacer(minLength: 0)
-                            }
-                            
-                            // Ring...
-                            
-                            ZStack{
-                                Circle()
-                                    .trim(from: 0, to: 1)
-                                    .stroke(stat.color.opacity(0.05), lineWidth: 10)
-                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-                                
-                                Circle()
-                                    .trim(from: 0, to: CGFloat(self.stats?.getPercent() ?? 0))
-                                    .stroke(stat.color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                                    .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
-                                
-                                Text(getPercent(val: self.stats?.getPercent() ?? 0) + "%")
-                                    .font(.system(size: 22))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(stat.color)
-                                    .rotationEffect(.init(degrees: 90))
-                            }
-                            .rotationEffect(.init(degrees: -90))
-                            
-                            Text(String(self.stats?.getDailyTotal() ?? 0) + " " + getType(val: stat.title))
+                    VStack(spacing: 32){
+                        HStack{
+                            Text("Water Intake Today")
                                 .font(.system(size: 22))
-                                .foregroundColor(.white)
                                 .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            Spacer(minLength: 0)
                         }
-                        .padding()
-                        .background(Color.white.opacity(0.06))
-                        .cornerRadius(15)
-                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 0)
                         
+                        // Ring...
+                        
+                        ZStack{
+                            Circle()
+                                .trim(from: 0, to: 1)
+                                .stroke(Color(.yellow).opacity(0.05), lineWidth: 10)
+                                .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+                            
+                            Circle()
+                                .trim(from: 0, to: CGFloat(self.stats?.getPercent(day: "Today") ?? 0))
+                                .stroke(Color(.yellow), style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+                            
+                            Text(getPercent(val: self.stats?.getPercent(day: "Today") ?? 0) + "%")
+                                .font(.system(size: 22))
+                                .fontWeight(.bold)
+                                .foregroundColor(Color(.yellow))
+                                .rotationEffect(.init(degrees: 90))
+                        }
+                        .rotationEffect(.init(degrees: -90))
+                        
+                        Text(String(self.stats?.getDailyTotal(day: "Today") ?? 0) + " oz")
+                            .font(.system(size: 22))
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
                     }
                     .padding()
-                    .cornerRadius(20)
-                    .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
-                }
-                Button(action: {
+                    .background(Color.white.opacity(0.06))
+                    .cornerRadius(15)
+                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 0)
                     
+                    VStack(spacing: 32){
+                        HStack{
+                            Text("Water Intake Yesterday")
+                                .font(.system(size: 22))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            Spacer(minLength: 0)
+                        }
+                        
+                        // Ring...
+                        
+                        ZStack{
+                            Circle()
+                                .trim(from: 0, to: 1)
+                                .stroke(Color(.yellow).opacity(0.05), lineWidth: 10)
+                                .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+                            
+                            Circle()
+                                .trim(from: 0, to: CGFloat(self.stats?.getPercent(day: "Yesterday") ?? 0))
+                                .stroke(Color(.yellow), style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
+                            
+                            Text(getPercent(val: self.stats?.getPercent(day: "Yesterday") ?? 0) + "%")
+                                .font(.system(size: 22))
+                                .fontWeight(.bold)
+                                .foregroundColor(Color(.yellow))
+                                .rotationEffect(.init(degrees: 90))
+                        }
+                        .rotationEffect(.init(degrees: -90))
+                        
+                        Text(String(self.stats?.getDailyTotal(day: "Yesterday") ?? 0) + " oz")
+                            .font(.system(size: 22))
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.06))
+                    .cornerRadius(15)
+                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 0)
+                }
+                .padding()
+                .cornerRadius(20)
+                .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
+                
+                Button(action: {
                     self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
                     
                     bluetooth.writeData()
@@ -211,11 +247,12 @@ struct HomePage: View {
         
     }
     
+    //removes the appropriate of the 4 drink reminders based on consumption thus far and time of day
     func checkProgress() {
         let hour = Calendar.current.component(.hour, from: Date())
-        print(String(self.stats?.getPercent() ?? 0))
+        print(String(self.stats?.getPercent(day: "Today") ?? 0))
         
-        if ((self.stats?.getPercent() ?? 0)*100 > 0.25)  && (hour > 9) && (hour < 12){
+        if ((self.stats?.getPercent(day: "Today") ?? 0)*100 > 0.25)  && (hour > 9) && (hour < 12){
             UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
                  for notificationRequest:UNNotificationRequest in notificationRequests {
                     print(notificationRequest.identifier)
@@ -224,7 +261,7 @@ struct HomePage: View {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkEarlyNotif"])
             
         }
-        else if ((self.stats?.getPercent() ?? 0)*100 > 0.50) && (hour > 12) && (hour < 15){
+        else if ((self.stats?.getPercent(day: "Today") ?? 0)*100 > 0.50) && (hour > 12) && (hour < 15){
             UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
                  for notificationRequest:UNNotificationRequest in notificationRequests {
                     print(notificationRequest.identifier)
@@ -233,7 +270,7 @@ struct HomePage: View {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkMidNotif"])
             
         }
-        else if ((self.stats?.getPercent() ?? 0) > 0.75)  && (hour > 15) && (hour < 19){
+        else if ((self.stats?.getPercent(day: "Today") ?? 0) > 0.75)  && (hour > 15) && (hour < 19){
             UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
                  for notificationRequest:UNNotificationRequest in notificationRequests {
                     print(notificationRequest.identifier)
@@ -242,7 +279,7 @@ struct HomePage: View {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkLateNotif"])
             
         }
-        else if ((self.stats?.getPercent() ?? 0)*100 > 1) && (hour >= 20){
+        else if ((self.stats?.getPercent(day: "Today") ?? 0)*100 > 1) && (hour >= 20){
             UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
                  for notificationRequest:UNNotificationRequest in notificationRequests {
                     print(notificationRequest.identifier)

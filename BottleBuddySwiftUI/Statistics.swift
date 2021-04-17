@@ -9,14 +9,14 @@ import Foundation
 import HealthKit
 
 class Statistics {
-    var sevenDayLog: Array<Int>? = nil
-    var baseGoal: Int
+    private var sevenDayLog: Array<Int>? = nil
+    private var baseGoal: Int
     var state: AppState
     let formatter = DateFormatter()
-    var totalGoal: Int
+    private var totalGoal: Int
     var healthStore: HealthStore?
-    var dailyTotal: Double = 0.0
-    var steps2: Double = 0.0
+    private var dailyTotal: Double = 0.0
+    private var steps2: Double = 0.0
     
     init(state: AppState){
         self.state = state

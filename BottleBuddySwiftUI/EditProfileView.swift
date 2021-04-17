@@ -73,10 +73,26 @@ struct EditProfileView: View {
                 Form{
                     Section(header: Text("About You")){
                         Text(self.name)
-                        TextField("Age " + String(self.ageOfUser), text: $ageOfUser)
-                            .keyboardType(.numberPad)
-                        TextField("Weight " + String(self.weight), text: $weight)
-                            .keyboardType(.numberPad)
+                        HStack{
+                            Text("Age")
+                            Spacer()
+                            TextField(String(self.ageOfUser), text: $ageOfUser)
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                                .foregroundColor(Color.gray)
+                            Text("Years")
+                                .foregroundColor(Color.gray)
+                        }
+                        HStack{
+                            Text("Weight")
+                            Spacer()
+                            TextField(String(self.weight), text: $weight)
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                                .foregroundColor(Color.gray)
+                            Text("lbs")
+                                .foregroundColor(Color.gray)
+                        }
                         Picker(selection: $sex, label: Text("Sex")){
                             Text("Male").tag(1)
                             Text("Female").tag(2)

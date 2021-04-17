@@ -53,6 +53,23 @@ class Statistics {
         return self.sevenDayLog
     }
     
+    func getDaysLabels() -> Array<String> {
+        var labels: Array<String> = Array<String>()
+        
+        var date = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        var i = 0
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "E"
+        
+        while i < 7 {
+            date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+            labels.append(dateFormatter.string(from: date))
+            i = i + 1
+        }
+        
+        return labels
+    }
+    
     func getDailyTotal() -> Double {
         let predicate = "date == " + "'" + String(formatter.string(from: Date())) + "'"
         self.dailyTotal = 0.0

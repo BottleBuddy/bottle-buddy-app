@@ -19,7 +19,6 @@ struct HomePage: View {
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
     let bblightblue = UIColor(named: "BB_LightBlue")
     let bbyellow = UIColor(named: "BB_Yellow")
-    //var waterLogData: [WaterLogEntry]
     @State var waterLogData = [WaterLogEntry]()
     @State var alert = false
     let notifContent = UNMutableNotificationContent()
@@ -28,8 +27,7 @@ struct HomePage: View {
     @State var stats: Statistics? = nil
     
     @ObservedObject var notifcation = NotificationManager()
-    
-    
+
     var body: some View {
         
         ScrollView(.vertical, showsIndicators: false) {
@@ -66,7 +64,7 @@ struct HomePage: View {
                 // Bar Chart...
                 
                 VStack(alignment: .leading, spacing: 25) {
-                    Text("Daily Water Consumption")
+                    Text("This Week's Water Consumption")
                         .font(.system(size: 22))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -255,10 +253,11 @@ struct HomePage: View {
     
     func getWaterLog(stats: Statistics){
         var  i = 0
+        let labels = stats.getDaysLabels()
         
         waterLogData.removeAll()
         for volume in stats.getSevenDayLog()! {
-            self.waterLogData.append(WaterLogEntry(id: (i), day: "Day \(i)",
+            self.waterLogData.append(WaterLogEntry(id: (i), day: labels[i],
                                                    water_consumed:getHeight(value: String(volume))))
             i = i + 1
         }

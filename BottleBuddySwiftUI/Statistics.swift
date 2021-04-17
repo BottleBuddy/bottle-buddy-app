@@ -88,22 +88,21 @@ class Statistics {
     }
     
     func numSteps() -> Int{
-        var steps = 0
-        if let healthStore = healthStore{
-            healthStore.requestAuthorization { success in
-                if(success){
-                    healthStore.calculateSteps{statisticsCollection in
-                        if let statisticsCollection = statisticsCollection{
-                            print(statisticsCollection)
-                            let data = statisticsCollection.statistics(for: Date())
-                            let count = data?.sumQuantity()?.doubleValue(for: .count())
-                            steps = Int(count ?? 0)
-                        }
-                    }
-                }
-            }
-        }
-        return steps
+        let steps: Double = self.healthStore!.calculateSteps()
+        
+//        self.healthStore?.requestAuthorization { success in
+//            if(success){
+//                self.healthStore?.calculateSteps{statisticsCollection in
+//                    if let statisticsCollection = statisticsCollection{
+//                        print(statisticsCollection)
+//                        let data = statisticsCollection.statistics(for: Date())
+//                        let count = data?.sumQuantity()?.doubleValue(for: .count())
+//                        steps = Int(count ?? 0)
+//                    }
+//                }
+//            }
+        //}
+        return Int(steps)
     }
 }
 

@@ -50,6 +50,7 @@ struct HomePage: View {
                             .renderingMode(.template)
                             .foregroundColor(.white)
                     }
+                   
                 }
                 .padding()
                 .onReceive(timer, perform: { _ in
@@ -61,7 +62,12 @@ struct HomePage: View {
                         }
                     }
                 })
-
+                VStack{
+                    let dailyGoal : String = String(self.stats?.getTotalGoal() ?? 0)
+                    Text("We calculated your suggested water consumption for today to be " + dailyGoal + " oz")
+                        .font(.body)
+                        .foregroundColor(.white)
+                }
                 
                 // Bar Chart...
                 
@@ -209,7 +215,7 @@ struct HomePage: View {
     func getType(val: String)->String{
         
         switch val {
-        case "Water Intake Today": return "L"
+        case "Water Intake Today": return "oz"
         case "Days Until Cleaning": return "Days"
         default: return "X"
         }

@@ -18,7 +18,7 @@ struct AboutView: View {
                 .foregroundColor(.white)
             Text("We are a group of Electrical and Computer Engineering seniors from UT Austin. Our passion for health, fitness, and technology resulted in the BottleBuddy!")
                 .foregroundColor(.white)
-                .padding(.vertical)
+                .padding()
             GridView(profileData: profileData)
         }
         .background(Color(bblightblue!).ignoresSafeArea())

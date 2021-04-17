@@ -45,6 +45,10 @@ struct RegisterView: View {
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(.black)
+                Text("We require your bottle type, bottle size, your age, sex, and weight in order to personalize your water intake suggestions.")
+                    .font(.body)
+                    .foregroundColor(.white)
+                    .padding()
                 Form{
                     TextField("Email", text: self.$email)
                         .autocapitalization(.none)
@@ -165,7 +169,12 @@ struct RegisterView: View {
 
     
     func register(){
-        if self.email != ""{
+        if self.email != "" &&
+            self.bottleBrandName != 0 &&
+            self.bottleSize != 0 &&
+            self.weight != "" &&
+            self.ageOfUser != "" &&
+            self.sex != 0{
             if self.pass == self.repass{
                 Auth.auth().createUser(withEmail: self.email, password: self.pass) { (res, err) in
                     if err != nil{
@@ -188,7 +197,7 @@ struct RegisterView: View {
             }
         }
         else{
-            self.error = "Please fill all the contents properly"
+            self.error = "Please fill all fields"
             self.alert.toggle()
         }
     }

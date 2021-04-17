@@ -126,8 +126,8 @@
             filePath = "BottleBuddySwiftUI/HomePageView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -206,8 +206,8 @@
             filePath = "BottleBuddySwiftUI/RegisterView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "register()"
             landmarkType = "7">
          </BreakpointContent>
@@ -222,8 +222,8 @@
             filePath = "BottleBuddySwiftUI/RegisterView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
             landmarkName = "register()"
             landmarkType = "7">
          </BreakpointContent>

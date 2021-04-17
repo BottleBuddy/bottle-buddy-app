@@ -12,7 +12,7 @@ import RealmSwift
 
 struct HomePage: View {
     @EnvironmentObject var state: AppState
-   // @EnvironmentObject var bluetooth: Bluetooth
+    // @EnvironmentObject var bluetooth: Bluetooth
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     @State var selected = 0
     var colors = [Color(.white)]
@@ -27,7 +27,7 @@ struct HomePage: View {
     @State var stats: Statistics? = nil
     
     @ObservedObject var notifcation = NotificationManager()
-
+    
     var body: some View {
         
         ScrollView(.vertical, showsIndicators: false) {
@@ -48,7 +48,7 @@ struct HomePage: View {
                             .renderingMode(.template)
                             .foregroundColor(.white)
                     }
-                   
+                    
                 }
                 .padding()
                 .onReceive(timer, perform: { _ in
@@ -61,7 +61,7 @@ struct HomePage: View {
                     }
                 })
                 VStack{
-                    let dailyGoal : String = String(self.stats?.getTotalGoal() ?? 0)
+                    let dailyGoal : String = String(self.stats?.getTotalGoal(day: "Today") ?? 0)
                     Text("We calculated your suggested water consumption for today to be " + dailyGoal + " oz")
                         .font(.body)
                         .foregroundColor(.white)
@@ -82,7 +82,7 @@ struct HomePage: View {
                                 getWaterLog(stats: self.stats!)
                             }
                         }
-
+                    
                     HStack(spacing: 15){
                         
                         ForEach(self.waterLogData){waterLogEntry in
@@ -118,7 +118,7 @@ struct HomePage: View {
                             }
                         }
                         .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
-
+                        
                     }
                 }
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
@@ -162,11 +162,11 @@ struct HomePage: View {
                                     .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
                                 
                                 Circle()
-                                    .trim(from: 0, to: CGFloat(self.stats?.getPercent() ?? 0))
+                                    .trim(from: 0, to: CGFloat(self.stats?.getPercent(day: "Today") ?? 0))
                                     .stroke(stat.color, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                     .frame(width: (UIScreen.main.bounds.width - 150) / 2, height: (UIScreen.main.bounds.width - 150) / 2)
                                 
-                                Text(getPercent(val: self.stats?.getPercent() ?? 0) + "%")
+                                Text(getPercent(val: self.stats?.getPercent(day: "Today") ?? 0) + "%")
                                     .font(.system(size: 22))
                                     .fontWeight(.bold)
                                     .foregroundColor(stat.color)
@@ -174,7 +174,7 @@ struct HomePage: View {
                             }
                             .rotationEffect(.init(degrees: -90))
                             
-                            Text(String(self.stats?.getDailyTotal() ?? 0) + " " + getType(val: stat.title))
+                            Text(String(self.stats?.getDailyTotal(day: "Today") ?? 0) + " " + getType(val: stat.title))
                                 .font(.system(size: 22))
                                 .foregroundColor(.white)
                                 .fontWeight(.bold)
@@ -190,10 +190,10 @@ struct HomePage: View {
                     .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
                 }
                 Button(action: {
-                    
-                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
-                    
-                bluetooth.writeData()}){
+                        
+                        self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
+                        
+                        bluetooth.writeData()}){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -313,6 +313,6 @@ struct HomePage: View {
             
         }
     }
-
-
+    
+    
 }

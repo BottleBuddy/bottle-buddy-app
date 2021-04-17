@@ -70,21 +70,27 @@ class Statistics {
         return labels
     }
     
-    func getDailyTotal() -> Double {
-        let predicate = "date == " + "'" + String(formatter.string(from: Date())) + "'"
-        self.dailyTotal = 0.0
-        state.waterReadings!.filter(predicate).forEach{waterReading in
-            self.dailyTotal = self.dailyTotal + Double(waterReading.water_level)!
-        }
+    func getDailyTotal(day: String) -> Double {
+        var dailyTotal: Double = 0.0
+        var dayString = ""
         
-        return self.dailyTotal
+        if(day == "Yesterday"){
+             dayString = String(formatter.string(from: Calendar.current.date(byAdding: .day , value: -1, to: Date())!)) + "'"
+        } else {
+            dayString = String(formatter.string(from: Date())) + "'"
+        }
+
+        state.waterReadings!.filter("date == " + "'" + dayString).forEach{waterReading in
+            dailyTotal = dailyTotal + Double(waterReading.water_level)!
+        }
+        return dailyTotal
     }
     
-    func getPercent() -> Double {
-        return getDailyTotal() / Double(getTotalGoal())
+    func getPercent(day: String) -> Double {
+        return getDailyTotal(day: day) / Double(getTotalGoal(day: day))
     }
     
-    func getTotalGoal() -> Int{
+    func getTotalGoal(day: String) -> Int{
         if(state.userData!.weight != "") {
             baseGoal  = Int(state.userData!.weight)! * 2/3
             totalGoal = baseGoal
@@ -93,7 +99,7 @@ class Statistics {
             totalGoal = 80
         }
         
-        let steps = numSteps()
+        let steps = numSteps(day: day)
         
         if(steps >= 5000 && steps < 8000){
             totalGoal += 5
@@ -106,15 +112,20 @@ class Statistics {
         return totalGoal
     }
     
-    func numSteps() -> Int{
+    func numSteps(day: String) -> Int{
         if let healthStore = healthStore{
             healthStore.requestAuthorization { success in
                 if(success){
                     healthStore.calculateSteps{statisticsCollection in
                         if let statisticsCollection = statisticsCollection{
-                            let startDate = Calendar.current.date(byAdding: .day , value: -1, to: Date())!
-                            let endDate = Date()
+                            var startDate = Date()
+                            var endDate = Date()
                             
+                            if(day == "Yesterday"){
+                                startDate = Calendar.current.date(byAdding: .day , value: -1, to: Date())!
+                                endDate = Calendar.current.date(byAdding: .day , value: -1, to: Date())!
+                            }
+
                             statisticsCollection.enumerateStatistics(from: startDate, to: endDate) { (statistics,stop) in
                                 self.steps2 = statistics.sumQuantity()?.doubleValue(for: .count()) ?? 10
                             }

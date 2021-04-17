@@ -5,7 +5,6 @@
 //  Created by Christopher Erattuparambil on 10/13/20.
 //  Copyright © 2020 Christopher Erattuparambil. All rights reserved.
 //
-
 import Foundation
 import HealthKit
 
@@ -43,18 +42,16 @@ class HealthStore{
             healthStore.execute(query)
         }
         
+        
     }
     
     func requestAuthorization(completion: @escaping (Bool) ->Void){
         
         let stepType = HKQuantityType.quantityType(forIdentifier:  HKQuantityTypeIdentifier.stepCount)!
-        let height = HKQuantityType.quantityType(forIdentifier: .height)!
-        let sex =  HKObjectType.characteristicType(forIdentifier: HKCharacteristicTypeIdentifier.biologicalSex)!
-        let mass =  HKSampleType.quantityType(forIdentifier: .bodyMass)!
         
         guard let healthStore = self.healthStore else{return completion(false)}
         
-        healthStore.requestAuthorization(toShare: [], read: [stepType,height, sex ,mass]) { (success, error) in
+        healthStore.requestAuthorization(toShare: [], read: [stepType]) { (success, error) in
             completion(success)
         }
     }
@@ -67,14 +64,3 @@ extension Date {
         return Calendar(identifier: .iso8601).date(from: Calendar(identifier: .iso8601).dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
     }
 }
-
-struct Step: Identifiable {
-    let id = UUID()
-    let count: Int
-    let date: Date
-}
-    
-
-
-
-

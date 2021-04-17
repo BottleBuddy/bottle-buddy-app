@@ -92,7 +92,9 @@ struct Dashboard : View {
                     self.error = nil
                     state.loginPublisher.send($0)
                 }).store(in: &state.cancellables)
+                
                 bluetooth.setState(state: state)
+                
                 firstDashboard = false
             }
         }.disabled(state.shouldIndicateActivity)

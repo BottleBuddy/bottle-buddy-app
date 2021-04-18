@@ -53,22 +53,22 @@ struct Dashboard : View {
                 .environmentObject(state)
                 .environmentObject(bluetooth)
             
-            waterReadingsView()
-                .tabItem{
-                    VStack{
-                        Image(systemName:"star")
-                        Text("Water Readings")
-                    }
-                }.tag(3)
-                .environmentObject(state)
-                .environmentObject(bluetooth)
+//            waterReadingsView()
+//                .tabItem{
+//                    VStack{
+//                        Image(systemName:"star")
+//                        Text("Water Readings")
+//                    }
+//                }.tag(3)
+//                .environmentObject(state)
+//                .environmentObject(bluetooth)
             BluetoothConnectView(tof_distance: 0)
                 .tabItem{
                     VStack{
                         Image(systemName:"paperplane")
                         Text("Bluetooth")
                     }
-                }.tag(4)
+                }.tag(3)
                 .environmentObject(state)
                 .environmentObject(bluetooth)
             

@@ -59,7 +59,7 @@ class NotificationManager: ObservableObject {
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         let content = UNMutableNotificationContent()
         content.title = "Reminder to hydrate!"
-        content.body = "Take a sip of water to meet your daily goal."
+        content.body = "Take a sip of water to meet 25% of your daily goal."
         content.badge = 1
         let request = UNNotificationRequest(identifier: "drinkEarlyNotif", content: content, trigger: trigger)
         //Add our notification to the notification center

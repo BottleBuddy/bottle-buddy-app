@@ -76,10 +76,10 @@ struct waterReadingsView: View {
                         trailing: EditButton())
 
                 // Action bar at bottom contains Add button.
-                HStack {
-                    Spacer()
-                    Button(action: addWaterReadingTOF) { Image(systemName: "plus") }
-                }.padding()
+//                HStack {
+//                    Spacer()
+//                    Button(action: addWaterReadingTOF) { Image(systemName: "plus") }
+//                }.padding()
             }
         }
     }
@@ -105,25 +105,25 @@ struct waterReadingsView: View {
     }
 
     
-    func addWaterReadingTOF() {
-        let newWaterReading = waterReading(water_level: String(bluetooth.getTofValue()))
-        let now = Date()
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "nl_NL")
-        formatter.setLocalizedDateFormatFromTemplate("dd-MM-yyyy")
-        newWaterReading.date = formatter.string(from: now)
-        
-        formatter.dateFormat = "HH:mm:ss"
-        newWaterReading.time = formatter.string(from: now)
-        
-        guard let realm = state.waterReadings!.realm else {
-            state.waterReadings!.append(newWaterReading)
-            return
-        }
-        try! realm.write {
-            state.waterReadings!.append(newWaterReading)
-        }
-    }
+//    func addWaterReadingTOF() {
+////        let newWaterReading = waterReading(water_level: String(bluetooth.getTofValue()))
+//        let now = Date()
+//        let formatter = DateFormatter()
+//        formatter.locale = Locale(identifier: "nl_NL")
+//        formatter.setLocalizedDateFormatFromTemplate("dd-MM-yyyy")
+//        newWaterReading.date = formatter.string(from: now)
+//
+//        formatter.dateFormat = "HH:mm:ss"
+//        newWaterReading.time = formatter.string(from: now)
+//
+//        guard let realm = state.waterReadings!.realm else {
+//            state.waterReadings!.append(newWaterReading)
+//            return
+//        }
+//        try! realm.write {
+//            state.waterReadings!.append(newWaterReading)
+//        }
+//    }
 
     /// Deletes the given waterReading.
     func delete(at offsets: IndexSet) {

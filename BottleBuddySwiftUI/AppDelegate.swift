@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 
           switch response.actionIdentifier {
           case "ACCEPT_ACTION":
-            bluetooth.writeData() //idk if this is the right function to call for cleaning
+            bluetooth.startBottleClean() //idk if this is the right function to call for cleaning
              break
                     
           case "DECLINE_ACTION":

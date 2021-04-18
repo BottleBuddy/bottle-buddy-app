@@ -26,7 +26,7 @@ struct HomePage: View {
     @State var name: String = ""
     @State var stats: Statistics? = nil
     
-    @ObservedObject var notifcation = NotificationManager()
+    @ObservedObject var notification = NotificationManager()
     
     var body: some View {
         
@@ -227,9 +227,9 @@ struct HomePage: View {
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
                 
                 Button(action: {
-                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
+                    self.notification.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
                     
-                    bluetooth.writeData()
+                    bluetooth.startBottleClean()
                     
                 }){
                     Text("Clean My Buddy")
@@ -279,7 +279,7 @@ struct HomePage: View {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkLateNotif"])
             
         }
-        else if ((self.stats?.getPercent(day: "Today") ?? 0)*100 > 1) && (hour >= 20){
+        else if ((self.stats?.getPercent(day: "Today") ?? 0) > 1) && (hour >= 20){
             UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
                  for notificationRequest:UNNotificationRequest in notificationRequests {
                     print(notificationRequest.identifier)

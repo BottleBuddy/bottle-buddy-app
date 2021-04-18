@@ -13,7 +13,7 @@ import UserNotifications
 
 struct BluetoothConnectView: View {
     let bblightblue = UIColor(named: "BB_LightBlue")
-    //let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.3, on : .main, in: .common).autoconnect()
     @State var tof_distance = UInt16()
     @State var imu_reading = String()
     //var bluetooth = Bluetooth.init()
@@ -32,21 +32,17 @@ struct BluetoothConnectView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 
-                //                Button(action: {bluetooth.scanForDevices()}) {
-                //                    Text("Search For Devices")
-                //                        .foregroundColor(.white)
-                //                        .padding(.vertical)
-                //                        .frame(width: UIScreen.main.bounds.width - 50)
-                //                        .background(Color(UIColor(named: "BB_DarkBlue")!))
-                //                        .cornerRadius(10)
-                //                }
-                //                .padding()
                 Text("\(connected_status)")
-                    
-                        
-                    
-                    .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
-                    .padding(.vertical)
+                          .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
+                            .padding(.vertical)
+                          .onReceive(timer){time in
+                            if(bluetooth.connected){
+                              connected_status = "Connected To Buddy!"
+                            }
+                            else{
+                              connected_status = "Not Connected to Buddy :("
+                            }
+                          }
                 Button(action: {connectBuddy()}) {
                     Text("Connect to Buddy")
                         .foregroundColor(.white)
@@ -127,15 +123,6 @@ struct BluetoothConnectView: View {
             }
             .background(Color(bblightblue!).ignoresSafeArea())
             .frame(maxWidth: .infinity)
-            .onAppear{
-                if(bluetooth.connected){
-                    connected_status = "Connected To Buddy!"
-                }
-                else {
-                    connected_status = "Not Connected"
-                }
-            
-            }
         }
         .background(Color(bblightblue!).ignoresSafeArea())
         .frame(maxWidth: .infinity)

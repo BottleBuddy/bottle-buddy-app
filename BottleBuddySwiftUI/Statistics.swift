@@ -45,7 +45,8 @@ class Statistics {
             
             var waterTotal = 0
             state.waterReadings!.filter(predicate).forEach{waterReading in
-                waterTotal = waterTotal + Int(waterReading.water_level)!
+                var indInt = Int(waterReading.water_level)
+                waterTotal += (indInt ?? 0)
             }
             self.sevenDayLog?.append(waterTotal)
             i = i + 1

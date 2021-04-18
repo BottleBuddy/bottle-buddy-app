@@ -190,6 +190,7 @@ struct RegisterView: View {
                 }
                 print("about to scan for bluetooth devices upon registering")
                 bluetooth.scanForDevices()
+                bluetooth.sendCallibrationService()
             }
             else{
                 self.error = "Password mismatch"

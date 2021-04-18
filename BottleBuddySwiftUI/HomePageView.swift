@@ -14,7 +14,7 @@ import RealmSwift
 struct HomePage: View {
     @EnvironmentObject var state: AppState
     @EnvironmentObject var bluetooth: Bluetooth
-    var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)git 
+    var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     @State var selected = 0
     var colors = [Color(.white)]
     let bbdarkblue = UIColor(named: "BB_DarkBlue")
@@ -132,6 +132,15 @@ struct HomePage: View {
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
+                        .onReceive(timer){_ in
+                            var waterDate = bluetooth.convertDateForDB(day: bluetooth.day,month: bluetooth.month,year: bluetooth.year)
+                            var waterTime = self.convertTimeForDB(hour: self.hour, minute: self.minute, second: self.second)
+                            var waterHeights = self.convertHeightToInt(oldHeight: self.oldHeightData, newHeight: self.newHeightData )
+                            self.addWaterReading(date: waterDate,time: waterTime, waterHeights: waterHeights )
+                                print("Done with one water reading")
+                            self.createWaterIntakeResponse(waterIntakePackageID : self.waterIntake_ID)//send ID ack
+                            
+                        }
                     
                     Spacer(minLength: 0)
                 }
@@ -188,11 +197,9 @@ struct HomePage: View {
                         
                         notification.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
                         
-//                        DispatchQueue.global(qos: .background).async {
-//
-//
-//                        }
-                        bluetooth.startBottleClean()}){
+                        //write clean with send Bool
+                   
+                }){
                     Text("Clean My Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
@@ -200,6 +207,7 @@ struct HomePage: View {
                         .background(Color(UIColor(named: "BB_DarkBlue")!))
                         .cornerRadius(10)
                 }
+                
                 //                Button(action: {
                 //                    //TODO: initiate cleaning protocol on button click
                 //                    self.notifcation.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 5)

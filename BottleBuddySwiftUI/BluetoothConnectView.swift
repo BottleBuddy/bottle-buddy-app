@@ -49,11 +49,22 @@ struct BluetoothConnectView: View {
                         if(bluetooth.connected){
                             connected_status = "Connected To Buddy!"
                         }
+                        else{
+                            connected_status = "Not Connected to Buddy :("
+                        }
                     }
                     .foregroundColor(Color(UIColor(named: "BB_DarkBlue")!))
                     .padding(.vertical)
                 Button(action: {connectBuddy()}) {
                     Text("Connect to Buddy")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                        .cornerRadius(10)
+                }
+                Button(action: {bluetooth.sendCallibrationService()}) {
+                    Text("Start Callibration to Buddy")
                         .foregroundColor(.white)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)
@@ -167,6 +178,10 @@ struct BluetoothConnectView: View {
     
     func connectBuddy(){
         bluetooth.scanForDevices()
+//        while(bluetooth == nil){
+//
+//        }
+//        bluetooth.sendCallibrationService()
 //        DispatchQueue.global(qos: .background).async {
 //            var previousTOF = UInt16()
 //            while(true){

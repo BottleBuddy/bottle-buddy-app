@@ -29,6 +29,8 @@ struct Dashboard : View {
     //@ObservedObject var bluetooth : Bluetooth
     @State var error: Error?
     @State var firstDashboard: Bool = true
+    @ObservedObject var notification = NotificationManager()
+
     
     var body: some View {
         TabView{
@@ -98,8 +100,38 @@ struct Dashboard : View {
                 bluetooth.setState(state: state)
                 
                 firstDashboard = false
+                
             }
+           // tryDashConnecting()
         }.disabled(state.shouldIndicateActivity)
+    }
+    
+    func tryDashConnecting(){
+        let queue = DispatchQueue(label: "ConnectQueue", qos: DispatchQoS.background)
+        queue.async {
+            
+            if(!bluetooth.connected){
+                print("In async func")
+                bluetooth.scanForDevices()
+                while(!bluetooth.connected){
+                    
+                }
+                if (bluetooth.callibrated == false){
+                    bluetooth.sendCallibrationService()
+                }
+                while(!bluetooth.callibrated){
+                    
+                }
+                bluetooth.disconnectDevice()
+                while(!bluetooth.connected){
+                    
+                }
+                bluetooth.scanForDevices()
+                
+            }
+             
+            
+        }
     }
 }
 

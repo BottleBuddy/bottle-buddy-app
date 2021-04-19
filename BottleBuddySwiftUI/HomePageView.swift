@@ -30,7 +30,9 @@ struct HomePage: View {
     var count = 0
     
     @ObservedObject var notification = NotificationManager()
-    
+    init() {
+        tryConnecting()
+    }
     var body: some View {
         
         ScrollView(.vertical, showsIndicators: false) {
@@ -246,7 +248,7 @@ struct HomePage: View {
                 .padding()
                 .cornerRadius(20)
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
-                .onAppear(perform: tryConnecting)
+                //.onAppear(perform: tryConnecting)
                 
                 
                 
@@ -403,7 +405,22 @@ struct HomePage: View {
             if(!bluetooth.connected){
                 print("In async func")
                 bluetooth.scanForDevices()
+                while(!bluetooth.connected){
+                    
+                }
+                if (bluetooth.callibrated == false){
+                    bluetooth.sendCallibrationService()
+                }
                 
+                while(!bluetooth.callibrated){
+                    
+                }
+                Thread.sleep(forTimeInterval: 10)
+                bluetooth.disconnectDevice()
+                while(!bluetooth.connected){
+
+                }
+                bluetooth.scanForDevices()
                 
             }
              

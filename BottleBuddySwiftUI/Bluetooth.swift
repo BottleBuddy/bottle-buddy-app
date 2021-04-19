@@ -37,6 +37,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var waterIntake_ID_data = Data()
     var characteristicsMap = [CBUUID : CBCharacteristic]()
     var finished_cleaning = Bool()
+    var callibrated = Bool(false)
     
     let Callibration_Service_CBUUID = CBUUID(string: "19B10010-E8F2-537E-4F6C-D104768A1214")
     let Callibration_Date_CBUUID = CBUUID(string: "19B10011-E8F2-537E-4F6C-D104768A1214")
@@ -405,8 +406,12 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             sendUInt32(data: sendCurrentTimeUInt(),cbuuid: Callibration_Time_CBUUID) //writiing to callibration time
             os_log("writing to callibration time")
            sendBoolean(boolVal: true, cbuuid: Callibration_WroteTime_CBUUID) //writiing to callibration wrote time
-                self.notification.sendNotification(title: "Callibration Done!", subtitle: nil, body: "Your Bottle is ready for use", launchIn: 10)
+               
             os_log("writing to callibration wrote time")
+            callibrated = true
+            self.notification.sendNotification(title: "Callibration Done!", subtitle: nil, body: "Your Bottle is ready for use", launchIn: 10)
+//            disconnectDevice()
+//            scanForDevices()
         }
         else{
             self.notification.sendNotification(title: "Please Connect Your Buddy", subtitle: nil, body: "Connect your Buddy before starting callibration", launchIn: 1)

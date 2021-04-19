@@ -9,7 +9,7 @@ import Foundation
 import HealthKit
 
 class Statistics {
-    private var sevenDayLog: Array<Int>? = nil
+    private var sevenDayLog: Array<Double>? = nil
     private var baseGoal: Int
     var state: AppState
     let formatter = DateFormatter()
@@ -33,8 +33,8 @@ class Statistics {
         formatter.setLocalizedDateFormatFromTemplate("dd-MM-yyyy")
     }
     
-    func getSevenDayLog() -> Array<Int>?{
-        self.sevenDayLog = Array<Int>()
+    func getSevenDayLog() -> Array<Double>?{
+        self.sevenDayLog = Array<Double>()
         
         var date = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         var i = 0
@@ -43,10 +43,11 @@ class Statistics {
             date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
             let predicate = "date == " + "'" + String(formatter.string(from: date)) + "'"
             
-            var waterTotal = 0
+            var waterTotal: Double = 0.0
             state.waterReadings!.filter(predicate).forEach{waterReading in
-                var indInt = Int(waterReading.water_level)
-                waterTotal += (indInt ?? 0)
+
+                waterTotal = waterTotal + Double(waterReading.water_level)!
+
             }
             self.sevenDayLog?.append(waterTotal)
             i = i + 1

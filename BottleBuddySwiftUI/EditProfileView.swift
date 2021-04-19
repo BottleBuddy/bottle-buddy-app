@@ -11,7 +11,9 @@ import Combine
 import RealmSwift
 
 var time = Date()
-var day = 0
+var day = Date()
+let myCalendar = Calendar(identifier: .gregorian)
+var weekDay = myCalendar.component(.weekday, from: day)
 
 final class userObject: Object, ObjectKeyIdentifiable {
     //user cannot manually update these values
@@ -126,7 +128,6 @@ struct EditProfileView: View {
                 
                 Button(action: {
                     time = cleanTime
-                    day = cleanDate
                     print("hour " + String(Calendar.current.dateComponents([.hour], from: time).hour ?? 0))
                     print("min " + String(Calendar.current.dateComponents([.minute], from: time).minute ?? 0))
                     cleanReminderNotification()
@@ -178,6 +179,7 @@ struct EditProfileView: View {
         let selectedHour = Calendar.current.dateComponents([.hour], from: time).hour
         let selectedMinute = Calendar.current.dateComponents([.minute], from: time).minute
        
+        dateComponents.weekday = cleanDate
         dateComponents.hour = selectedHour
         dateComponents.minute = selectedMinute
         

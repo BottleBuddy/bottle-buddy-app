@@ -40,7 +40,6 @@ struct HomePage: View {
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                    Spacer(minLength: 0)
 
                     Button(action: {}) {
 
@@ -70,7 +69,6 @@ struct HomePage: View {
                             .font(.title)
                             .foregroundColor(.white)
                             .fontWeight(.semibold)
-                        Spacer(minLength: 0)
                     }
                 }
                 .padding()
@@ -157,7 +155,6 @@ struct HomePage: View {
                                 bluetooth.createWaterIntakeResponse(waterIntakePackageID : bluetooth.waterIntake_ID)//send ID ack
                             }
                         })
-                    Spacer(minLength: 0)
                 }
                 .padding()
                 

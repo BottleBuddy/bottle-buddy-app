@@ -45,7 +45,9 @@ class Statistics {
             
             var waterTotal: Double = 0.0
             state.waterReadings!.filter(predicate).forEach{waterReading in
+
                 waterTotal = waterTotal + Double(waterReading.water_level)!
+
             }
             self.sevenDayLog?.append(waterTotal)
             i = i + 1

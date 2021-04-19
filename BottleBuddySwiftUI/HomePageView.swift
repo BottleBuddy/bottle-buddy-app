@@ -24,6 +24,7 @@ struct HomePage: View {
     let notifContent = UNMutableNotificationContent()
     let timer = Timer.publish(every: 0.5, on : .main, in: .common).autoconnect()
     @State var name: String = ""
+    @State private var showingAlert = false
     @State var stats: Statistics? = nil
     
     @ObservedObject var notification = NotificationManager()
@@ -102,7 +103,7 @@ struct HomePage: View {
                                     RoundedShape()
                                         .fill(LinearGradient(gradient: .init(colors: selected == waterLogEntry.id ? colors : [Color.white.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
                                         // max height = 200
-                                        .frame(height: waterLogEntry.water_consumed)
+                                        .frame(height: CGFloat(waterLogEntry.water_consumed))
                                 }
                                 .frame(height: 220)
                                 .onTapGesture {
@@ -134,6 +135,21 @@ struct HomePage: View {
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
+                        .onReceive(timer, perform: { _ in
+                            if(bluetooth.readWaterIntakeDate && bluetooth.readWaterIntakeTime && bluetooth.readWaterIntakeHeightsBool){
+                                var waterDate = bluetooth.convertDateForDB(day: bluetooth.day,month: bluetooth.month,year: bluetooth.year)
+                                var waterTime = bluetooth.convertTimeForDB(hour: bluetooth.hour, minute: bluetooth.minute, second: bluetooth.second)
+                                var waterHeights = bluetooth.convertHeightToInt(oldHeight: bluetooth.oldHeightData, newHeight: bluetooth.newHeightData )
+                                bluetooth.addWaterReading(date: waterDate,time: waterTime, waterHeights: waterHeights )
+                                print("Done with one water reading")
+                                
+                                
+                                bluetooth.readWaterIntakeTime = false
+                                bluetooth.readWaterIntakeDate = false
+                                bluetooth.readWaterIntakeHeightsBool = false
+                                bluetooth.createWaterIntakeResponse(waterIntakePackageID : bluetooth.waterIntake_ID)//send ID ack
+                            }
+                        })
                     
                     Spacer(minLength: 0)
                 }
@@ -241,6 +257,26 @@ struct HomePage: View {
                 }
                 .padding()
             }
+            
+            Button("Clean my Buddy") {
+                        showingAlert = true
+                    }
+                .foregroundColor(.white)
+                .padding(.vertical)
+                .frame(width: UIScreen.main.bounds.width - 50)
+                .background(Color(UIColor(named: "BB_DarkBlue")!))
+                .cornerRadius(10)
+                .alert(isPresented:$showingAlert) {
+                        Alert(
+                            title: Text("Is your cap completely on?"),
+                            message: Text("There is no undo"),
+                            primaryButton: .destructive(Text("Yes")) {
+                                print("Starting Clean")
+                                bluetooth.startBottleClean()
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    }
         }
         .onAppear{checkProgress()}
         .background(Color(bblightblue!).ignoresSafeArea())
@@ -251,8 +287,17 @@ struct HomePage: View {
     func checkProgress() {
         let hour = Calendar.current.component(.hour, from: Date())
         print(String(self.stats?.getPercent(day: "Today") ?? 0))
+//        if ((self.stats?.getPercent(day: "Today") ?? 0)*100 < 0.25)  && (hour > 9) && (hour <= 12){
+//            bluetooth.drinkWater()
+//        }
+//        if ((self.stats?.getPercent(day: "Today") ?? 0)*100 < 0.50) && (hour > 12) && (hour <= 15){
+//            bluetooth.drinkWater()
+//        }
+//        if ((self.stats?.getPercent(day: "Today") ?? 0)*100 < 0.75) && (hour > 15) && (hour <= 19){
+//            bluetooth.drinkWater()
+//        }
         
-        if ((self.stats?.getPercent(day: "Today") ?? 0)*100 > 0.25)  && (hour > 9) && (hour < 12){
+        if ((self.stats?.getPercent(day: "Today") ?? 0)*100 > 0.25)  && (hour > 9) && (hour <= 12){
             UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
                  for notificationRequest:UNNotificationRequest in notificationRequests {
                     print(notificationRequest.identifier)
@@ -261,7 +306,7 @@ struct HomePage: View {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkEarlyNotif"])
             
         }
-        else if ((self.stats?.getPercent(day: "Today") ?? 0)*100 > 0.50) && (hour > 12) && (hour < 15){
+        else if ((self.stats?.getPercent(day: "Today") ?? 0)*100 > 0.50) && (hour > 12) && (hour <= 15){
             UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
                  for notificationRequest:UNNotificationRequest in notificationRequests {
                     print(notificationRequest.identifier)
@@ -270,7 +315,7 @@ struct HomePage: View {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["drinkMidNotif"])
             
         }
-        else if ((self.stats?.getPercent(day: "Today") ?? 0) > 0.75)  && (hour > 15) && (hour < 19){
+        else if ((self.stats?.getPercent(day: "Today") ?? 0) > 0.75)  && (hour > 15) && (hour <= 19){
             UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
                  for notificationRequest:UNNotificationRequest in notificationRequests {
                     print(notificationRequest.identifier)
@@ -308,7 +353,7 @@ struct HomePage: View {
     
     // converting Number to decimal...
     
-    func getDec(val: CGFloat)->String{
+    func getDec(val: Double)->String{
         
         let format = NumberFormatter()
         format.numberStyle = .decimal
@@ -324,12 +369,12 @@ struct HomePage: View {
     
     // calculating Hrs For Height...
     
-    func getHeight(value : String)->CGFloat{
+    func getHeight(value : String)->Double{
         
         // the value in minutes....
         // 24 hrs in min = 1440
-        guard let n = NumberFormatter().number(from: value) else {return CGFloat(-1)}
-        return CGFloat(n)
+        guard let n = NumberFormatter().number(from: value) else {return Double(-1)}
+        return Double(n)
         //        let hrs = CGFloat(n / 1440) * 200
         //
         //        return hrs
@@ -375,7 +420,7 @@ struct HomePage: View {
         
         var id : Int
         var day : String
-        var water_consumed : CGFloat
+        var water_consumed : Double
     }
     
     

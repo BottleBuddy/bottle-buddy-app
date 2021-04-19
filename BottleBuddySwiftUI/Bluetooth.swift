@@ -445,7 +445,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     }
     func finishedClean(cleaningFinished : Bool)->Bool{
         if(cleaningFinished){
-            self.notification.sendNotification(title: "Cleaning Done!", subtitle: nil, body: "Go enjoy some water :).", launchIn: 1)
+            self.notification.sendNotification(title: "Cleaning Done!", subtitle: nil, body: "Go enjoy some water :)", launchIn: 1)
         }
         return cleaningFinished
     }

@@ -26,6 +26,8 @@ struct HomePage: View {
     @State var name: String = ""
     @State private var showingAlert = false
     @State var stats: Statistics? = nil
+    let group = DispatchGroup()
+    var count = 0
     
     @ObservedObject var notification = NotificationManager()
     
@@ -206,6 +208,7 @@ struct HomePage: View {
                                 .font(.system(size: 22))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
+                            
                             Spacer(minLength: 0)
                         }
                         
@@ -243,6 +246,8 @@ struct HomePage: View {
                 .padding()
                 .cornerRadius(20)
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
+                .onAppear(perform: tryConnecting)
+                
                 
                 
             }
@@ -391,6 +396,23 @@ struct HomePage: View {
         }
     }
     
+    func tryConnecting(){
+        let queue = DispatchQueue(label: "ConnectQueue", qos: DispatchQoS.background)
+        queue.async {
+            
+            if(!bluetooth.connected){
+                print("In async func")
+                bluetooth.scanForDevices()
+                
+                
+            }
+             
+            
+        }
+       
+
+        
+    }
     
     
     struct RoundedShape : Shape {

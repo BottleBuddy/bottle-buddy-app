@@ -66,6 +66,8 @@ struct HomePage: View {
                     Text("We calculated your suggested water consumption for today to be " + dailyGoal + " oz")
                         .font(.body)
                         .foregroundColor(.white)
+                        
+                        
                 }
                 
                 // Bar Chart...
@@ -242,20 +244,7 @@ struct HomePage: View {
                 .cornerRadius(20)
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x:0, y:5)
                 
-                Button(action: {
-                    self.notification.sendNotification(title: "Cleaning Started!", subtitle: nil, body: "Please make sure that the BottleBuddy is secured on the bottle for cleaning.", launchIn: 2)
-                    
-                    bluetooth.startBottleClean()
-                    
-                }){
-                    Text("Clean My Buddy")
-                        .foregroundColor(.white)
-                        .padding(.vertical)
-                        .frame(width: UIScreen.main.bounds.width - 50)
-                        .background(Color(UIColor(named: "BB_DarkBlue")!))
-                        .cornerRadius(10)
-                }
-                .padding()
+                
             }
             
             Button("Clean my Buddy") {

@@ -399,13 +399,20 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         return heightArr
     }
     func sendCallibrationService(){
-        sendUInt32(data: sendCurrentDateUInt(), cbuuid: Callibration_Date_CBUUID) //writiing to callibration date
-        os_log("writing to callibration date")
-        sendUInt32(data: sendCurrentTimeUInt(),cbuuid: Callibration_Time_CBUUID) //writiing to callibration time
-        os_log("writing to callibration time")
-       sendBoolean(boolVal: true, cbuuid: Callibration_WroteTime_CBUUID) //writiing to callibration wrote time
-            self.notification.sendNotification(title: "Callibration Done!", subtitle: nil, body: "Your Bottle is ready for use", launchIn: 10)
-        os_log("writing to callibration wrote time")
+        if(connected){
+            sendUInt32(data: sendCurrentDateUInt(), cbuuid: Callibration_Date_CBUUID) //writiing to callibration date
+            os_log("writing to callibration date")
+            sendUInt32(data: sendCurrentTimeUInt(),cbuuid: Callibration_Time_CBUUID) //writiing to callibration time
+            os_log("writing to callibration time")
+           sendBoolean(boolVal: true, cbuuid: Callibration_WroteTime_CBUUID) //writiing to callibration wrote time
+                self.notification.sendNotification(title: "Callibration Done!", subtitle: nil, body: "Your Bottle is ready for use", launchIn: 10)
+            os_log("writing to callibration wrote time")
+        }
+        else{
+            self.notification.sendNotification(title: "Please Connect Your Buddy", subtitle: nil, body: "Connect your Buddy before starting callibration", launchIn: 1)
+        os_log("Callibration Failed")
+        }
+       
     }
     func sendBoolean(boolVal : Bool, cbuuid : CBUUID){
         os_log("entered send Boolean function")
@@ -429,7 +436,12 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     }
     func startBottleClean() {
         os_log("Trying to Clean Bottle")
+        if(connected){
         sendBoolean(boolVal: true, cbuuid: Cleaning_StartClean_CBUUID) //tell bottle to clean
+        }
+        else{
+            self.notification.sendNotification(title: "Please Connect Your Buddy", subtitle: nil, body: "Connect your Buddy to start cleaning", launchIn: 1)
+        }
     }
     func finishedClean(cleaningFinished : Bool)->Bool{
         if(cleaningFinished){

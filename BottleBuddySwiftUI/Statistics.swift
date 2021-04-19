@@ -112,7 +112,6 @@ class Statistics {
             totalGoal += 15
         }
 
-        print(day + " " + String(steps) + " " + String(totalGoal))
         return totalGoal
     }
     

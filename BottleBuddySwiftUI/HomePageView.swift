@@ -40,11 +40,10 @@ struct HomePage: View {
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                    
                     Spacer(minLength: 0)
-                    
+
                     Button(action: {}) {
-                        
+
                         Image("menu")
                             .renderingMode(.template)
                             .foregroundColor(.white)
@@ -63,12 +62,18 @@ struct HomePage: View {
                 })
                 VStack{
                     let dailyGoal : String = String(self.stats?.getTotalGoal(day: "Today") ?? 0)
-                    Text("We calculated your suggested water consumption for today to be " + dailyGoal + " oz")
-                        .font(.body)
-                        .foregroundColor(.white)
-                        
-                        
+                    HStack{
+                        Text("Today's Goal:")
+                            .font(.title)
+                            .foregroundColor(.white)
+                        Text(dailyGoal + " oz")
+                            .font(.title)
+                            .foregroundColor(.white)
+                            .fontWeight(.semibold)
+                        Spacer(minLength: 0)
+                    }
                 }
+                .padding()
                 
                 // Bar Chart...
                 
@@ -133,7 +138,7 @@ struct HomePage: View {
                 
                 HStack{
                     
-                    Text("Statistics")
+                    Text("Goal Completion Statistics")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -152,7 +157,6 @@ struct HomePage: View {
                                 bluetooth.createWaterIntakeResponse(waterIntakePackageID : bluetooth.waterIntake_ID)//send ID ack
                             }
                         })
-                    
                     Spacer(minLength: 0)
                 }
                 .padding()
@@ -166,7 +170,6 @@ struct HomePage: View {
                                 .font(.system(size: 22))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
-                            Spacer(minLength: 0)
                         }
                         
                         // Ring...
@@ -190,7 +193,7 @@ struct HomePage: View {
                         }
                         .rotationEffect(.init(degrees: -90))
                         
-                        Text(String(self.stats?.getDailyTotal(day: "Today") ?? 0) + " oz")
+                        Text(String(getDec(val: self.stats?.getDailyTotal(day: "Today") ?? 0)) + " oz")
                             .font(.system(size: 22))
                             .foregroundColor(.white)
                             .fontWeight(.bold)
@@ -230,7 +233,7 @@ struct HomePage: View {
                         }
                         .rotationEffect(.init(degrees: -90))
                         
-                        Text(String(self.stats?.getDailyTotal(day: "Yesterday") ?? 0) + " oz")
+                        Text(String(getDec(val: self.stats?.getDailyTotal(day: "Yesterday") ?? 0.0)) + " oz")
                             .font(.system(size: 22))
                             .foregroundColor(.white)
                             .fontWeight(.bold)

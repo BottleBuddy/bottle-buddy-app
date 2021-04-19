@@ -110,7 +110,7 @@ class Statistics {
         } else if(steps >= 10000){
             totalGoal += 15
         }
-        
+
         return totalGoal
     }
     
@@ -129,7 +129,7 @@ class Statistics {
                             }
 
                             statisticsCollection.enumerateStatistics(from: startDate, to: endDate) { (statistics,stop) in
-                                self.steps2 = statistics.sumQuantity()?.doubleValue(for: .count()) ?? 10
+                                self.steps2 = statistics.sumQuantity()?.doubleValue(for: .count()) ?? 0
                             }
                         }
                     }
@@ -137,7 +137,7 @@ class Statistics {
             }
         }
         
-        return Int(steps2)
+        return Int(self.steps2)
     }
 }
 

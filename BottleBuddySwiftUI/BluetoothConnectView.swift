@@ -53,6 +53,16 @@ struct BluetoothConnectView: View {
                 }
                 .padding()
                 
+                Button(action: {bluetooth.sendCallibrationService()}) {
+                    Text("Callibrate Buddy")
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width - 50)
+                        .background(Color(UIColor(named: "BB_DarkBlue")!))
+                        .cornerRadius(10)
+                }
+                .padding()
+                
                 Button(action: {bluetooth.disconnectDevice()}) {
                     Text("Disconnect Buddy")
                         .foregroundColor(.white)

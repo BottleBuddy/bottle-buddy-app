@@ -77,8 +77,8 @@ class NotificationManager: ObservableObject {
         var dateComponents = DateComponents()
         
         //2:05 reminder to drink
-        dateComponents.hour = 14
-        dateComponents.minute = 5
+        dateComponents.hour = 15
+        dateComponents.minute = 16
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         let content = UNMutableNotificationContent()
         content.title = "Reminder to hydrate!"

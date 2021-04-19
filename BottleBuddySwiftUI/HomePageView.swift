@@ -346,6 +346,7 @@ struct HomePage: View {
         
         let format = NumberFormatter()
         format.numberStyle = .decimal
+        format.maximumSignificantDigits = 3
         
         return format.string(from: NSNumber.init(value: Float(val)))!
     }

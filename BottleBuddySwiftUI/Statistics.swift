@@ -17,6 +17,7 @@ class Statistics {
     var healthStore: HealthStore?
     private var dailyTotal: Double = 0.0
     private var steps2: Double = 0.0
+    private var steps1: Double = 0.0
     
     init(state: AppState){
         self.state = state
@@ -111,6 +112,7 @@ class Statistics {
             totalGoal += 15
         }
 
+        print(day + " " + String(steps) + " " + String(totalGoal))
         return totalGoal
     }
     
@@ -120,16 +122,20 @@ class Statistics {
                 if(success){
                     healthStore.calculateSteps{statisticsCollection in
                         if let statisticsCollection = statisticsCollection{
-                            var startDate = Date()
+                            var startDate = Calendar.current.startOfDay(for: Date())
                             var endDate = Date()
                             
                             if(day == "Yesterday"){
-                                startDate = Calendar.current.date(byAdding: .day , value: -1, to: Date())!
+                                startDate = Calendar.current.date(byAdding: .day , value: -1, to: Calendar.current.startOfDay(for: Date()))!
                                 endDate = Calendar.current.date(byAdding: .day , value: -1, to: Date())!
                             }
 
                             statisticsCollection.enumerateStatistics(from: startDate, to: endDate) { (statistics,stop) in
-                                self.steps2 = statistics.sumQuantity()?.doubleValue(for: .count()) ?? 0
+                                if(day == "Yesterday"){
+                                    self.steps2 = statistics.sumQuantity()?.doubleValue(for: .count()) ?? 0
+                                } else {
+                                    self.steps1 = statistics.sumQuantity()?.doubleValue(for: .count()) ?? 0
+                                }
                             }
                         }
                     }
@@ -137,7 +143,10 @@ class Statistics {
             }
         }
         
-        return Int(self.steps2)
+        if(day == "Yesterday"){
+            return Int(self.steps2)
+        }
+        return Int(self.steps1)
     }
 }
 

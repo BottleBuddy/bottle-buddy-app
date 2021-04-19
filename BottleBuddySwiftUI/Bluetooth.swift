@@ -34,6 +34,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     var second = UInt8(0)
     var oldHeightData = UInt8(0)
     var newHeightData = UInt8(0)
+    var waterIntake_ID_data = Data()
     var characteristicsMap = [CBUUID : CBCharacteristic]()
     var finished_cleaning = Bool()
     
@@ -196,7 +197,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         
         if(String(describing: characteristic.uuid) == "19B10021-E8F2-537E-4F6C-D104768A1214"){
             oldWaterIntakeID = waterIntake_ID
-            let waterIntake_ID_data = characteristic.value!
+            waterIntake_ID_data = characteristic.value!
             waterIntake_ID = UInt16((waterIntake_ID_data[1])<<8) + UInt16((waterIntake_ID_data[0]))
             connectedPeripheral.readValue(for: characteristicsMap[WaterIntake_RecieveDate_CBUUID]!)
             connectedPeripheral.readValue(for: characteristicsMap[WaterIntake_RecieveTime_CBUUID]!)
@@ -257,7 +258,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         try! realm.write {
             state!.waterReadings!.append(newWaterReading)
         }
-        self.notification.sendNotification(title: "Water Reading Added!", subtitle: nil, body: "You just Drank \(finalWater) oz", launchIn: 1)
+       self.notification.sendNotification(title: "Water Reading Added!", subtitle: nil, body: "You just drank \(finalWater) oz", launchIn: 1)
         print("Add water reading done")
     }
     func convertHeightMMtoVolumeOZ(height : Int)->Double{
@@ -403,7 +404,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         sendUInt32(data: sendCurrentTimeUInt(),cbuuid: Callibration_Time_CBUUID) //writiing to callibration time
         os_log("writing to callibration time")
        sendBoolean(boolVal: true, cbuuid: Callibration_WroteTime_CBUUID) //writiing to callibration wrote time
-            self.notification.sendNotification(title: "Callibration Done!", subtitle: nil, body: "Your Bottle is ready for use", launchIn: 1)
+            self.notification.sendNotification(title: "Callibration Done!", subtitle: nil, body: "Your Bottle is ready for use", launchIn: 10)
         os_log("writing to callibration wrote time")
     }
     func sendBoolean(boolVal : Bool, cbuuid : CBUUID){

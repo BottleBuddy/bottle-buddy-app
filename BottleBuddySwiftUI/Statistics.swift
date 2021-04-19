@@ -111,7 +111,7 @@ class Statistics {
         } else if(steps >= 10000){
             totalGoal += 15
         }
-
+        
         return totalGoal
     }
     

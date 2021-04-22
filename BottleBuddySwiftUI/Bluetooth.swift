@@ -258,7 +258,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         try! realm.write {
             state!.waterReadings!.append(newWaterReading)
         }
-       self.notification.sendNotification(title: "Water Reading Added!", subtitle: nil, body: "You just drank \(finalWater) oz", launchIn: 1)
+//       self.notification.sendNotification(title: "Water Reading Added!", subtitle: nil, body: "You just drank \(finalWater) oz", launchIn: 1)
         print("Add water reading done")
     }
     func convertHeightMMtoVolumeOZ(height : Int)->Double{
@@ -276,6 +276,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
             let smallCylinder = pi * smallRadius * smallRadius * Double(bottleHeight - inflectionPoint)
             volumeMM3 = (pi * largeRadius * largeRadius * Double(inflectionPoint - height)) + smallCylinder
         }
+        print("Volume: " , volumeMM3*ozConversion)
         return volumeMM3 * ozConversion
     }
     func convertDateForDB(day :UInt8, month :UInt8, year : UInt16) -> String {
@@ -290,7 +291,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         
         var finalString = String()
         finalString = dayString+"-"+monthString+"-\(year)"
-        print("final date for Database input: ", finalString)
+        //print("final date for Database input: ", finalString)
         return finalString
     }
     func convertTimeForDB(hour: UInt8, minute : UInt8, second :UInt8) -> String {
@@ -319,7 +320,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         var finalString = String()
         
         finalString = hourString+":"+minString+":"+secString
-        print("final time for Database input: ", finalString) // Output: 25
+        //print("final time for Database input: ", finalString) // Output: 25
         return finalString
         
     }
@@ -347,14 +348,14 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         for i in Range(0...(16-yearBinary.count-1)){
             yearBinary = "0"+yearBinary
         }
-        print("day", dayBinary)
-        print("month", monthBinary)
-        print("year", yearBinary)
+//        print("day", dayBinary)
+//        print("month", monthBinary)
+//        print("year", yearBinary)
         finalDateString = yearBinary+monthBinary+dayBinary
-        print(finalDateString.count)
+//        print(finalDateString.count)
 
         var dateAnswer = UInt32(finalDateString, radix: 2)!
-        print("current date in UInt32: ", dateAnswer)
+//        print("current date in UInt32: ", dateAnswer)
         return dateAnswer
         
     }
@@ -365,7 +366,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         formatter.locale = Locale(identifier: "nl_NL")
         formatter.dateFormat = "HH:mm:ss"
         var time = formatter.string(from: now)
-        print(time)
+//        print(time)
         var timeArr = time.split(separator: ":")
         var hour: Int = Int(timeArr[0])!
         let min : Int = Int(timeArr[1])!
@@ -382,11 +383,11 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
         for i in Range(0...(8-secondBinary.count-1)){
             secondBinary = "0"+secondBinary
         }
-        print("hour", hourBinary)
-        print("min", minBinary)
-        print("second", secondBinary)
+//        print("hour", hourBinary)
+//        print("min", minBinary)
+//        print("second", secondBinary)
         finalTimeString = "00000000"+hourBinary+minBinary+secondBinary
-        print(finalTimeString.count)
+//        print(finalTimeString.count)
         
         var timeAnswer = UInt32(finalTimeString, radix: 2)!
         print("current time in UInt32: ", timeAnswer)
@@ -396,6 +397,7 @@ class Bluetooth: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate, Obser
     func convertHeightToInt(oldHeight : UInt8, newHeight :UInt8) -> [Int] {
         let heightArr = [Int(oldHeight),Int(newHeight)]
         print("Height Array: "+"\(heightArr[0]) "+"\(heightArr[1])")
+        print("*****")
         return heightArr
     }
     func sendCallibrationService(){
